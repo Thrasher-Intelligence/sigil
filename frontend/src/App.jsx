@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
+import SettingsPanel from './components/SettingsPanel'; // Import the correct component
 
 // Base API URL (makes it easier to change)
 const API_BASE_URL = 'http://localhost:8000';
@@ -7,6 +8,8 @@ const API_BASE_URL = 'http://localhost:8000';
 // Default settings (could also fetch from backend on initial load)
 const DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant.";
 const DEFAULT_TEMPERATURE = 0.7;
+const DEFAULT_TEMPERATURE_MAX = 2.0;
+const DEFAULT_TEMPERATURE_STEP = 0.1;
 const DEFAULT_TOP_P = 0.95;
 const DEFAULT_MAX_TOKENS = 1000;
 
@@ -42,77 +45,6 @@ function ModelLoadPanel({
   );
 }
 
-// Settings Panel Component
-function SettingsPanel({ 
-    systemPrompt, setSystemPrompt,
-    temperature, setTemperature,
-    topP, setTopP,
-    maxTokens, setMaxTokens,
-    onReload, reloadStatus,
-    modelLoaded // New prop to disable reload if model not loaded
- }) {
-  const isLoading = reloadStatus === 'loading';
-
-  return (
-    <div className="settings-panel">
-      <h2>Settings</h2>
-      <div className="settings-group">
-        <label htmlFor="system-prompt">System Prompt:</label>
-        <textarea
-          id="system-prompt"
-          value={systemPrompt}
-          onChange={(e) => setSystemPrompt(e.target.value)}
-          rows={5}
-          disabled={!modelLoaded} // Disable if model not loaded
-        />
-      </div>
-      <div className="settings-group">
-        <label htmlFor="temperature">Temperature:</label>
-        <input
-          type="number"
-          id="temperature"
-          value={temperature}
-          onChange={(e) => setTemperature(parseFloat(e.target.value) || 0)}
-          min="0"
-          max="2.0" // Match backend validation
-          step="0.1"
-          disabled={!modelLoaded} // Disable if model not loaded
-        />
-      </div>
-       <div className="settings-group">
-        <label htmlFor="top-p">Top P:</label>
-        <input
-          type="number"
-          id="top-p"
-          value={topP}
-          onChange={(e) => setTopP(parseFloat(e.target.value) || 0)}
-          min="0"
-          max="1.0"
-          step="0.05"
-          disabled={!modelLoaded} // Disable if model not loaded
-        />
-      </div>
-       <div className="settings-group">
-        <label htmlFor="max-tokens">Max New Tokens:</label>
-        <input
-          type="number"
-          id="max-tokens"
-          value={maxTokens}
-          onChange={(e) => setMaxTokens(parseInt(e.target.value, 10) || 1)}
-          min="1"
-          step="50"
-          disabled={!modelLoaded} // Disable if model not loaded
-        />
-      </div>
-      <button onClick={onReload} disabled={isLoading || !modelLoaded}> 
-        {isLoading ? 'Applying...' : 'Apply Settings'}
-      </button>
-      {reloadStatus === 'success' && <p className="success-message">Settings applied!</p>}
-      {reloadStatus === 'error' && <p className="error-message">Failed to apply settings.</p>}
-    </div>
-  );
-}
-
 function App() {
   const [userInput, setUserInput] = useState('');
   const [chatHistory, setChatHistory] = useState([]); // Array of message objects
@@ -122,16 +54,17 @@ function App() {
   const loadingMessageIdRef = useRef(null); // Ref to store loading message ID
 
   // Settings State
+  const [modelPath, setModelPath] = useState(''); // Add model path state
   const [systemPrompt, setSystemPrompt] = useState(DEFAULT_SYSTEM_PROMPT);
   const [temperature, setTemperature] = useState(DEFAULT_TEMPERATURE);
   const [topP, setTopP] = useState(DEFAULT_TOP_P);
   const [maxTokens, setMaxTokens] = useState(DEFAULT_MAX_TOKENS);
-  const [reloadStatus, setReloadStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+  const [reloadStatus, setReloadStatus] = useState({ type: null, message: null }); // e.g., { type: 'success', message: 'Applied!' }
 
   // New Model Loading State
-  const [modelPathInput, setModelPathInput] = useState(''); // Input field value
-  const [modelLoadStatus, setModelLoadStatus] = useState('idle'); // 'idle' | 'loading' | 'loaded' | 'error'
-  const [modelLoadError, setModelLoadError] = useState(null); // Error message for model load
+  const [modelPathInput, setModelPathInput] = useState('');
+  const [modelLoadStatus, setModelLoadStatus] = useState('idle');
+  const [modelLoadError, setModelLoadError] = useState(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -158,71 +91,67 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ path: path }), // Send the path
+        body: JSON.stringify({ path: path }),
       });
-
-      const data = await response.json(); // Always try to parse JSON
-
+      const data = await response.json();
       if (!response.ok) {
-        // Use detail from JSON if available, otherwise statusText
         throw new Error(data.detail || `HTTP error! status: ${response.status}`);
       }
-
       console.log("Load model response:", data);
       setModelLoadStatus('loaded');
-       // Optional: Clear success message after delay or keep it
-      // setTimeout(() => setModelLoadStatus(null), 3000); // Example
-
+      setModelPath(path); // Store the successfully loaded path
+      // Fetch current settings after successful load (optional but good practice)
+      // Consider fetching settings here or relying on initial fetch
     } catch (err) {
        console.error('Failed to load model:', err);
        setModelLoadError(err.message || 'An unknown error occurred');
        setModelLoadStatus('error');
-       // Optional: Clear error message after delay
-       // setTimeout(() => setModelLoadStatus('idle'), 5000);
     }
   };
 
-  // Handler for applying model settings (previously reload)
-  const handleApplySettings = async () => {
-    setReloadStatus('loading');
-    setError(null); // Clear main error display
+  const handleApplySettings = async (settingsFromPanel) => {
+    // Now receives the full settings object from the panel
+    setReloadStatus({ type: 'loading', message: 'Applying...' });
+    setError(null);
     try {
-      // Use the new endpoint path
       const response = await fetch(`${API_BASE_URL}/api/v1/settings/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        // Use data from the panel, ensure keys match backend
         body: JSON.stringify({ 
-            // Ensure names match Pydantic model in backend
-            system_prompt: systemPrompt,
-            temperature: temperature,
-            top_p: topP,
-            max_new_tokens: maxTokens
+            system_prompt: settingsFromPanel.system_prompt,
+            temperature: settingsFromPanel.temperature, // Assuming panel uses this key
+            top_p: settingsFromPanel.top_p,           // Assuming panel uses this key
+            max_new_tokens: settingsFromPanel.max_tokens // Assuming panel uses this key
         }),
       });
 
-      const data = await response.json(); // Always try to parse JSON
-
+      const data = await response.json();
       if (!response.ok) {
         throw new Error(data.detail || `HTTP error! status: ${response.status}`);
       }
-
       console.log("Apply settings response:", data);
-      setReloadStatus('success');
-       // Hide success message after a delay
-      setTimeout(() => setReloadStatus(null), 2000);
+      // Update App's state to reflect successful application
+      setSystemPrompt(settingsFromPanel.system_prompt);
+      // setTemperature(settingsFromPanel.temperature);
+      // setTopP(settingsFromPanel.top_p);
+      setMaxTokens(settingsFromPanel.max_tokens);
+
+      setReloadStatus({ type: 'success', message: 'Settings applied!' });
+      setTimeout(() => setReloadStatus({ type: null, message: null }), 2000);
 
     } catch (err) {
        console.error('Failed to apply model settings:', err);
-       setError(`Apply settings failed: ${err.message}`); // Show error
-       setReloadStatus('error');
-       // Hide error message after a delay
-       setTimeout(() => setReloadStatus(null), 3000);
+       const errorMsg = `Apply settings failed: ${err.message}`;
+       setError(errorMsg);
+       setReloadStatus({ type: 'error', message: errorMsg });
+       setTimeout(() => setReloadStatus({ type: null, message: null }), 3000);
     }
   };
 
-  const handleSubmit = async (event) => { // Removed event type
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const trimmedInput = userInput.trim();
     if (!trimmedInput || modelLoadStatus !== 'loaded') return; // Don't submit if model not loaded
@@ -280,7 +209,7 @@ function App() {
     } catch (e) { // Removed type catch error
       console.error('Fetch error:', e);
       const errorMessage = `Failed to fetch: ${e.message}`;
-      setError(errorMessage); // Set the main error display
+      setError(errorMessage);
       
       // Ensure loading message is removed on error and add system error message
       const idToRemoveOnError = loadingMessageIdRef.current;
@@ -304,6 +233,15 @@ function App() {
 
   const modelLoaded = modelLoadStatus === 'loaded';
 
+  // Construct initialSettings for the panel
+  const settingsPanelProps = {
+      model_path: modelPath, // Use the state holding the loaded path
+      system_prompt: systemPrompt,
+      temperature: temperature,
+      top_p: topP,
+      max_tokens: maxTokens
+  };
+
   return (
     <div className="app-layout"> 
        {/* Left Panel: Settings and Model Load */}
@@ -316,17 +254,10 @@ function App() {
             modelLoadError={modelLoadError}
          />
          <SettingsPanel
-            systemPrompt={systemPrompt}
-            setSystemPrompt={setSystemPrompt}
-            temperature={temperature}
-            setTemperature={setTemperature}
-            topP={topP}
-            setTopP={setTopP}
-            maxTokens={maxTokens}
-            setMaxTokens={setMaxTokens}
-            onReload={handleApplySettings} // Use the renamed handler
+            initialSettings={settingsPanelProps}
+            onReloadConfig={handleApplySettings}
+            isModelLoading={reloadStatus.type === 'loading'}
             reloadStatus={reloadStatus}
-            modelLoaded={modelLoaded} // Pass model loaded status
          />
       </div>
 

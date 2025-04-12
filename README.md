@@ -35,7 +35,7 @@ The goal is to offer a starting point that you can quickly get running and adapt
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/Thrasher-Intelligence/sigil
-    cd https://github.com/Thrasher-Intelligence/sigil
+    cd sigil
     ```
 
 2.  **Create and activate a Python virtual environment:**
