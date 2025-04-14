@@ -1,3 +1,31 @@
+:root {
+  /* Define theme variables with fallback to defaults */
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252525;
+  --bg-tertiary: #333333;
+  --bg-selection: #444444;
+  --text-primary: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --text-selection: #ffffff;
+  --border-color: #555555;
+  --accent-primary: #bb86fc;
+  --accent-secondary: #03dac6;
+  --accent-positive: var(--accent-secondary); /* Default positive to secondary accent */
+  --accent-negative: #cf6679;
+
+  /* Scrollbar colors */
+  --scrollbar-thumb: #444; /* Keep this potentially customizable but default */
+  --scrollbar-track: var(--bg-secondary);
+  --scrollbar-thumb-messages: #444; /* Keep this potentially customizable */
+  --scrollbar-track-messages: var(--bg-primary);
+
+  /* Added for Model Load Panel (can be themed too) */
+  --success-bg-light: color-mix(in srgb, var(--accent-positive) 15%, transparent);
+  --success-text: var(--accent-positive);
+  --error-bg-light: color-mix(in srgb, var(--accent-negative) 10%, transparent);
+  --error-text: var(--accent-negative);
+}
+
 /* Base styles */
 html,
 body,
@@ -12,69 +40,66 @@ body,
 *::before,
 *::after {
   box-sizing: border-box;
-  /* Removed margin/padding here as it's set on html, body, #root */
 }
 
 body {
-  /* Use a modern sans-serif font stack */
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background-color: #121212; /* Slightly softer dark background */
-  color: #e0e0e0; /* Light grey for primary text - easier on the eyes */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.6;
-  overflow: hidden; /* Prevent body scrolling if needed, but height: 100% on html/body is better */
-  display: block; /* Ensure body behaves as a block */
+  overflow: hidden;
+  display: block;
 }
 
 #root {
-  /* Already set height/width: 100% above */
-  /* Ensure #root can contain the flex container correctly */
-  display: flex; /* Or block, flex might be slightly better for the chat container child */
+  display: flex;
   text-align: left;
 }
 
 /* New App Layout */
 .app-layout {
   display: flex;
-  height: 100%; /* Fill height of #root */
-  width: 100%; /* Fill width of #root */
+  height: 100%;
+  width: 100%;
 }
 
-/* Settings Panel */
-.settings-panel {
-  width: 280px; /* Fixed width for the panel */
-  flex-shrink: 0; /* Prevent panel from shrinking */
-  background-color: #252525; /* Match header/input bar */
-  padding: 1.5rem;
-  border-right: 1px solid #333; /* Separator line */
+/* Left Panel Container */
+.left-panel {
+  width: 280px;
+  flex-shrink: 0;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Allow scrolling if content overflows */
+  overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: #444 #252525; 
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
-.settings-panel::-webkit-scrollbar {
- width: 6px;
+.left-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.left-panel::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+.left-panel::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 3px;
 }
 
-.settings-panel::-webkit-scrollbar-track {
- background: #252525;
+/* Styling for components inside left-panel */
+.model-load-panel,
+.settings-panel {
+  padding: 1.5rem; /* Apply padding here */
+  /* Remove individual backgrounds/borders if left-panel handles it */
 }
 
-.settings-panel::-webkit-scrollbar-thumb {
- background-color: #444;
- border-radius: 3px;
+.model-load-panel {
+ border-bottom: 1px solid var(--border-color); /* Separator */
 }
 
-.settings-panel h2 {
-  color: #bb86fc; /* Accent color */
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
 
+/* Shared Settings Group Styling */
 .settings-group {
   margin-bottom: 1.25rem;
 }
@@ -82,18 +107,21 @@ body {
 .settings-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #ccc; /* Lighter grey for labels */
+  color: var(--text-secondary);
   font-size: 0.9rem;
   font-weight: 500;
 }
 
+/* Shared Input/Textarea/Select Styling */
+.model-load-panel input[type="text"],
+.settings-panel select,
 .settings-panel input[type="number"],
 .settings-panel textarea {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  background-color: #333;
-  border: 1px solid #555;
-  color: #e0e0e0;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   font-family: inherit;
   font-size: 0.95rem;
   border-radius: 4px;
@@ -102,22 +130,45 @@ body {
 }
 
 .settings-panel textarea {
-  resize: vertical; /* Allow vertical resize only */
+  resize: vertical;
   min-height: 60px;
 }
 
+/* Focus styles */
+.model-load-panel input[type="text"]:focus,
+.settings-panel select:focus,
 .settings-panel input[type="number"]:focus,
 .settings-panel textarea:focus {
-  border-color: #bb86fc; /* Accent color for focus */
-  box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.3);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary) 30%, transparent);
 }
 
+/* Read-only/Disabled styles */
+.model-load-panel input[type="text"]:disabled,
+.settings-panel textarea:read-only,
+.settings-panel select:disabled,
+.settings-panel input:disabled,
+.settings-panel textarea:disabled {
+  background-color: color-mix(in srgb, var(--bg-tertiary) 80%, var(--bg-secondary)); /* Slightly different disabled bg */
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Specific overrides for model path display */
+.settings-panel textarea[name="model_path"] {
+  background-color: var(--bg-tertiary); /* Keep consistent */
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Shared Button Styling */
+.model-load-panel button,
 .settings-panel button {
   width: 100%;
   padding: 0.7rem 1rem;
-  margin-top: 0.5rem; /* Space above button */
-  background-color: #03dac6; /* Teal/cyan accent */
-  color: #121212;
+  margin-top: 0.5rem;
+  background-color: var(--accent-secondary);
+  color: var(--bg-primary); /* Contrast against accent-secondary */
   border: none;
   border-radius: 6px;
   font-family: inherit;
@@ -127,17 +178,34 @@ body {
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
+.model-load-panel button:hover:not(:disabled),
 .settings-panel button:hover:not(:disabled) {
-  background-color: #00b3a4; 
+  background-color: color-mix(in srgb, var(--accent-secondary) 85%, #000000); /* Darken */
 }
 
+.model-load-panel button:disabled,
 .settings-panel button:disabled {
-  background-color: #444;
-  color: #888;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
+
+/* Settings Panel Specific Title */
+.settings-panel h2 {
+  color: var(--accent-primary);
+  margin-top: 0; /* Reset margin if padding is on panel */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+
+/* Success/Error Messages (Shared) */
+.success-message,
+.error-message,
 .reload-success,
 .reload-error {
   margin-top: 1rem;
@@ -147,105 +215,140 @@ body {
   font-size: 0.9rem;
 }
 
+.success-message,
 .reload-success {
-  background-color: rgba(3, 218, 198, 0.15); /* Teal background tint */
-  color: #03dac6; /* Teal text */
+  background-color: var(--success-bg-light);
+  color: var(--success-text);
 }
 
+.error-message,
 .reload-error {
-  background-color: rgba(207, 102, 121, 0.1); /* Red background tint */
-  color: #cf6679; /* Red text */
+  background-color: var(--error-bg-light);
+  color: var(--error-text);
 }
 
-/* Chat container - Ensure full width and height within #root */
-/* Needs to adapt to be next to settings panel */
+/* Chat container */
 .chat-container {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Take remaining space */
-  height: 100%; /* Fill height */
-  background-color: #1e1e1e; /* Give container a slightly different bg */
+  flex-grow: 1;
+  height: 100%;
+  background-color: var(--bg-primary);
 }
 
-/* Header - Softer border */
+/* Header */
 .chat-header {
-  background-color: #252525; /* Slightly lighter dark */
-  padding: 0.75rem 1.5rem; /* Adjust padding */
+  background-color: var(--bg-secondary);
+  padding: 0.75rem 1.5rem;
   text-align: center;
-  border-bottom: 1px solid #333; /* Subtle border */
+  border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Keep shadow */
+  display: flex; /* Use flex for alignment */
+  justify-content: center; /* Center title */
+  align-items: center;
+  position: relative; /* For positioning status indicator */
 }
 
 .chat-header h1 {
-  font-size: 1.4rem; /* Slightly smaller */
-  color: #bb86fc; /* Use a softer purple/magenta accent */
+  font-size: 1.4rem;
+  color: var(--accent-primary);
   font-weight: 600;
+  margin: 0; /* Remove default margin */
 }
 
-/* Messages area - Softer scrollbar */
+/* Model Status Indicator in Header */
+.model-status-indicator {
+  position: absolute;
+  right: 1.5rem;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.model-status-indicator.error {
+  background-color: var(--error-bg-light);
+  color: var(--error-text);
+}
+
+.model-status-indicator.loading {
+ color: var(--accent-primary);
+ /* Add subtle animation? */
+}
+
+/* Messages area */
 .messages-area {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 1.5rem; /* Increase padding */
+  padding: 1.5rem;
   scrollbar-width: thin;
-  scrollbar-color: #444 #1e1e1e; /* Softer scrollbar colors */
+  scrollbar-color: var(--scrollbar-thumb-messages) var(--scrollbar-track-messages);
 }
 
-/* Webkit scrollbar styles - Softer */
+/* Webkit scrollbar styles */
 .messages-area::-webkit-scrollbar {
   width: 8px;
 }
 
 .messages-area::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--scrollbar-track-messages);
 }
 
 .messages-area::-webkit-scrollbar-thumb {
-  background-color: #444; /* Dimmer scrollbar handle */
+  background-color: var(--scrollbar-thumb-messages);
   border-radius: 4px;
-  border: 1px solid #1e1e1e;
+  border: 1px solid var(--scrollbar-track-messages);
 }
 
-/* Individual messages - Softer look, increased radius */
+/* Individual messages */
 .message {
   margin-bottom: 1rem;
   padding: 0.75rem 1.25rem;
-  border-radius: 8px; /* Softer corners */
-  max-width: 75%; /* Adjust max width */
+  border-radius: 8px;
+  max-width: 75%;
   word-wrap: break-word;
-  /* Removed border, using background difference */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* Subtle shadow */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15); /* Keep shadow */
+  line-height: 1.5;
 }
 
 .user-message {
-  background-color: #33334d; /* Darker, slightly blueish bg for user */
-  color: #e0e0e0; /* Standard light text */
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
   margin-left: auto;
-  /* border: 1px solid #00ffff; */ /* Removed border */
 }
 
 .backend-message {
-  background-color: #2a2a2a; /* Slightly lighter than container bg */
-  color: #e0e0e0; /* Standard light text */
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   margin-right: auto;
- /* border: 1px solid #00ff00; */ /* Removed border */
+}
+
+/* System messages (used for loading model prompt) */
+.system-message {
+    background-color: transparent; /* Often want these less prominent */
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 0.9rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: none;
 }
 
 /* Loading indicator message style */
-.system-message.loading-message {
-  background-color: transparent; 
-  /* Remove color/font-style here, apply to dots */
-  /* color: #aaa; */
-  margin-right: auto;
-  /* font-style: italic; */
-  /* Align the dots container */
+.message.loading-message { /* Make selector more specific */
+  background-color: transparent;
+  box-shadow: none;
   display: flex;
-  align-items: flex-end; /* Align dots to bottom */
-  padding-top: 0.5rem; /* Adjust spacing if needed */
+  align-items: flex-end;
+  padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  margin-right: auto; /* Keep aligned left like backend */
+  width: fit-content; /* Only take needed width */
+  min-height: 2em; /* Ensure some height */
 }
 
 .dots-container {
@@ -257,13 +360,11 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #aaa; /* Initial dot color */
-  margin: 0 3px; /* Spacing between dots */
-  /* Apply the animation */
+  background-color: var(--text-secondary);
+  margin: 0 3px;
   animation: bounce-flash 1.4s infinite ease-in-out both;
 }
 
-/* Apply animation delays to each dot */
 .dots-container span:nth-child(1) {
   animation-delay: -0.32s;
 }
@@ -273,97 +374,101 @@ body {
 }
 
 .dots-container span:nth-child(3) {
-  /* No delay on the third dot */
   animation-delay: 0s;
 }
 
-/* Keyframes for bouncing and flashing effect */
 @keyframes bounce-flash {
   0%, 80%, 100% {
     transform: scale(0.8) translateY(0);
-    background-color: #aaa; /* Standard color */
+    background-color: var(--text-secondary);
     opacity: 0.6;
   }
   40% {
-    transform: scale(1.1) translateY(-8px); /* Bounce up */
-    background-color: #03dac6; /* Flash with accent color */
+    transform: scale(1.1) translateY(-8px);
+    background-color: var(--accent-secondary);
     opacity: 1;
   }
 }
 
 .message p {
   margin: 0;
-  line-height: 1.5; /* Adjust line height within messages */
 }
 
-/* Error message specific style - Keep clear */
-.error-message {
-  color: #cf6679; /* Softer red for errors */
+/* Chat Error message specific style */
+.chat-error {
+  color: var(--error-text);
   text-align: center;
   padding: 0.75rem;
-  font-weight: 500; /* Medium weight */
-  background-color: rgba(207, 102, 121, 0.1); /* Slight background tint */
+  font-weight: 500;
+  background-color: var(--error-bg-light);
   border-radius: 4px;
   margin: 0.5rem 1.5rem;
+  /* Position within chat flow if needed */
 }
 
-/* Input bar - Softer border, more padding */
+/* Input bar */
 .input-bar {
   display: flex;
-  align-items: center; /* Align items vertically */
+  align-items: center;
   padding: 1rem 1.5rem;
-  border-top: 1px solid #333; /* Subtle border */
-  background-color: #252525; /* Match header */
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
   position: sticky;
   bottom: 0;
   z-index: 10;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Keep shadow */
 }
 
 .input-bar input[type="text"] {
   flex-grow: 1;
-  padding: 0.75rem 1rem; /* Increase padding */
-  background-color: #333; /* Slightly lighter input bg */
-  border: 1px solid #555; /* Dimmer border */
-  color: #e0e0e0; /* Standard light text */
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
-  margin-right: 0.75rem; /* Adjust spacing */
-  border-radius: 6px; /* Slightly softer corners */
+  margin-right: 0.75rem;
+  border-radius: 6px;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease; /* Add transition */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-bar input[type="text"]:focus {
-  border-color: #bb86fc; /* Use accent color for focus */
-  box-shadow: 0 0 0 2px rgba(187, 134, 252, 0.3); /* Subtle focus ring */
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+
+.input-bar input[type="text"]:disabled {
+    background-color: color-mix(in srgb, var(--bg-tertiary) 80%, var(--bg-secondary));
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .input-bar button {
-  padding: 0.75rem 1.25rem; /* Adjust padding */
-  background-color: #03dac6; /* Teal/cyan accent for button */
-  color: #121212; /* Dark text for contrast on button */
+  padding: 0.75rem 1.25rem;
+  background-color: var(--accent-secondary);
+  color: var(--bg-primary);
   border: none;
   border-radius: 6px;
   font-family: inherit;
   font-size: 1rem;
-  font-weight: 600; /* Bold */
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .input-bar button:hover:not(:disabled) {
-  background-color: #00b3a4; /* Slightly darker teal on hover */
+  background-color: color-mix(in srgb, var(--accent-secondary) 85%, #000000);
 }
 
 .input-bar button:disabled {
-  background-color: #444;
-  color: #888;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
   cursor: not-allowed;
-  opacity: 0.7; /* Make disabled state clearer */
+  opacity: 0.7;
 }
 
-/* Remove default Vite styles (or adjust as needed) */
+/* Remove default Vite styles */
 #root {
   max-width: none;
   margin: 0;
@@ -371,9 +476,8 @@ body {
   text-align: left;
 }
 
-/* Keep or remove logo/other styles as needed */
 .logo {
-  display: none; /* Hide default logos */
+  display: none;
 }
 
 /* Optional: Keyframes for loading animation */
