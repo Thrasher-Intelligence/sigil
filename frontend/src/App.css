@@ -89,6 +89,15 @@ body {
   flex-shrink: 0; /* Prevent header from shrinking */
 }
 
+/* Welcome message styling */
+.app-header .welcome-message {
+  color: var(--primary, #6200ee);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-left: 15px;
+  white-space: nowrap;
+}
+
 /* Add styles for TabContainer if needed, assume flex-shrink: 0 */
 .main-content > .tab-container {
   flex-shrink: 0;

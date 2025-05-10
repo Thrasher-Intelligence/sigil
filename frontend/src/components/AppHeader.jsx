@@ -19,6 +19,11 @@ function AppHeader({
         Sigil {currentLoadedModelName && <span className="loaded-model-name">({currentLoadedModelName})</span>}
       </h1>
       <div className="header-controls">
+        {hfUsername && (
+          <div className="welcome-message">
+            Welcome {hfUsername}!
+          </div>
+        )}
         <div className="mode-selector">
           <button
             onClick={() => onChatModeChange('instruction')}
