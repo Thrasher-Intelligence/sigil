@@ -1,17 +1,17 @@
 /* Starshine Theme - CSS Variables */
 :root {
-  --button-background-base: #00E0C6; /* Renamed from --palette-4: Used for button background base */
-  --header-text-color: #a369ff; /* Renamed from --palette-9: Used for header text (chat, settings) */
-  --input-text-color: #D6C3E5; /* Renamed from --foreground: Used for text in settings inputs/textareas */
-  --ui-text-primary: #D6C3E5; /* Default UI text color */
-  --user-message-glow-color: #dfac1f; /* Original palette-1 */
-  --backend-message-glow-color: #8B00FF; /* Original palette-9 / Current header-text-color */
+  --button-background-base: #00E0C6; /* palette-4: Used for button background base */
+  --header-text-color: #FF007C; /* palette-9: Used for header text (chat, settings) */
+  --input-text-color: #D6C3E5; /* palette-15/foreground: Used for text in settings inputs/textareas */
+  --ui-text-primary: #D6C3E5; /* Default UI text color - palette-15/foreground */
+  --user-message-glow-color: #FF4F4F; /* palette-1 */
+  --backend-message-glow-color: #FF007C; /* palette-9 */
 
   /* --- NEW: Light/Dark Mode Backgrounds --- */
   /* Default (Dark Mode) */
-  --background-dark: #121212;
-  --surface-dark: #1e1e1e;
-  --panel-bg-dark: #2a2a2a;
+  --background-dark: #2C1B2E; /* palette-0/background */
+  --surface-dark: #3C2B3E; /* Slightly lighter than background */
+  --panel-bg-dark: #4C3B4E; /* Even lighter for panels */
 
   /* Light Mode Variations (Adjusted for Readability) */
   --background-light: #f4f6f8; /* Light Grey-Blue (Night Sky) */
@@ -19,66 +19,66 @@
   --panel-bg-light: #e8eaf6; /* Light Indigo/Lavender */
 
   /* --- NEW: Input Area Colors --- */
-  --input-bg-dark: #2a2a2a;
+  --input-bg-dark: #3C2B3E; /* Slightly lighter than background */
   --input-bg-light: #ffffff; /* White */
-  --disabled-bg-dark: #555;
+  --disabled-bg-dark: #4C3B4E; /* Lighter shade */
   --disabled-bg-light: #d8dae0; /* Muted Lavender/Grey */
-  --disabled-fg-dark: #999;
+  --disabled-fg-dark: #826C99; /* palette-8 */
   --disabled-fg-light: #9090a0; /* Muted Purple/Grey */
 
   /* --- NEW: Panel Tab/Container Colors --- */
-  --panel-tab-bg-dark: #1e1e1e;
+  --panel-tab-bg-dark: #3C2B3E; /* Slightly lighter than background */
   --panel-tab-bg-light: #e8eaf6; /* Match panel bg light */
-  --panel-tab-active-bg-dark: #2a2a2a;
+  --panel-tab-active-bg-dark: #4C3B4E; /* Even lighter for active tabs */
   --panel-tab-active-bg-light: #f8f7fc; /* Match surface light */
-  --panel-tab-text-dark: #aaa; /* Already similar to --foreground-muted */
+  --panel-tab-text-dark: #826C99; /* palette-8 */
   --panel-tab-text-light: #6a5acd; /* Slate Blue (Twilight) */
-  --panel-tab-active-text-dark: #be37f7; /* Already similar to --ui-text-primary */
+  --panel-tab-active-text-dark: #FF5FC6; /* palette-13 */
   --panel-tab-active-text-light: #4a4a6a; /* Deep Space Purple/Grey */
-  --panel-container-bg-dark: #2a2a2a;
+  --panel-container-bg-dark: #4C3B4E; /* Match panel-bg-dark */
   --panel-container-bg-light: #e8eaf6; /* Match panel bg light */
 
   /* --- NEW: Button Colors --- */
-  --primary-dark: #7e25b9; /* Starshine Button Base */
+  --primary-dark: #00E0C6; /* palette-4 */
   --primary-light: #fffacd; /* Lemon Chiffon (Star Glow) */
-  --primary-hover-dark: #00b39e; /* Darker version for dark mode hover */
+  --primary-hover-dark: #00C896; /* palette-2/10 - Darker version */
   --primary-hover-light: #f8f8d0; /* Slightly darker yellow */
-  --button-foreground-dark: #121212; /* Dark text on primary */
+  --button-foreground-dark: #2C1B2E; /* palette-0/background - Dark text on primary */
   --button-foreground-light: #5a5a3a; /* Dark text on light yellow */
 
-  --button-bg-dark: #444;
+  --button-bg-dark: #912F56; /* palette-6/14 */
   --button-bg-light: #b0b0d0; /* Medium Lavender/Grey */
-  --button-hover-bg-dark: #555;
+  --button-hover-bg-dark: #A13F66; /* Lighter version of palette-6 */
   --button-hover-bg-light: #9a9ac0; /* Darker Lavender/Grey */
-  --button-border-dark: #666;
+  --button-border-dark: #FF5FC6; /* palette-5/13 */
   --button-border-light: #8a8aaf; /* Subtler Lavender/Grey */
-  --button-text-dark: #eee; /* Reusing --ui-text-primary essentially */
+  --button-text-dark: #D6C3E5; /* palette-15/foreground */
   --button-text-light: #3a3a5a; /* Dark Purple/Grey Text */
 
   /* --- NEW: Focus Ring Color --- */
-  --primary-focus-dark: rgba(0, 224, 198, 0.4); /* Based on original --primary-dark */
+  --primary-focus-dark: rgba(0, 224, 198, 0.4); /* Based on palette-4 */
   --primary-focus-light: rgba(255, 250, 205, 0.6); /* Based on primary-light yellow */
 
   /* --- NEW: Settings Panel & Input Details --- */
-  --surface-input-dark: #333; /* Slightly darker than input-bg */
+  --surface-input-dark: #3C2B3E; /* Slightly darker than input-bg */
   --surface-input-light: #ffffff; /* White */
-  --border-input-dark: #555; /* Similar to input border */
+  --border-input-dark: #826C99; /* palette-8 */
   --border-input-light: #c8cadd; /* Light lavender border */
   --focus-ring-accent-dark: var(--primary-dark); /* Use primary color */
   --focus-ring-accent-light: var(--primary-light);
   --focus-ring-color-dark: var(--primary-focus-dark);
   --focus-ring-color-light: var(--primary-focus-light);
-  --text-secondary-dark: #aaa;
+  --text-secondary-dark: #826C99; /* palette-8 */
   --text-secondary-light: #6a5acd; /* Slate Blue (Twilight) */
   --primary-contrast-dark: var(--button-foreground-dark); /* Match primary button text */
   --primary-contrast-light: var(--button-foreground-light);
-  --surface-disabled-dark: #555; /* Same as --disabled-bg-dark */
+  --surface-disabled-dark: #4C3B4E; /* Same as --disabled-bg-dark */
   --surface-disabled-light: var(--disabled-bg-light);
-  --text-disabled-dark: #999; /* Same as --disabled-fg-dark */
+  --text-disabled-dark: #826C99; /* palette-8 - Same as --disabled-fg-dark */
   --text-disabled-light: var(--disabled-fg-light);
-  --surface-hover-dark: #404040;
+  --surface-hover-dark: #5C4B5E; /* Lighter than panel background */
   --surface-hover-light: #f0f2f5; /* Slightly darker light grey-blue */
-  --border-input-hover-dark: #777;
+  --border-input-hover-dark: #A688C9; /* Lighter than palette-8 */
   --border-input-hover-light: #b8bacd; /* Darker lavender border */
   /* --- END NEW --- */
 
