@@ -5,8 +5,8 @@
   --header-text-color: #ff5757;
   --input-text-color: #e63946; /* Base Text (Red) */
   --ui-text-primary: #e63946; /* Base Text (Red) */
-  --user-message-glow-color: #4c77f7;
-  --backend-message-glow-color: #29ca6c;
+  --user-message-glow-color: #d4af37; /* Gold for user messages - irezumi style */
+  --backend-message-glow-color: #808080; /* Gray for bot responses - irezumi style */
 
   /* --- Derived & Default Colors --- */
   /* Backgrounds */
