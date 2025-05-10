@@ -98,12 +98,7 @@ def list_models():
 # Endpoint to load the model
 @app.post("/api/v1/model/load", response_model=LoadModelResponse, status_code=status.HTTP_200_OK)
 def load_model_endpoint(req: LoadModelRequest):
-    # Basic check if a model is already loaded
-    if app.state.model is not None:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=f"A model is already loaded from '{app.state.model_path}'. Please restart the backend to load a different model.",
-        )
+    # The check for an existing model is removed here, as load_model_internal now handles unloading.
     try:
         # Resolve relative paths from the backend API directory if necessary
         # For simplicity, assume path is usable as is (e.g., absolute or relative to where backend is run)
@@ -240,4 +235,9 @@ app.include_router(settings_router, prefix="/api/v1/settings", tags=["Settings"]
 app.include_router(models_router, prefix="/api/v1/models", tags=["Models"]) # <-- Include models router
 app.include_router(system_router, prefix="/api/v1/system", tags=["System"]) # <-- Include system router
 
+if __name__ == "__main__":
+    # Only launch Uvicorn if we're in a frozen PyInstaller binary
+    if getattr(sys, 'frozen', False):
+        import uvicorn
+        uvicorn.run("backend.api.main:app", host="127.0.0.1", port=8000)
 

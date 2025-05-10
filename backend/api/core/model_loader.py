@@ -5,6 +5,46 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import json
 from .config import settings
 
+# --- Module-level cache for the currently loaded model ---
+_current_model_state = {
+    "tokenizer": None,
+    "model": None,
+    "device": None,
+}
+
+# --- Helper to unload the current model ---
+def _unload_current_model_if_exists():
+    """Checks the cache and unloads the model if one is present."""
+    global _current_model_state
+    model_unloaded = False
+    tokenizer_unloaded = False
+
+    if _current_model_state["model"] is not None:
+        print(f"⏳ Unloading existing model from device '{_current_model_state['device']}'...")
+        del _current_model_state["model"]
+        _current_model_state["model"] = None
+        model_unloaded = True
+        print("   ✅ Model object deleted.")
+
+    if _current_model_state["tokenizer"] is not None:
+        del _current_model_state["tokenizer"]
+        _current_model_state["tokenizer"] = None
+        tokenizer_unloaded = True
+        print("   ✅ Tokenizer object deleted.")
+
+    if _current_model_state["device"] == 'cuda':
+        try:
+            torch.cuda.empty_cache()
+            print("   ✅ torch.cuda.empty_cache() called.")
+        except Exception as e:
+            print(f"   ⚠️ Error calling torch.cuda.empty_cache(): {e}", file=sys.stderr)
+    
+    if model_unloaded or tokenizer_unloaded:
+        print("   Unload process complete.")
+    
+    _current_model_state["device"] = None
+
+
 # --- Model Registry (REMOVED) ---
 # MODEL_REGISTRY = {
 #     # Paths should be relative to the project root (the directory containing 'backend' and 'frontend')
@@ -14,6 +54,10 @@ from .config import settings
 # --- Model Loading Helper ---
 def load_model_internal(path: str):
     """Loads the tokenizer and model from the specified path, resolving relative paths from the project root."""
+    global _current_model_state
+
+    # Unload any existing model before loading a new one
+    _unload_current_model_if_exists()
 
     # Calculate project root relative to this file's location (backend/api/core)
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -110,6 +154,12 @@ def load_model_internal(path: str):
                 device = 'cuda' # Report cuda if any layer is on GPU
         
         print(f"   ✅ Model loaded from '{absolute_path}'. Effective device: '{device.upper()}'. Distribution: {getattr(model, 'hf_device_map', 'N/A')}")
+
+        # Update the cache with the newly loaded model
+        _current_model_state["tokenizer"] = tokenizer
+        _current_model_state["model"] = model
+        _current_model_state["device"] = device
+        print(f"   ℹ️ Model and tokenizer cached. Current state: device='{device}'")
 
         # The explicit model.to(device) calls are no longer needed as accelerate handles placement.
 
