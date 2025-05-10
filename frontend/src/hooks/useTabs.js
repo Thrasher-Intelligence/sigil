@@ -41,6 +41,14 @@ export const useTabs = ({
         await onLoadSessionRequest(tabId);
       }
     }
+    
+    // Scroll to the bottom of the chat after tab switch
+    setTimeout(() => {
+      const messagesEndElement = document.querySelector(".messages-end-ref");
+      if (messagesEndElement) {
+        messagesEndElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   }, [activeTabId, NEW_CHAT_TAB_ID, onClearChatRequest, onLoadSessionRequest, setActiveTabId]);
 
   // Handler for closing a tab
@@ -147,9 +155,17 @@ export const useTabs = ({
         return updatedTabs;
       }
     });
-    // Only set active if it's a valid session ID, not NEW_CHAT_TAB_ID (which should already be handled by handleTabSelect)
+    
+    // Always set the new thread as active when creating a new tab
+    // This ensures the user is automatically switched to their new chat tab
+    // Always make the new thread tab active when creating from New Chat
     if (newThreadId !== NEW_CHAT_TAB_ID) {
-        setActiveTabId(newThreadId);
+        // Set a small timeout to ensure the tab is created before switching
+        setTimeout(() => {
+            setActiveTabId(newThreadId);
+            // We don't need to call onLoadSessionRequest here because the session data
+            // is already loaded in memory from the send message operation
+        }, 50);
     }
   }, [setOpenTabs, setActiveTabId, NEW_CHAT_TAB_ID]);
 

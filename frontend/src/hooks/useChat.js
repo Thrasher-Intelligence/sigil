@@ -37,7 +37,7 @@ export const useChat = ({
     setChatHistory([]);
     setSendError(null);
     setCurrentThreadId(null);
-    // Note: Resetting newChatSettings or currentSessionSettings would typically be handled
+    // Note: Resetting newChatSettings or currentSessionSettings is handled
     // by App.jsx in response to a tab change or a clear action.
     // This function primarily clears the chat-specific state within this hook.
     console.log("useChat: Cleared internal chat state.");
@@ -104,6 +104,8 @@ export const useChat = ({
       let systemPromptToSend;
 
       if (activeTabId === NEW_CHAT_TAB_ID || currentThreadId === null) {
+        // Capture these settings to preserve them for the new tab that will be created
+        // They will be stored temporarily when the response comes back
         settingsToSend = {
           temperature: newChatSettings.temperature,
           top_p: newChatSettings.topP,
@@ -173,6 +175,26 @@ export const useChat = ({
         // onSetAppCurrentThreadId?.(newThreadId); // Inform App (already current, but good practice)
         const newLabel = currentUserInput.substring(0, 30) + (currentUserInput.length > 30 ? '...' : '');
         onAddSessionTabAndMakeActive?.(newThreadId, newLabel, activeTabId);
+      }
+      
+      // Clear the New Chat tab history after creating a new chat session
+      // This prevents duplicate chat history appearing in both tabs
+      if (activeTabId === NEW_CHAT_TAB_ID && newThreadId) {
+        // Save current settings to use in the new tab
+        const settingsForNewChat = currentSessionSettings || newChatSettings;
+        
+        // Wait a short time to ensure tab switching has completed
+        setTimeout(() => {
+          // Clear the New Chat tab
+          clearChatStateAndSettings();
+          
+          // Notify any listeners that we want to keep these settings for the new tab only
+          if (onSetAppCurrentThreadId) {
+            // Use this callback as a channel to App for the settings preservation
+            // The thread ID is already set above, so this is just using the callback mechanism
+            onSetAppCurrentThreadId(newThreadId);
+          }
+        }, 100);
       }
       // If newThreadId is the same as currentThreadId and it's not a NEW_CHAT_TAB_ID, no tab action needed here.
 

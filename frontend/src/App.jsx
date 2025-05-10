@@ -137,6 +137,7 @@ function App() {
       maxTokens: sessionData.sampling_settings?.max_new_tokens ?? DEFAULTS.MAX_TOKENS,
     };
     setCurrentSessionSettings(loadedSettings);
+    
     console.log("App: Applied session settings:", loadedSettings);
     setError(null);
   }, [loadChatState, setAppCurrentThreadId, setCurrentSessionSettings, setError]);
@@ -212,7 +213,7 @@ function App() {
   const handleCurrentSessionSettingsChange = useCallback((updatedSettings) => {
     setCurrentSessionSettings(updatedSettings);
   }, []);
-
+  
   useEffect(() => {
     fetch(`${API_BASE_URL}/themes`)
       .then(res => res.json())
@@ -278,6 +279,10 @@ function App() {
             if (sessionData && sessionData.thread_id) {
                 const tabLabel = sessionData.custom_title || sessionData.title || `Session ${sessionData.thread_id.substring(0,6)}...`;
                 addSessionTabAndMakeActive(sessionData.thread_id, tabLabel, activeTabId);
+                // Force a small delay to ensure tab switching completes
+                setTimeout(() => {
+                    handleTabSelect(sessionData.thread_id);
+                }, 100);
             }
           }}
           loadedSessionSettings={currentSessionSettings}
