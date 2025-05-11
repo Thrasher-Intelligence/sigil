@@ -1,7 +1,6 @@
 import React from 'react';
 import ChatBubble from './ChatBubble';
 import SystemMessage from './SystemMessage';
-import styles from './Chat.module.css';
 
 function ChatInterface({
   chatHistory,
@@ -20,32 +19,35 @@ function ChatInterface({
       <div className="messages-area">
         {/* System messages for different states */}
         {appModelLoadStatus === 'idle' && !chatHistory.length && (
-          <SystemMessage>
+          <SystemMessage id="idle-message">
             Please load a model using the 'Load Model' panel in the sidebar to begin.
           </SystemMessage>
         )}
+        
         {appModelLoadStatus === 'error' && (
-          <SystemMessage type="error">
+          <SystemMessage type="error" id="model-error">
             Failed to load model. Check console for details.
           </SystemMessage>
         )}
+        
         {globalError && !globalIsLoading && (
-          <SystemMessage type="error">
+          <SystemMessage type="error" id="global-error">
             Error: {globalError}
           </SystemMessage>
         )}
+        
         {sendError && !isSendingMessage && (
-          <SystemMessage type="error">
+          <SystemMessage type="error" id="send-error">
             Chat Error: {sendError}
           </SystemMessage>
         )}
 
-        {/* Chat history messages */}
+        {/* Chat messages */}
         {chatHistory.map((msg) => (
           <ChatBubble key={msg.id} message={msg} />
         ))}
         
-        {/* Reference for auto-scrolling */}
+        {/* Ref for auto-scrolling */}
         <div ref={messagesEndRef} />
       </div>
 

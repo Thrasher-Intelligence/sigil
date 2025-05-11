@@ -8,7 +8,7 @@ import { useTabs } from './hooks/useTabs.js'; // <-- IMPORTED
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js'; // <-- IMPORTED
 import { useChat } from './hooks/useChat.js'; // <-- IMPORT useChat
 import AppHeader from './components/AppHeader.jsx';
-import ChatInterface from './components/ChatInterface.jsx';
+import ChatInterface from './components/chat/ChatInterface.jsx';
 
 // Base API URL - Moved to constants.js
 // const API_BASE_URL = 'http://localhost:8000';

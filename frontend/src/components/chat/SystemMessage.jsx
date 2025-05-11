@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Chat.module.css';
 
-const SystemMessage = ({ type, children }) => {
+const SystemMessage = ({ type, children, id }) => {
   const isError = type === 'error';
   
   return (
-    <div className={isError ? styles.errorMessage : styles.systemMessage}>
+    <div 
+      id={id}
+      className={isError ? styles.errorMessage : styles.systemMessage}
+    >
       <p className={styles.bubbleContent}>{children}</p>
     </div>
   );
@@ -14,11 +17,13 @@ const SystemMessage = ({ type, children }) => {
 
 SystemMessage.propTypes = {
   type: PropTypes.string,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  id: PropTypes.string
 };
 
 SystemMessage.defaultProps = {
-  type: 'info'
+  type: 'info',
+  id: `system-${Date.now()}`
 };
 
 export default SystemMessage;

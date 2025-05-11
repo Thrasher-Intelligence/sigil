@@ -2,39 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Chat.module.css';
 
-// Debug log to check CSS module content
-console.log("CSS Modules loaded:", styles);
-
 const ChatBubble = ({ message }) => {
   const { id, sender, text, tokens } = message;
   const isLoading = id.startsWith('loading-');
   
-  console.log("Rendering message with tokens:", tokens, message);
-  
-  // Use standard classes while testing
-  const bubbleClass = `message ${sender}-message ${isLoading ? 'loading-message' : ''}`;
+  // Estimate tokens if not provided (~ 4 chars per token)
+  const estimateTokens = (text) => {
+    if (!text) return 0;
+    return Math.max(1, Math.ceil(text.length / 4));
+  };
+
+  // Determine the bubble style based on sender
+  let bubbleClass;
+  if (isLoading) {
+    bubbleClass = styles.loadingBubble;
+  } else if (sender === 'user') {
+    bubbleClass = styles.userBubble;
+  } else if (sender === 'backend') {
+    bubbleClass = styles.assistantBubble;
+  } else if (sender === 'system') {
+    bubbleClass = styles.systemMessage;
+  } else {
+    bubbleClass = styles.chatBubble; // Fallback
+  }
   
   return (
     <div className={bubbleClass}>
       {isLoading ? (
-        <div className="dots-container">
+        <div className={styles.dotsContainer}>
           <span></span>
           <span></span>
           <span></span>
         </div>
       ) : (
         <>
-          <p>{text}</p>
-          <div className="token-counter" style={{
-            fontSize: '0.7rem',
-            color: 'var(--text-secondary, #ccc)',
-            textAlign: 'right',
-            marginTop: '0.5rem',
-            opacity: 0.8,
-            fontStyle: 'italic'
-          }}>
-            {tokens ? `${tokens} tokens` : 'No token data'}
-          </div>
+          <p className={styles.bubbleContent}>{text}</p>
+          {(sender === 'user' || sender === 'backend') && (
+            <div className={styles.tokenCounter}>
+              {tokens || estimateTokens(text)} tokens
+            </div>
+          )}
         </>
       )}
     </div>
