@@ -1,6 +1,6 @@
+/* ModelLoadPanel using the shared glass-panel class from CombinedPanel.css */
 .model-load-panel {
-  /* Add some padding if needed */
-  /* padding: 10px; */
+  padding: var(--spacing-large); /* 1.5rem */
 }
 
 /* Style the container for the local model load buttons */
@@ -11,34 +11,88 @@
   margin-top: 15px; /* Add some space above the button list */
 }
 
-/* Style individual model load buttons (optional, adjust as needed) */
+/* Style individual model load buttons with glass effect */
 .model-load-button {
-  /* Example styling - adapt as needed */
-  padding: 6px 12px;
-  background-color: var(--button-bg, #444);
-  color: var(--button-text, #eee);
-  border: 1px solid var(--button-border, #666);
-  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: rgba(30, 30, 30, 0.65);
+  color: var(--input-text-color, #33b690);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  border-radius: var(--border-radius-small, 4px);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 12px var(--user-bubble-glow, rgba(16, 115, 67, 0.2));
 }
 
 .model-load-button:hover:not(:disabled) {
-  background-color: var(--button-hover-bg, #555);
+  background-color: rgba(16, 115, 67, 0.25);
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  box-shadow: 0 6px 16px var(--user-bubble-glow, rgba(16, 115, 67, 0.4));
+  transform: translateY(-1px);
 }
 
 .model-load-button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* Add some margin below forms/sections for better spacing */
 .model-load-panel form {
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-large, 1.5rem);
+}
+
+.model-load-panel h2 {
+  color: var(--header-text-color);
+  margin-top: 0;
+  margin-bottom: var(--spacing-large);
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
+  letter-spacing: 1px;
+}
+
+.model-load-panel input[type="text"],
+.model-load-panel input[type="password"] {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: rgba(30, 30, 30, 0.65);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  color: var(--input-text-color);
+  font-family: inherit;
+  font-size: 0.95rem;
+  border-radius: var(--border-radius-small);
+  outline: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.model-load-panel input[type="text"]:focus,
+.model-load-panel input[type="password"]:focus {
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  box-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
+}
+
+.model-load-panel label {
+  display: block;
+  margin-bottom: var(--spacing-small, 0.5rem);
+  color: var(--user-message-text-color, #33b690);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 .hf-token-status,
 .device-status-display,
 .search-results {
-  margin-bottom: 15px;
-} 
+  margin-bottom: var(--spacing-large, 1.5rem);
+  padding: 10px;
+  border-radius: var(--border-radius-small);
+  background-color: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}

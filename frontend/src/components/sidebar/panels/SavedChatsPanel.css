@@ -1,14 +1,19 @@
 .saved-chats-panel {
-  padding: 10px;
+  padding: var(--spacing-large, 1.5rem);
   overflow-y: auto; /* Allow scrolling if list is long */
 }
 
 .saved-chats-panel h4 {
   margin-top: 0;
-  margin-bottom: 15px;
-  border-bottom: 1px solid var(--panel-border-color, #444);
-  padding-bottom: 5px;
-  color: var(--ui-text-primary, #eee);
+  margin-bottom: var(--spacing-large, 1.5rem);
+  border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  padding-bottom: 8px;
+  color: var(--header-text-color, #e08009);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
+  letter-spacing: 1px;
+  text-align: center;
 }
 
 .saved-chats-list {
@@ -21,16 +26,23 @@
   display: flex; /* Use flexbox to align info and button */
   justify-content: space-between; /* Push info to left, button to right */
   align-items: center; /* Vertically center items */
-  padding: 8px 5px;
-  margin-bottom: 5px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  border-radius: var(--border-radius-small, 4px);
+  transition: all 0.3s ease;
+  background-color: rgba(30, 30, 30, 0.4);
+  border: 1px solid rgba(43, 156, 124, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 /* Apply hover effect only when not deleting */
 .session-item:not(.is-deleting):hover {
-  background-color: var(--list-item-hover-bg, #444);
+  background-color: rgba(16, 115, 67, 0.25);
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  box-shadow: 0 4px 12px var(--user-bubble-glow, rgba(16, 115, 67, 0.2));
+  transform: translateY(-1px);
 }
 
 /* Dim the item slightly when deleting */
@@ -50,10 +62,11 @@
   display: block; /* Title on its own line */
   margin-bottom: 3px;
   font-size: 0.95em;
-  color: var(--ui-text-primary, #eee);
+  color: var(--user-message-text-color, #33b690);
   white-space: nowrap; /* Prevent title wrap */
   overflow: hidden;
   text-overflow: ellipsis; /* Add ellipsis if title too long */
+  text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 .session-item span {
@@ -66,43 +79,51 @@
 /* --- UPDATED: Group common button styles --- */
 .edit-session-button,
 .delete-session-button {
-  border: 1px solid transparent; /* Default border */
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   padding: 3px 7px;             /* Unified padding - slightly adjusted for visual balance */
   margin-left: 5px;             /* Keep existing margin */
   border-radius: var(--border-radius-small, 4px); /* Use theme variable or default */
   cursor: pointer;
   font-size: 0.9em;             /* Unified font size */
   line-height: 1.2;             /* Slightly adjusted for better vertical alignment */
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  transition: all 0.3s ease;
   flex-shrink: 0;               /* Prevent buttons from shrinking */
-  background: none;             /* Start with no background for edit button */
+  background-color: rgba(30, 30, 30, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15);
 }
 
-/* --- NEW: Styling for the edit button --- */
+/* --- Styling for the edit button --- */
 .edit-session-button {
-  /* Use secondary/muted button colors from theme, or fallbacks */
-  color: var(--foreground-muted, #aaa);
-  border-color: var(--border-input, #444); /* Subtle border */
+  /* Use theme colors */
+  color: var(--user-message-text-color, #33b690);
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.5));
 }
 
 .edit-session-button:hover:not(:disabled) {
-  background-color: var(--surface-hover, #444);
-  color: var(--foreground, #fff);
-  border-color: var(--border-input-hover, #666); /* Slightly lighter border on hover */
+  background-color: rgba(16, 115, 67, 0.25);
+  color: var(--header-text-color, #e08009);
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  box-shadow: 0 4px 12px var(--user-bubble-glow, rgba(16, 115, 67, 0.2));
+  transform: translateY(-1px);
 }
 
-/* Styling for the delete button - Keep specific danger colors */
-/* REPLACED previous .delete-session-button rule */
+/* Styling for the delete button with theme-consistent danger colors */
 .delete-session-button {
-  background-color: var(--button-danger-bg, #7f1d1d);
+  background-color: rgba(127, 29, 29, 0.7);
   color: var(--button-danger-text, #fecaca);
-  border-color: var(--button-danger-border, #b91c1c); /* Use border-color for consistency */
+  border-color: rgba(185, 28, 28, 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .delete-session-button:hover:not(:disabled) {
-  background-color: var(--button-danger-hover-bg, #b91c1c); /* Brighter red on hover */
+  background-color: rgba(185, 28, 28, 0.8);
   color: var(--button-danger-hover-text, #fee2e2);
-  border-color: var(--button-danger-hover-border, #cf6679); /* Optional: define hover border */
+  border-color: rgba(207, 102, 121, 0.8);
+  box-shadow: 0 4px 12px rgba(207, 102, 121, 0.3);
+  transform: translateY(-1px);
 }
 
 /* --- UPDATED: Unified disabled styles --- */
@@ -139,10 +160,16 @@
 }
 
 .error-message {
-    color: var(--accent-color-error, #dc3545); /* Red color for errors */
+    color: var(--header-text-color, #e08009);
     font-size: 0.9em;
-    margin-top: 5px; /* Space from list/header */
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    padding: 8px;
+    background-color: rgba(224, 128, 9, 0.2);
+    border-radius: var(--border-radius-small, 4px);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    text-align: center;
 }
 
 /* --- ADDED: Styles for the rename input and its buttons --- */
@@ -156,43 +183,53 @@
 .session-edit-input {
   flex-grow: 1; /* Input takes most space */
   padding: 4px 8px;
-  border: 1px solid var(--border-input, #444);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   border-radius: var(--border-radius-small, 4px);
-  background-color: var(--surface-input, #333);
-  color: var(--input-text-color, #e0e0e0);
+  background-color: rgba(30, 30, 30, 0.65);
+  color: var(--input-text-color, #33b690);
   font-size: 0.9em;
   line-height: 1.2;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .session-edit-input:focus {
   outline: none;
-  border-color: var(--focus-ring-accent, #bb86fc);
-  box-shadow: 0 0 0 1px var(--focus-ring-color, rgba(187, 134, 252, 0.3));
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  box-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 .session-edit-button {
   padding: 3px 7px; /* Match other buttons */
-  border: 1px solid var(--border-input, #444);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   border-radius: var(--border-radius-small, 4px);
-  background-color: var(--surface-input, #333);
-  color: var(--foreground-muted, #aaa);
+  background-color: rgba(30, 30, 30, 0.65);
+  color: var(--user-message-text-color, #33b690);
   cursor: pointer;
   font-size: 0.9em;
   line-height: 1.2;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+  transition: all 0.3s ease;
   flex-shrink: 0;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15);
 }
 
 .session-edit-button.save:hover:not(:disabled) {
-  background-color: var(--button-success-bg, #166534); /* Example success color */
+  background-color: rgba(22, 101, 52, 0.8);
   color: var(--button-success-text, #dcfce7);
-  border-color: var(--button-success-border, #22c55e);
+  border-color: rgba(34, 197, 94, 0.8);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  transform: translateY(-1px);
 }
 
 .session-edit-button.cancel:hover:not(:disabled) {
-  background-color: var(--button-danger-bg, #7f1d1d); /* Use danger color */
+  background-color: rgba(127, 29, 29, 0.7);
   color: var(--button-danger-text, #fecaca);
-  border-color: var(--button-danger-border, #b91c1c);
+  border-color: rgba(185, 28, 28, 0.7);
+  box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+  transform: translateY(-1px);
 }
 
 .session-edit-button:disabled {

@@ -270,7 +270,7 @@ function ModelLoadPanel({
 
   return (
     <div className="model-load-panel">
-      <h3>Load Model</h3>
+      <h2 className="panel-title">Load Model</h2>
 
       {/* --- Display HF Token Status --- (NEW) */}
       <div className="hf-token-status" style={{ fontSize: '0.9em', marginBottom: '10px', opacity: 0.8 }}>

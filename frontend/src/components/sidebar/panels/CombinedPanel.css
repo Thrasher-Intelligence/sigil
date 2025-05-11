@@ -1,7 +1,7 @@
 /* CombinedPanel styles */
 
-/* Settings Panel Overlay */
-.settings-panel-overlay {
+/* Shared Panel Overlay Styles */
+.panel-overlay {
   position: absolute;
   top: 0;
   left: 40px; /* Match the width of tab buttons */
@@ -14,30 +14,41 @@
   pointer-events: none; /* Allow clicks to pass through to elements below */
 }
 
-/* Container for the settings panel */
-.settings-panel-container {
+/* Container for the panel content */
+.panel-container {
   flex-grow: 1;
   display: flex;
   height: 100%;
   pointer-events: auto;
+  position: relative;
 }
 
-/* Make the settings panel itself receive pointer events */
-.settings-panel-overlay .settings-panel {
+/* Glass panel base style - used by all panels */
+.glass-panel {
   pointer-events: auto;
-  max-height: 100%;
+  height: 100%;
   width: 100%;
   margin: 0;
   overflow-y: auto;
   border-radius: 0;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-  background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
   animation: panel-fade-in 0.3s ease-out;
+  
+  /* Glass effect styling */
+  background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  border-left: none; /* Remove left border to connect with tabs */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: var(--border-radius-large, 8px);
+  border-bottom-right-radius: var(--border-radius-large, 8px);
+  display: flex;
+  flex-direction: column;
 }
 
+/* Panel animation */
 @keyframes panel-fade-in {
   from {
     opacity: 0;
@@ -47,6 +58,28 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Settings panel specific overlay - for backward compatibility */
+.settings-panel-overlay {
+  position: absolute;
+  top: 0;
+  left: 40px;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  pointer-events: none;
+}
+
+/* Settings panel specific container - for backward compatibility */
+.settings-panel-container {
+  flex-grow: 1;
+  display: flex;
+  height: 100%;
+  pointer-events: auto;
 }
 
 /* Tab buttons */
@@ -89,6 +122,8 @@
   border-left: 3px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
   position: relative;
   z-index: 25; /* Even higher z-index to ensure it's above the overlay */
+  font-weight: 600;
+  text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 .panel-tab-button:hover:not(.active) {
@@ -96,7 +131,7 @@
   border-left: 3px solid var(--border-medium, #444444);
 }
 
-/* Tab content container */
+/* Tab content container - only shown when no glass panel is active */
 .panel-content {
   border: none;
   padding: 15px;
@@ -106,6 +141,16 @@
   overflow-y: auto;
   min-height: 350px; /* Ensure there's enough vertical space */
   position: relative; /* Needed for absolute positioning of overlay */
+  display: none; /* Hide by default, shown only when needed */
+}
+
+/* Apply common styling to panel contents */
+.glass-panel > div {
+  padding: var(--spacing-large, 1.5rem);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
 
 .panel-button-text {

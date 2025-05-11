@@ -32,7 +32,7 @@ const CombinedPanel = (props) => {
       onSessionSettingsChange,
   } = props;
   
-  const [activeTab, setActiveTab] = useState('settings'); // 'settings', 'modelLoad', 'interface', 'precision', or 'help'
+  const [activeTab, setActiveTab] = useState('settings'); // 'settings', 'modelLoad', 'savedChats', 'interface', 'precision', or 'help'
 
   // --- State for UI settings ---
   const [colorMode, setColorMode] = useState('dark'); // Default to 'dark'
@@ -78,6 +78,7 @@ const CombinedPanel = (props) => {
           onClick={() => setActiveTab('modelLoad')}
           title="Load Model"
           aria-label="Load Model panel"
+          style={{ zIndex: activeTab === 'modelLoad' ? 25 : 'auto' }}
         >
           <span className="panel-button-text">Mod</span>
         </button>
@@ -86,6 +87,7 @@ const CombinedPanel = (props) => {
           onClick={() => setActiveTab('savedChats')}
           title="Saved Chats"
           aria-label="Saved Chats panel"
+          style={{ zIndex: activeTab === 'savedChats' ? 25 : 'auto' }}
         >
           <span className="panel-button-text">Chat</span>
         </button>
@@ -94,6 +96,7 @@ const CombinedPanel = (props) => {
           onClick={() => setActiveTab('interface')}
           title="Interface"
           aria-label="Interface panel"
+          style={{ zIndex: activeTab === 'interface' ? 25 : 'auto' }}
         >
           <span className="panel-button-text">UI</span>
         </button>
@@ -104,6 +107,7 @@ const CombinedPanel = (props) => {
             onClick={() => setActiveTab('precision')}
             title="Precision"
             aria-label="Precision settings panel"
+            style={{ zIndex: activeTab === 'precision' ? 25 : 'auto' }}
           >
             <span className="panel-button-text">Prec</span>
           </button>
@@ -113,101 +117,137 @@ const CombinedPanel = (props) => {
           onClick={() => setActiveTab('help')}
           title="Help"
           aria-label="Help panel"
+          style={{ zIndex: activeTab === 'help' ? 25 : 'auto' }}
         >
           <span className="panel-button-text">Help</span>
         </button>
       </div>
 
-      {/* Tab Content Area */}
-      <div className="panel-content">
-        {/* Settings panel is rendered as an overlay outside the panel-content */}
-        {activeTab === 'modelLoad' && (
-          // Render ModelLoadPanel, passing only the props it needs
-          <ModelLoadPanel 
-            setLoadStatus={setLoadStatus}
-            setLoading={setLoading}
-            isLoading={isLoading}
-            isModelLoaded={isModelLoaded} // Use the destructured prop
-            currentModelPath={currentModelPath}
-            onHfUsernameUpdate={onHfUsernameUpdate}
-            onDeviceUpdate={onDeviceUpdate}
-            currentDevice={currentDevice}
-          />
-        )}
-        {activeTab === 'savedChats' && (
-          <SavedChatsPanel 
-            onSelectSession={onLoadSession}
-            onRenameSession={onTabRename}
-          />
-        )}
-        {activeTab === 'interface' && (
-          <div>
-            {/* Theme Selection */}
-            <div className="ui-settings-group">
-              <label htmlFor="theme-select" className="ui-settings-label">Theme:</label>
-              <select 
-                id="theme-select" 
-                value={themeName} 
-                onChange={e => setThemeName(e.target.value)}
-                className="ui-settings-select"
-              >
-                {themeList.map(theme => (
-                  <option key={theme} value={theme}>{theme}</option>
-                ))}
-              </select>
-            </div>
-
-
-            {/* Light/Dark Mode Toggle */}
-            <div className="mode-toggle-container">
-              <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
-              <ModeToggleSwitch
-                id="mode-toggle"
-                isDarkMode={colorMode === 'dark'}
-                onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
-              />
-              <span className="mode-toggle-value">
-                 {colorMode}
-              </span>
-            </div>
-          </div>
-        )}
-        {activeTab === 'help' && (
-          <div className="help-content">
-            <h4>Keyboard Shortcuts</h4>
-            <ul>
-              <li>
-                <strong>Toggle Settings Panel:</strong> 
-                <code>Cmd + ,</code> or <code>Ctrl + ,</code>
-              </li>
-              <li>
-                <strong>Clear Chat:</strong> 
-                <code>Ctrl + Shift + C</code>
-              </li>
-            </ul>
-          </div>
-        )}
-        {/* Conditionally render PrecisionSettingsPanel */}
-        {activeTab === 'precision' && currentDevice === 'cuda' && (
-          <PrecisionSettingsPanel /> 
-          // Assuming PrecisionSettingsPanel doesn't need specific props from CombinedPanel
-          // If it does, pass them here.
-        )}
+      {/* Panel Content Area (only visible when no overlay is active) */}
+      <div className="panel-content" style={{ display: activeTab === 'settings' || activeTab === 'modelLoad' || activeTab === 'savedChats' || activeTab === 'interface' || activeTab === 'help' || activeTab === 'precision' ? 'none' : 'block' }}>
+        {/* This area is now empty as all content is moved to overlays */}
       </div>
 
-      {/* Render SettingsPanel as an overlay when active */}
+      {/* Settings Panel Overlay */}
       {activeTab === 'settings' && (
-        <div className="settings-panel-overlay">
-          <div className="settings-panel-container">
-            <SettingsPanel 
-              modelLoaded={modelLoaded} 
-              onClearChat={onClearChat}
-              loadedSessionSettings={loadedSessionSettings}
-              activeTabId={activeTabId}
-              newChatSettings={newChatSettings}
-              onNewChatSettingsChange={onNewChatSettingsChange}
-              onSessionSettingsChange={onSessionSettingsChange}
-            />
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              <SettingsPanel 
+                modelLoaded={modelLoaded} 
+                onClearChat={onClearChat}
+                loadedSessionSettings={loadedSessionSettings}
+                activeTabId={activeTabId}
+                newChatSettings={newChatSettings}
+                onNewChatSettingsChange={onNewChatSettingsChange}
+                onSessionSettingsChange={onSessionSettingsChange}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Model Load Panel Overlay */}
+      {activeTab === 'modelLoad' && (
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              <ModelLoadPanel 
+                setLoadStatus={setLoadStatus}
+                setLoading={setLoading}
+                isLoading={isLoading}
+                isModelLoaded={isModelLoaded}
+                currentModelPath={currentModelPath}
+                onHfUsernameUpdate={onHfUsernameUpdate}
+                onDeviceUpdate={onDeviceUpdate}
+                currentDevice={currentDevice}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Saved Chats Panel Overlay */}
+      {activeTab === 'savedChats' && (
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              <SavedChatsPanel 
+                onSelectSession={onLoadSession}
+                onRenameSession={onTabRename}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Interface Panel Overlay */}
+      {activeTab === 'interface' && (
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              {/* Theme Selection */}
+              <div className="ui-settings-group">
+                <label htmlFor="theme-select" className="ui-settings-label">Theme:</label>
+                <select 
+                  id="theme-select" 
+                  value={themeName} 
+                  onChange={e => setThemeName(e.target.value)}
+                  className="ui-settings-select"
+                >
+                  {themeList.map(theme => (
+                    <option key={theme} value={theme}>{theme}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Light/Dark Mode Toggle */}
+              <div className="mode-toggle-container">
+                <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
+                <ModeToggleSwitch
+                  id="mode-toggle"
+                  isDarkMode={colorMode === 'dark'}
+                  onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
+                />
+                <span className="mode-toggle-value">
+                  {colorMode}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Help Panel Overlay */}
+      {activeTab === 'help' && (
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              <div className="help-content">
+                <h4>Keyboard Shortcuts</h4>
+                <ul>
+                  <li>
+                    <strong>Toggle Settings Panel:</strong> 
+                    <code>Cmd + ,</code> or <code>Ctrl + ,</code>
+                  </li>
+                  <li>
+                    <strong>Clear Chat:</strong> 
+                    <code>Ctrl + Shift + C</code>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Precision Panel Overlay */}
+      {activeTab === 'precision' && currentDevice === 'cuda' && (
+        <div className="panel-overlay">
+          <div className="panel-container">
+            <div className="glass-panel">
+              <PrecisionSettingsPanel />
+            </div>
           </div>
         </div>
       )}

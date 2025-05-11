@@ -232,7 +232,7 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
 
   return (
     <div className="saved-chats-panel">
-      <h4>Saved Chats <button onClick={fetchSessions} disabled={isLoading || isRenaming || !!editingSessionId || !!deletingSessionId} title="Refresh List">&#x21bb;</button></h4>
+      <h2 className="panel-title">Saved Chats <button onClick={fetchSessions} disabled={isLoading || isRenaming || !!editingSessionId || !!deletingSessionId} title="Refresh List">&#x21bb;</button></h2>
       {isLoading && <p>Loading sessions...</p>}
       {error && <p className="error-message">List Error: {error}</p>}
       {/* Display specific errors near the top for clarity */}

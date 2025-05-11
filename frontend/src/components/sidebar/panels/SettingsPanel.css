@@ -1,27 +1,17 @@
 /* frontend/src/components/panels/SettingsPanel.css */
 
-/* Settings Panel */
-.settings-panel {
-  width: 320px; /* Wider panel for prominence */
-  flex-shrink: 0; /* Prevent panel from shrinking */
+/* Settings Panel - applies to the content inside the glass-panel */
+.settings-panel, 
+.glass-panel .settings-panel {
   padding: var(--spacing-large); /* 1.5rem */
   display: flex;
   flex-direction: column;
   overflow-y: auto; /* Allow scrolling if content overflows */
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
-  /* Glass effect */
-  background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
-  border-top-left-radius: 0; /* Flat on the left side to align with tabs */
-  border-bottom-left-radius: 0;
-  border-top-right-radius: var(--border-radius-large, 8px);
-  border-bottom-right-radius: var(--border-radius-large, 8px);
-  border-left: none; /* Remove left border to connect with tabs */
-  box-shadow: 0 12px 32px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
   position: relative; /* For pseudo-elements */
+  height: 100%; /* Fill the container height */
+  width: 100%; /* Fill the container width */
 }
 
 .settings-panel::-webkit-scrollbar {
@@ -37,7 +27,8 @@
  border-radius: 3px; /* Keep small radius for thumb */
 }
 
-.settings-panel::before {
+/* Gradient border effect for all panels */
+.glass-panel::before {
   content: '';
   position: absolute;
   top: 0;
@@ -51,7 +42,9 @@
   z-index: 5;
 }
 
-.settings-panel h2 {
+/* Panel headers styling - applies to all h2 elements inside settings-panel and glass-panel */
+.settings-panel h2,
+.glass-panel h2 {
   color: var(--header-text-color); /* Use --palette-9 as requested */
   margin-top: 0;
   margin-bottom: var(--spacing-large); /* 1.5rem */
@@ -62,11 +55,15 @@
   letter-spacing: 1px;
 }
 
-.settings-group {
+/* Setting group containers */
+.settings-group,
+.glass-panel .settings-group {
   margin-bottom: 1.25rem; /* Specific spacing */
 }
 
-.settings-group label {
+/* Label styling for all panels */
+.settings-group label,
+.glass-panel label {
   display: block;
   margin-bottom: var(--spacing-small); /* 0.5rem */
   color: var(--user-message-text-color, #33b690); /* Use theme color for labels */
@@ -75,8 +72,12 @@
   text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3)); /* Subtle text glow */
 }
 
+/* Input styling for all panels */
 .settings-panel input[type="number"],
-.settings-panel textarea {
+.settings-panel textarea,
+.glass-panel input[type="number"],
+.glass-panel textarea,
+.glass-panel input[type="text"] {
   width: 100%;
   padding: 0.6rem 0.8rem; /* Specific padding */
   background-color: rgba(30, 30, 30, 0.65); /* Darker with transparency */
@@ -97,13 +98,19 @@
   min-height: 60px;
 }
 
+/* Focus state for input elements */
 .settings-panel input[type="number"]:focus,
-.settings-panel textarea:focus {
+.settings-panel textarea:focus,
+.glass-panel input[type="number"]:focus,
+.glass-panel textarea:focus,
+.glass-panel input[type="text"]:focus {
   border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7)); /* Match theme */
   box-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.3)); /* Glowing effect */
 }
 
-.settings-panel button {
+/* Primary button styling for all panels */
+.settings-panel button,
+.glass-panel button:not(.panel-tab-button):not(.edit-session-button):not(.delete-session-button):not(.session-edit-button) {
   width: 100%;
   padding: 0.7rem 1rem; /* Specific padding */
   margin-top: var(--spacing-small); /* 0.5rem */
@@ -121,13 +128,17 @@
   -webkit-backdrop-filter: blur(5px);
 }
 
-.settings-panel button:hover:not(:disabled) {
+/* Button hover state */
+.settings-panel button:hover:not(:disabled),
+.glass-panel button:not(.panel-tab-button):not(.edit-session-button):not(.delete-session-button):not(.session-edit-button):hover:not(:disabled) {
   background-color: var(--primary-hover);
   box-shadow: 0 6px 16px var(--user-bubble-glow, rgba(16, 115, 67, 0.4));
   transform: translateY(-1px);
 }
 
-.settings-panel button:disabled {
+/* Button disabled state */
+.settings-panel button:disabled,
+.glass-panel button:not(.panel-tab-button):not(.edit-session-button):not(.delete-session-button):not(.session-edit-button):disabled {
   background-color: var(--surface-disabled);
   color: var(--text-disabled);
   cursor: not-allowed;
@@ -225,6 +236,8 @@
   border-radius: var(--border-radius-small);
   text-align: center;
   font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 
 .error-message {
@@ -235,4 +248,57 @@
   border-radius: var(--border-radius-small);
   text-align: center;
   font-size: 0.9rem;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Shared UI elements that can be used in other panels */
+.panel-title,
+.glass-panel .panel-title {
+  color: var(--header-text-color); 
+  margin-top: 0;
+  margin-bottom: var(--spacing-large);
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for refresh button in title */
+.panel-title button {
+  width: auto !important;
+  padding: 0.3rem !important;
+  margin: 0 0 0 0.5rem !important;
+  background: rgba(30, 30, 30, 0.45) !important;
+  color: var(--user-message-text-color, #33b690) !important;
+  border-radius: 50% !important;
+  font-size: 1rem !important;
+  height: 1.8rem;
+  width: 1.8rem !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15) !important;
+}
+
+.panel-title button:hover:not(:disabled) {
+  transform: rotate(180deg) translateY(0) !important;
+  background: rgba(16, 115, 67, 0.25) !important;
+  transition: transform 0.5s ease, background-color 0.3s ease !important;
+}
+
+.panel-title button:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+/* Adding a general class for panel container */
+.panel-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
