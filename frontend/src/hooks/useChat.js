@@ -52,14 +52,16 @@ export const useChat = ({
     }
     console.log(`useChat: Loading session ${sessionData.thread_id} into hook state`);
 
-    const formattedHistory = sessionData.messages.map((msg, index) => ({
-      role: msg.role || 'unknown',
-      content: msg.content || '',
-      text: msg.content || '', // For display
-      id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
-      sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
-      tokens: msg.token_count || null // Add token count from loaded messages
-    }));
+    const formattedHistory = sessionData.messages.map((msg, index) => {
+      return {
+        role: msg.role || 'unknown',
+        content: msg.content || '',
+        text: msg.content || '', // For display
+        id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
+        sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
+        tokens: msg.token_count || msg.tokens || null // Use any available token count
+      };
+    });
     setChatHistory(formattedHistory);
     setCurrentThreadId(sessionData.thread_id);
     // onSetAppCurrentThreadId?.(sessionData.thread_id); // Inform App if needed
@@ -84,13 +86,13 @@ export const useChat = ({
     // onSetAppError?.(null);
 
     const newUserMessageId = `user-${Date.now()}`;
-    // Calculate approximate token count for user message (this is an estimation)
-    const estimatedTokenCount = Math.ceil(userInput.split(/\s+/).length * 1.3); // rough estimate
+    // Calculate approximate token count for user message (1 token ≈ 4 chars for English text)
+    const estimatedTokenCount = Math.max(1, Math.ceil(userInput.length / 4));
     const newUserMessage = { 
       sender: 'user', 
       text: userInput, 
       id: newUserMessageId,
-      tokens: estimatedTokenCount // Add estimated token count
+      tokens: estimatedTokenCount
     };
 
     const updatedChatHistory = [...currentChatHistoryFromArg, newUserMessage];
@@ -156,16 +158,21 @@ export const useChat = ({
       }
 
       const data = await response.json();
+      // Extract essential data from response
       const backendResponse = data.response;
       const newThreadId = data.thread_id; // This is the thread_id returned by the backend
-      const tokenCount = data.token_count || null; // Extract token count if available
+      
+      // Try to find token count in any of the common fields
+      const tokenCount = data.token_count || data.tokens || 
+                         (data.usage && data.usage.total_tokens) || 
+                         null;
 
       const backendMessageId = `backend-${Date.now()}`;
       const backendMessage = { 
         sender: 'backend', 
         text: backendResponse, 
         id: backendMessageId,
-        tokens: tokenCount // Add token count to the message
+        tokens: tokenCount !== null ? Number(tokenCount) : Math.ceil(backendResponse.length / 4) // Use token count or estimate
       };
 
       const loadingIdToRemove = loadingMessageIdRef.current;

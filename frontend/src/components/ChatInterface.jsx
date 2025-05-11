@@ -12,6 +12,12 @@ function ChatInterface({
   globalError,
   messagesEndRef,
 }) {
+  // Helper to estimate tokens if none provided (~ 4 chars per token)
+  const estimateTokens = (text) => {
+    if (!text) return 0;
+    return Math.max(1, Math.ceil(text.length / 4));
+  };
+
   return (
     <div className="chat-area">
       <div className="messages-area">
@@ -49,9 +55,19 @@ function ChatInterface({
             ) : (
               <>
                 <p>{msg.text}</p>
-                {msg.tokens && (
-                  <div className="token-counter">
-                    {msg.tokens} tokens
+                {!msg.id.startsWith('system-') && (
+                  <div 
+                    style={{
+                      fontSize: '0.7rem',
+                      color: '#aaa',
+                      textAlign: 'right',
+                      marginTop: '0.5rem',
+                      opacity: 0.6,
+                      fontStyle: 'italic',
+                    }}
+                  >
+                    {/* Use provided token count or estimate tokens */}
+                    {(msg.tokens || estimateTokens(msg.text))} tokens
                   </div>
                 )}
               </>

@@ -1,0 +1,130 @@
+/* Chat components styling module */
+
+/* Base Chat Bubble */
+.chatBubble {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  max-width: 75%;
+  word-wrap: break-word;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  overflow: hidden;
+  transition: height 0.3s ease-out, padding 0.3s ease-out, margin 0.3s ease-out;
+  position: relative;
+}
+
+/* User bubble */
+.userBubble {
+  composes: chatBubble;
+  background-color: var(--surface-user-msg, #4a4a70);
+  color: var(--foreground, #e0e0e0);
+  margin-left: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 15px var(--user-message-glow-color, rgba(3, 218, 198, 0.4));
+}
+
+/* Assistant bubble */
+.assistantBubble {
+  composes: chatBubble;
+  background-color: var(--surface-backend-msg, #2a2a2a);
+  color: var(--foreground, #e0e0e0);
+  margin-right: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 15px var(--backend-message-glow-color, rgba(187, 134, 252, 0.4));
+}
+
+/* Loading bubble */
+.loadingBubble {
+  composes: chatBubble;
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  margin-right: auto;
+  margin-left: 0;
+  padding: 0.5rem 1.25rem;
+  max-width: 100px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+/* System message */
+.systemMessage {
+  composes: chatBubble;
+  color: var(--foreground-muted, #aaa);
+  font-style: italic;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Error system message */
+.errorMessage {
+  composes: systemMessage;
+  color: var(--error-color, #cf6679);
+  background-color: var(--error-bg-faded, rgba(207, 102, 121, 0.1));
+  font-style: normal;
+  border-radius: 4px;
+}
+
+/* Bubble content */
+.bubbleContent {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Token counter */
+.tokenCounter {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #ccc);
+  text-align: right;
+  margin-top: 0.5rem;
+  opacity: 0.6;
+  font-style: italic;
+  position: relative;
+  display: block;
+  padding-right: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+.userBubble .tokenCounter, 
+.assistantBubble .tokenCounter {
+  color: var(--text-placeholder, #aaa);
+}
+
+.chatBubble:hover .tokenCounter {
+  opacity: 0.8;
+}
+
+/* Loading dots container */
+.dotsContainer {
+  display: flex;
+  align-items: center;
+}
+
+.dotsContainer span {
+  height: 8px;
+  width: 8px;
+  margin-right: 4px;
+  background-color: var(--foreground-muted, #aaa);
+  border-radius: 50%;
+  display: inline-block;
+  animation: bounce-flash 1.4s infinite ease-in-out both;
+}
+
+.dotsContainer span:nth-child(1) { animation-delay: -0.32s; }
+.dotsContainer span:nth-child(2) { animation-delay: -0.16s; }
+.dotsContainer span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce-flash {
+  0%, 80%, 100% { 
+    transform: scale(0); 
+    opacity: 0.5;
+  } 40% { 
+    transform: scale(1.0); 
+    opacity: 1;
+  }
+}
