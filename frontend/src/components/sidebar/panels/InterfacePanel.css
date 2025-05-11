@@ -1,0 +1,129 @@
+.interface-panel {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.interface-panel h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+/* Settings group */
+.ui-settings-group {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Label for settings */
+.ui-settings-label {
+  display: block;
+  margin-bottom: var(--spacing-small, 0.5rem);
+  color: var(--text-secondary, #ccc);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Select input */
+.ui-settings-select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: var(--surface-input);
+  border: 1px solid var(--border-input);
+  color: var(--input-text-color);
+  border-radius: var(--border-radius-small);
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: auto;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ui-settings-select:focus {
+  border-color: var(--focus-ring-accent);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.ui-settings-select option {
+  padding: 0.5rem;
+}
+
+/* Font preview */
+.font-preview-bubble {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius-large);
+  background: rgba(42, 42, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  color: var(--foreground);
+  transition: box-shadow 0.3s ease;
+}
+
+.font-preview-bubble::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(187, 134, 252, 0.3), rgba(187, 134, 252, 0), rgba(187, 134, 252, 0.3));
+}
+
+.font-preview-bubble:hover {
+  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.12);
+}
+
+/* Font token counter style */
+.font-preview-tokens {
+  font-size: 0.7rem;
+  color: rgba(187, 134, 252, 0.7);
+  text-align: right;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  font-style: italic;
+  position: relative;
+  display: block;
+  padding-right: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+/* Mode toggle container */
+.mode-toggle-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding-top: 8px;
+  margin-top: 16px;
+}
+
+.mode-toggle-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.mode-toggle-label {
+  margin-bottom: 8px;
+}
+
+.mode-toggle-value {
+  margin-left: 10px;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .interface-panel {
+    padding: 12px;
+  }
+}

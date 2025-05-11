@@ -111,8 +111,6 @@ After loading a model, the frontend presents a clean interface to interact with 
 - **Settings Persist:** Sampling parameters (like temperature, top_p, etc.) are saved with each chat and will be restored when you reopen it.
 - **Multiple Chats:** Sigil supports multiple chat instances, allowing you to work with different models or conversations simultaneously.
 
-![Chat Interface Inference Example](assets/inference.gif)
-
 ### Themes
 
 Sigil supports both light and dark variants of each theme. The theme system is designed to be easily extensible:
@@ -124,17 +122,17 @@ Sigil supports both light and dark variants of each theme. The theme system is d
 
 ### Examples of a few themes
 
-Irezumi - Dark Theme
-![Irezumi - Dark Theme](assets/irezumi_dark.png)
+Gambler - Dark Theme
+![Gambler - Dark Theme](assets/gambler.png)
 
-Kanagawa Wave - Dark Theme
-![Kanagawa Wave - Dark Theme](assets/kana_wave_dark.png)
+AlienBlood - Dark Theme
+![AlienBlood - Dark Theme](assets/alienblood.png)
 
-Irezumi - Light Theme
-![Irezumi - Light Theme](assets/irezumi_light.png)
+Gambler - Light Theme
+![Gambler - Light Theme](assets/gambler_light.png)
 
 Starshine - Light Theme
-![Starshine - Light Theme](assets/starshine_light.png)
+![Starshine - Light Theme](assets/starshine.png)
 
 
 

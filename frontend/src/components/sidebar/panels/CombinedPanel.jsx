@@ -3,8 +3,8 @@ import SettingsPanel from './SettingsPanel';
 import ModelLoadPanel from './ModelLoadPanel';
 import PrecisionSettingsPanel from './PrecisionSettingsPanel';
 import SavedChatsPanel from './SavedChatsPanel';
+import InterfacePanel from './InterfacePanel';
 import PropTypes from 'prop-types';
-import ModeToggleSwitch from '../../ui/ModeToggleSwitch';
 import './CombinedPanel.css';
 
 // This component receives all props needed by both SettingsPanel and ModelLoadPanel
@@ -36,8 +36,6 @@ const CombinedPanel = (props) => {
 
   // --- State for UI settings ---
   const [colorMode, setColorMode] = useState('dark'); // Default to 'dark'
-  // Always use Fira Code as the interface font
-  const fontFamily = 'Fira Code';
 
   // --- Effects to apply UI settings ---
   useEffect(() => {
@@ -177,35 +175,13 @@ const CombinedPanel = (props) => {
         <div className="panel-overlay">
           <div className="panel-container">
             <div className="glass-panel">
-              {/* Theme Selection and Mode Selection in one section */}
-              <div className="ui-settings-group">
-                <label htmlFor="theme-select" className="ui-settings-label">Theme:</label>
-                <select 
-                  id="theme-select" 
-                  value={themeName} 
-                  onChange={e => setThemeName(e.target.value)}
-                  className="ui-settings-select"
-                >
-                  {themeList.map(theme => (
-                    <option key={theme} value={theme}>{theme}</option>
-                  ))}
-                </select>
-                
-                {/* Light/Dark Mode Toggle - now positioned directly under theme selection */}
-                <div className="mode-toggle-container" style={{ marginTop: '12px' }}>
-                  <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <ModeToggleSwitch
-                      id="mode-toggle"
-                      isDarkMode={colorMode === 'dark'}
-                      onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
-                    />
-                    <span className="mode-toggle-value" style={{ marginLeft: '10px' }}>
-                      {colorMode}
-                    </span>
-                  </div>
-                </div>
-              </div>
+              <InterfacePanel
+                themeName={themeName}
+                setThemeName={setThemeName}
+                themeList={themeList}
+                colorMode={colorMode}
+                setColorMode={setColorMode}
+              />
             </div>
           </div>
         </div>
