@@ -47,7 +47,14 @@ function ChatInterface({
                 <span>.</span>
               </div>
             ) : (
-              <p>{msg.text}</p>
+              <>
+                <p>{msg.text}</p>
+                {msg.tokens && (
+                  <div className="token-counter">
+                    {msg.tokens} tokens
+                  </div>
+                )}
+              </>
             )}
           </div>
         ))}
@@ -85,4 +92,4 @@ function ChatInterface({
   );
 }
 
-export default ChatInterface; 
+export default ChatInterface;

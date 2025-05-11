@@ -350,6 +350,31 @@ body {
   white-space: pre-wrap; /* Preserve whitespace and wrap lines */
 }
 
+.token-counter {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #ccc);
+  text-align: right;
+  margin-top: 0.5rem;
+  opacity: 0.6;
+  font-style: italic;
+  position: relative;
+  display: block;
+  padding-right: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+.message:hover .token-counter {
+  opacity: 0.8;
+}
+
+.backend-message .token-counter {
+  color: var(--text-placeholder, #aaa);
+}
+
+.user-message .token-counter {
+  color: var(--text-placeholder, #aaa);
+}
+
 .error-message.chat-error {
   color: var(--error-color, #ff6b6b);
   border: 1px solid var(--error-color, #ff6b6b);
