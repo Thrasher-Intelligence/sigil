@@ -32,7 +32,7 @@ const CombinedPanel = (props) => {
       onSessionSettingsChange,
   } = props;
   
-  const [activeTab, setActiveTab] = useState('settings'); // 'settings', 'modelLoad', 'savedChats', 'interface', 'precision', or 'help'
+  const [activeTab, setActiveTab] = useState('settings'); // 'settings', 'modelLoad', 'savedChats', 'interface', or 'precision'
 
   // --- State for UI settings ---
   const [colorMode, setColorMode] = useState('dark'); // Default to 'dark'
@@ -112,19 +112,10 @@ const CombinedPanel = (props) => {
             <span className="panel-button-text">Prec</span>
           </button>
         )}
-        <button
-          className={`panel-tab-button ${activeTab === 'help' ? 'active' : ''}`}
-          onClick={() => setActiveTab('help')}
-          title="Help"
-          aria-label="Help panel"
-          style={{ zIndex: activeTab === 'help' ? 25 : 'auto' }}
-        >
-          <span className="panel-button-text">Help</span>
-        </button>
       </div>
 
       {/* Panel Content Area (only visible when no overlay is active) */}
-      <div className="panel-content" style={{ display: activeTab === 'settings' || activeTab === 'modelLoad' || activeTab === 'savedChats' || activeTab === 'interface' || activeTab === 'help' || activeTab === 'precision' ? 'none' : 'block' }}>
+      <div className="panel-content" style={{ display: activeTab === 'settings' || activeTab === 'modelLoad' || activeTab === 'savedChats' || activeTab === 'interface' || activeTab === 'precision' ? 'none' : 'block' }}>
         {/* This area is now empty as all content is moved to overlays */}
       </div>
 
@@ -220,28 +211,7 @@ const CombinedPanel = (props) => {
         </div>
       )}
       
-      {/* Help Panel Overlay */}
-      {activeTab === 'help' && (
-        <div className="panel-overlay">
-          <div className="panel-container">
-            <div className="glass-panel">
-              <div className="help-content">
-                <h4>Keyboard Shortcuts</h4>
-                <ul>
-                  <li>
-                    <strong>Toggle Settings Panel:</strong> 
-                    <code>Cmd + ,</code> or <code>Ctrl + ,</code>
-                  </li>
-                  <li>
-                    <strong>Clear Chat:</strong> 
-                    <code>Ctrl + Shift + C</code>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+
       
       {/* Precision Panel Overlay */}
       {activeTab === 'precision' && currentDevice === 'cuda' && (
