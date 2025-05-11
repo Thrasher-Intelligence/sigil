@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import devtoolsSourcemapsPlugin from './plugins/devtools-sourcemaps'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    devtoolsSourcemapsPlugin()
+  ],
   server: {
     proxy: {
       '/api/v1': {
@@ -11,5 +15,8 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  build: {
+    sourcemap: true
   }
 })

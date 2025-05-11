@@ -120,6 +120,24 @@
   border-color: var(--button-danger-border, #b91c1c);
 }
 
+/* Delete confirmation option styling */
+.delete-confirm-option {
+  margin-top: 10px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+}
+
+.delete-confirm-option label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.delete-confirm-option input[type="checkbox"] {
+  margin-right: 8px;
+}
+
 .error-message {
     color: var(--accent-color-error, #dc3545); /* Red color for errors */
     font-size: 0.9em;

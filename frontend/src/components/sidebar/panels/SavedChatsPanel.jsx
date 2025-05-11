@@ -11,6 +11,9 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
   const [sessionLoadError, setSessionLoadError] = useState(null); // Error specific to loading a session
   const [deletingSessionId, setDeletingSessionId] = useState(null); // Track deleting session
   const [deleteError, setDeleteError] = useState(null); // Error specific to deleting
+  const [skipDeleteConfirm, setSkipDeleteConfirm] = useState(
+    localStorage.getItem('skipDeleteConfirm') === 'true'
+  ); // User preference to skip delete confirmation
 
   // --- ADDED: State for editing ---
   const [editingSessionId, setEditingSessionId] = useState(null); // Track which session is being edited
@@ -88,8 +91,8 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
     // Prevent deleting if already deleting another, editing this one, or loading this one
     if (deletingSessionId || loadingSessionId === threadId || editingSessionId === threadId) return;
 
-    // Optional: Confirm deletion
-    if (!window.confirm(`Are you sure you want to delete session ${threadId}? This cannot be undone.`)) {
+    // Optional: Confirm deletion (skip if user preference is set)
+    if (!skipDeleteConfirm && !window.confirm(`Are you sure you want to delete session ${threadId}? This cannot be undone.`)) {
         return;
     }
 
@@ -237,6 +240,21 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
       {deleteError && <p className="error-message">Delete Error: {deleteError}</p>}
       {/* --- ADDED: Rename Error display --- */}
       {renameError && <p className="error-message">Rename Error: {renameError}</p>}
+
+      <div className="delete-confirm-option">
+        <label>
+          <input
+            type="checkbox"
+            checked={skipDeleteConfirm}
+            onChange={(e) => {
+              const newValue = e.target.checked;
+              setSkipDeleteConfirm(newValue);
+              localStorage.setItem('skipDeleteConfirm', newValue);
+            }}
+          />
+          Don't ask for confirmation when deleting chats
+        </label>
+      </div>
 
       {!isLoading && !error && sessions.length === 0 && (
         <p>No saved sessions found.</p>
