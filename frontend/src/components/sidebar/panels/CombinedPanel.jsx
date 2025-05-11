@@ -69,6 +69,7 @@ const CombinedPanel = (props) => {
           onClick={() => setActiveTab('settings')}
           title="Settings"
           aria-label="Settings panel"
+          style={{ zIndex: activeTab === 'settings' ? 25 : 'auto' }}
         >
           <span className="panel-button-text">Set</span>
         </button>
@@ -197,15 +198,17 @@ const CombinedPanel = (props) => {
       {/* Render SettingsPanel as an overlay when active */}
       {activeTab === 'settings' && (
         <div className="settings-panel-overlay">
-          <SettingsPanel 
-            modelLoaded={modelLoaded} 
-            onClearChat={onClearChat}
-            loadedSessionSettings={loadedSessionSettings}
-            activeTabId={activeTabId}
-            newChatSettings={newChatSettings}
-            onNewChatSettingsChange={onNewChatSettingsChange}
-            onSessionSettingsChange={onSessionSettingsChange}
-          />
+          <div className="settings-panel-container">
+            <SettingsPanel 
+              modelLoaded={modelLoaded} 
+              onClearChat={onClearChat}
+              loadedSessionSettings={loadedSessionSettings}
+              activeTabId={activeTabId}
+              newChatSettings={newChatSettings}
+              onNewChatSettingsChange={onNewChatSettingsChange}
+              onSessionSettingsChange={onSessionSettingsChange}
+            />
+          </div>
         </div>
       )}
     </div>

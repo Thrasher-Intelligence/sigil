@@ -2,7 +2,7 @@
 
 /* Settings Panel */
 .settings-panel {
-  width: 320px; /* Wider panel for more prominence */
+  width: 320px; /* Wider panel for prominence */
   flex-shrink: 0; /* Prevent panel from shrinking */
   padding: var(--spacing-large); /* 1.5rem */
   display: flex;
@@ -15,7 +15,11 @@
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
-  border-radius: var(--border-radius-large, 8px);
+  border-top-left-radius: 0; /* Flat on the left side to align with tabs */
+  border-bottom-left-radius: 0;
+  border-top-right-radius: var(--border-radius-large, 8px);
+  border-bottom-right-radius: var(--border-radius-large, 8px);
+  border-left: none; /* Remove left border to connect with tabs */
   box-shadow: 0 12px 32px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
   position: relative; /* For pseudo-elements */
 }
@@ -44,6 +48,7 @@
     rgba(43, 156, 124, 0),
     var(--user-bubble-border, rgba(43, 156, 124, 0.7)),
     rgba(43, 156, 124, 0));
+  z-index: 5;
 }
 
 .settings-panel h2 {
@@ -84,6 +89,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   backdrop-filter: blur(5px); /* Input glass effect */
   -webkit-backdrop-filter: blur(5px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .settings-panel textarea {
@@ -198,6 +204,7 @@
   appearance: auto;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .font-select:focus {
