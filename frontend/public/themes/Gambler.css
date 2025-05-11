@@ -10,6 +10,25 @@
   --vegas-neon-red: #FF2D55;
   --vegas-neon-green: #39FF14;
   
+  /* Chat Message Styling */
+  --user-bubble-bg: rgba(255, 0, 144, 0.25); /* Subtle pink tint from vegas-neon-pink */
+  --user-bubble-border: rgba(255, 0, 144, 0.5); /* From vegas-neon-pink */
+  --user-bubble-glow: rgba(255, 0, 144, 0.2); /* Subtle glow effect */
+  --assistant-bubble-bg: rgba(0, 225, 255, 0.15); /* Subtle blue tint from vegas-neon-blue */
+  --assistant-bubble-border: rgba(0, 225, 255, 0.4); /* From vegas-neon-blue */
+  --assistant-bubble-glow: rgba(0, 225, 255, 0.15); /* Subtle glow effect */
+  
+  /* Tab Styling */
+  --tab-inactive-bg: rgba(26, 17, 42, 0.8); /* Darker variant of vegas-background-surface */
+  --tab-inactive-color: #B099D0; /* Light purplish text */
+  --tab-hover-bg: rgba(157, 0, 255, 0.3); /* Light variant of vegas-neon-purple */
+  --tab-hover-color: #CCBBEE; /* Lighter text on hover */
+  --tab-active-bg: rgba(255, 215, 0, 0.15); /* Subtle gold background */
+  --tab-active-color: var(--vegas-neon-gold); /* Match gold */
+  --tab-border-color: rgba(75, 0, 130, 0.4); /* Subtle border from vegas-royal-purple */
+  --tab-active-border-color: rgba(255, 215, 0, 0.5); /* Stronger border for active tab */
+  --tab-container-border-color: rgba(75, 0, 130, 0.4); /* Border below tabs */
+  
   /* Casino/Luxury Elements */
   --vegas-gold: #D4AF37;
   --vegas-royal-purple: #4B0082;
@@ -135,11 +154,16 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
-  --panel-tab-bg: var(--panel-tab-bg-dark);
-  --panel-tab-active-bg: var(--panel-tab-active-bg-dark);
-  --panel-tab-text: var(--panel-tab-text-dark);
-  --panel-tab-active-text: var(--panel-tab-active-text-dark);
+  /* Tab Overrides */
+  --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
+  --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-dark));
+  --panel-tab-text: var(--tab-inactive-color, var(--panel-tab-text-dark));
+  --panel-tab-active-text: var(--tab-active-color, var(--panel-tab-active-text-dark));
   --panel-container-bg: var(--panel-container-bg-dark);
+  
+  /* Chat Bubble Styles */
+  --surface-user-msg: var(--user-bubble-bg, var(--vegas-background-surface));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--vegas-background-surface));
 
   /* Button Base Variables */
   --primary: var(--primary-dark);
@@ -183,11 +207,15 @@ body.light-mode {
   --disabled-fg: var(--disabled-fg-light);
 
   /* Panel Tabs */
-  --panel-tab-bg: var(--panel-tab-bg-light);
-  --panel-tab-active-bg: var(--panel-tab-active-bg-light);
-  --panel-tab-text: var(--panel-tab-text-light);
-  --panel-tab-active-text: var(--panel-tab-active-text-light);
+  --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-light));
+  --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-light));
+  --panel-tab-text: var(--tab-inactive-color, var(--panel-tab-text-light));
+  --panel-tab-active-text: var(--tab-active-color, var(--panel-tab-active-text-light));
   --panel-container-bg: var(--panel-container-bg-light);
+  
+  /* Chat Bubble Styles - Light Mode */
+  --surface-user-msg: var(--user-bubble-bg, var(--mojave-background-surface));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--mojave-background-surface));
 
   /* Button Base Variables */
   --primary: var(--primary-light);

@@ -5,11 +5,11 @@
   align-items: center; /* Vertically center items */
   padding: 8px 12px;
   margin-right: 4px; /* Space between tabs */
-  border: 1px solid var(--tab-border-color, var(--border-color, #ccc)); /* Use specific or fallback border */
+  border: 1px solid var(--tab-border-color, var(--border-input, var(--border-color, #ccc))); /* Use specific or fallback border */
   border-bottom: none; /* Remove bottom border for classic tab look */
   border-radius: 4px 4px 0 0; /* Rounded top corners */
-  background-color: var(--tab-inactive-bg, #e0e0e0);
-  color: var(--tab-inactive-color, #333);
+  background-color: var(--tab-inactive-bg, var(--panel-tab-bg, #e0e0e0));
+  color: var(--tab-inactive-color, var(--panel-tab-text, #333));
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   white-space: nowrap; /* Prevent label wrapping */
@@ -22,16 +22,16 @@
 }
 
 .tab:hover {
-  background-color: var(--tab-hover-bg, #d0d0d0);
-  color: var(--tab-hover-color, var(--tab-inactive-color, #333)); /* Optional hover text color */
+  background-color: var(--tab-hover-bg, var(--button-hover-bg, #d0d0d0));
+  color: var(--tab-hover-color, var(--tab-inactive-color, var(--panel-tab-text, #333))); /* Optional hover text color */
 }
 
 .tab.active {
-  background-color: var(--tab-active-bg, var(--surface, #fff)); /* Use specific or theme surface */
-  color: var(--tab-active-color, var(--foreground, #000)); /* Use specific or theme foreground */
+  background-color: var(--tab-active-bg, var(--panel-tab-active-bg, var(--surface, #fff))); /* Use specific or theme surface */
+  color: var(--tab-active-color, var(--panel-tab-active-text, var(--foreground, #000))); /* Use specific or theme foreground */
   border-color: var(--tab-active-border-color, var(--tab-border-color, var(--border-color, #ccc))); /* Match border color */
   /* Make bottom border visually connect to the content area */
-  border-bottom: 1px solid var(--tab-active-bg, var(--surface, #fff)); /* Match active background */
+  border-bottom: 1px solid var(--tab-active-bg, var(--panel-tab-active-bg, var(--surface, #fff))); /* Match active background */
   position: relative; /* Ensure active tab is visually on top */
   z-index: 1; /* Bring active tab forward */
   /* Extend the bottom slightly to cover the container's top border */
@@ -49,7 +49,7 @@
 .tab-close-button {
   background: none;
   border: none;
-  color: var(--tab-close-color, #777);
+  color: var(--tab-close-color, var(--text-secondary, #777));
   cursor: pointer;
   padding: 0 2px;
   margin-left: 4px;
@@ -65,6 +65,6 @@
 }
 
 .tab-close-button:hover {
-  color: var(--tab-close-hover-color, var(--foreground, #000)); /* Use theme foreground on hover */
+  color: var(--tab-close-hover-color, var(--tab-active-color, var(--foreground, #000))); /* Use theme foreground on hover */
   opacity: 1;
 } 

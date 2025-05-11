@@ -4,7 +4,7 @@
   display: flex;
   flex-wrap: nowrap; /* Prevent tabs from wrapping to the next line */
   overflow-x: auto; /* Allow horizontal scrolling if tabs overflow */
-  border-bottom: 1px solid var(--tab-container-border-color, var(--border-color, #ccc)); /* Use specific or fallback */
+  border-bottom: 1px solid var(--tab-container-border-color, var(--border-input, var(--border-color, #ccc))); /* Use specific or fallback */
   padding-left: 4px; /* Align first tab slightly */
   margin-bottom: 10px; /* Space below the tabs */
 
@@ -12,8 +12,8 @@
   scrollbar-width: thin; /* Firefox */
   /* Use specific vars or fallback to generic scrollbar vars or defaults */
   scrollbar-color: 
-    var(--tab-scrollbar-thumb-color, var(--scrollbar-thumb-color, #aaa)) 
-    var(--tab-scrollbar-track-color, var(--scrollbar-track-color, #eee)); /* Firefox */
+    var(--tab-scrollbar-thumb-color, var(--button-border, var(--scrollbar-thumb-color, #aaa))) 
+    var(--tab-scrollbar-track-color, var(--panel-tab-bg, var(--scrollbar-track-color, #eee))); /* Firefox */
 }
 
 /* Webkit (Chrome, Safari, Edge) scrollbar styling */
@@ -22,15 +22,15 @@
 }
 
 .tab-container::-webkit-scrollbar-track {
-  background: var(--tab-scrollbar-track-color, var(--scrollbar-track-color, #eee));
+  background: var(--tab-scrollbar-track-color, var(--panel-tab-bg, var(--scrollbar-track-color, #eee)));
   border-radius: 3px;
 }
 
 .tab-container::-webkit-scrollbar-thumb {
-  background-color: var(--tab-scrollbar-thumb-color, var(--scrollbar-thumb-color, #aaa));
+  background-color: var(--tab-scrollbar-thumb-color, var(--button-border, var(--scrollbar-thumb-color, #aaa)));
   border-radius: 3px;
 }
 
 .tab-container::-webkit-scrollbar-thumb:hover {
-  background-color: var(--tab-scrollbar-thumb-hover-color, var(--scrollbar-thumb-hover-color, #888));
-} 
+  background-color: var(--tab-scrollbar-thumb-hover-color, var(--tab-active-border-color, var(--scrollbar-thumb-hover-color, #888)));
+}

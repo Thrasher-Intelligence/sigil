@@ -7,6 +7,25 @@
   --ui-text-primary: #e63946; /* Base Text (Red) */
   --user-message-glow-color: #d4af37; /* Gold for user messages - irezumi style */
   --backend-message-glow-color: #808080; /* Gray for bot responses - irezumi style */
+  
+  /* Chat Message Styling */
+  --user-bubble-bg: rgba(212, 175, 55, 0.25); /* Subtle gold tint from user-message-glow */
+  --user-bubble-border: rgba(212, 175, 55, 0.5); /* From user-message-glow */
+  --user-bubble-glow: rgba(212, 175, 55, 0.2); /* Subtle glow effect */
+  --assistant-bubble-bg: rgba(128, 128, 128, 0.15); /* Subtle gray tint from backend-message-glow */
+  --assistant-bubble-border: rgba(128, 128, 128, 0.4); /* From backend-message-glow */
+  --assistant-bubble-glow: rgba(128, 128, 128, 0.15); /* Subtle glow effect */
+  
+  /* Tab Styling */
+  --tab-inactive-bg: rgba(42, 42, 42, 0.8); /* Darker variant of surface-dark */
+  --tab-inactive-color: #aaaaaa; /* Using disabled fg */
+  --tab-hover-bg: rgba(119, 119, 119, 0.2); /* Light variant of primary */
+  --tab-hover-color: #e63946; /* Match ui-text-primary */
+  --tab-active-bg: rgba(34, 34, 34, 0.9); /* Darker panel-bg-dark */
+  --tab-active-color: #ff5757; /* Match header-text-color */
+  --tab-border-color: rgba(119, 119, 119, 0.3); /* Subtle border from primary */
+  --tab-active-border-color: rgba(230, 57, 70, 0.5); /* Stronger border for active tab */
+  --tab-container-border-color: rgba(119, 119, 119, 0.3); /* Border below tabs */
 
   /* --- Derived & Default Colors --- */
   /* Backgrounds */
@@ -87,11 +106,17 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
-  --panel-tab-bg: var(--panel-tab-bg-dark);
-  --panel-tab-active-bg: var(--panel-tab-active-bg-dark);
-  --panel-tab-text: var(--panel-tab-text-dark);
-  --panel-tab-active-text: var(--panel-tab-active-text-dark);
+  
+  /* Tab Overrides */
+  --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
+  --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-dark));
+  --panel-tab-text: var(--tab-inactive-color, var(--panel-tab-text-dark));
+  --panel-tab-active-text: var(--tab-active-color, var(--panel-tab-active-text-dark));
   --panel-container-bg: var(--panel-container-bg-dark);
+  
+  /* Chat Bubble Styles */
+  --surface-user-msg: var(--user-bubble-bg, var(--surface-dark));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--surface-dark));
 
   /* Button Base Variables */
   --primary: var(--primary-dark);
@@ -125,6 +150,25 @@ body.light-mode {
   --user-message-glow-color: #ffb7c5; /* Cherry Blossom Pink Glow */
   --backend-message-glow-color: #a0d8ef; /* Water Blue Glow */
   --button-background-base: #a0d8ef; /* Override original mapping */
+  
+  /* Chat Message Light Mode Overrides */
+  --user-bubble-bg: rgba(255, 183, 197, 0.15); /* Light pink tint */
+  --user-bubble-border: rgba(255, 183, 197, 0.4); /* Soft pink border */
+  --user-bubble-glow: rgba(255, 183, 197, 0.1); /* Subtle glow */
+  --assistant-bubble-bg: rgba(160, 216, 239, 0.12); /* Very light blue */
+  --assistant-bubble-border: rgba(160, 216, 239, 0.35); /* Soft blue border */
+  --assistant-bubble-glow: rgba(160, 216, 239, 0.1); /* Subtle glow */
+  
+  /* Tab Light Mode Overrides */
+  --tab-inactive-bg: rgba(230, 226, 216, 0.8); /* Light variant of panel-bg-light */
+  --tab-inactive-color: #8a8374; /* Match panel-tab-text-light */
+  --tab-hover-bg: rgba(255, 183, 197, 0.15); /* Light pink from primary-light */
+  --tab-hover-color: #5c5547; /* Match ui-text-primary */
+  --tab-active-bg: rgba(160, 216, 239, 0.12); /* Very light blue */
+  --tab-active-color: #1f3a4f; /* Match header-text-color */
+  --tab-border-color: rgba(220, 216, 204, 0.8); /* Light border from disabled-bg */
+  --tab-active-border-color: rgba(160, 216, 239, 0.5); /* Blue border for active tab */
+  --tab-container-border-color: rgba(220, 216, 204, 0.8); /* Light border below tabs */
 
   /* Base (Tatami Inspired) */
   --background: #f5f1e8; /* Tatami Beige */
@@ -135,11 +179,15 @@ body.light-mode {
   --disabled-fg: #a8a399; /* Muted Text */
 
   /* Panel Tabs */
-  --panel-tab-bg: #e6e2d8;
-  --panel-tab-active-bg: #faf8f0;
-  --panel-tab-text: #8a8374;
-  --panel-tab-active-text: #5c5547;
+  --panel-tab-bg: var(--tab-inactive-bg, #e6e2d8);
+  --panel-tab-active-bg: var(--tab-active-bg, #faf8f0);
+  --panel-tab-text: var(--tab-inactive-color, #8a8374);
+  --panel-tab-active-text: var(--tab-active-color, #5c5547);
   --panel-container-bg: #e6e2d8;
+  
+  /* Chat Bubble Styles - Light Mode */
+  --surface-user-msg: var(--user-bubble-bg, var(--surface));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--surface));
 
   /* Button Base Variables (Primary: Cherry Blossom, Default: Water) */
   --primary: #ffb7c5; /* Cherry Blossom Pink */

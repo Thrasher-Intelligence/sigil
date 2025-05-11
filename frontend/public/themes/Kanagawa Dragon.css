@@ -7,6 +7,25 @@
   --ui-text-primary: #c8c093; /* Base Text */
   --user-message-glow-color: #88c6e0; /* Moonlit jade glow */
   --backend-message-glow-color: #425a77; /* Deep ocean indigo glow */
+  
+  /* Chat Message Styling */
+  --user-bubble-bg: rgba(136, 198, 224, 0.25); /* Subtle blue tint from user-message-glow */
+  --user-bubble-border: rgba(136, 198, 224, 0.5); /* From user-message-glow */
+  --user-bubble-glow: rgba(136, 198, 224, 0.2); /* Subtle glow effect */
+  --assistant-bubble-bg: rgba(66, 90, 119, 0.2); /* Subtle indigo tint from backend-message-glow */
+  --assistant-bubble-border: rgba(66, 90, 119, 0.5); /* From backend-message-glow */
+  --assistant-bubble-glow: rgba(66, 90, 119, 0.15); /* Subtle glow effect */
+  
+  /* Tab Styling */
+  --tab-inactive-bg: rgba(31, 31, 40, 0.9); /* Darker variant of surface-dark */
+  --tab-inactive-color: #a6a6b8; /* Using disabled fg */
+  --tab-hover-bg: rgba(139, 164, 176, 0.2); /* Light variant of primary */
+  --tab-hover-color: #c8c093; /* Match ui-text-primary */
+  --tab-active-bg: rgba(45, 79, 103, 0.8); /* Lighter panel-bg-dark */
+  --tab-active-color: #d4af37; /* Match header-text-color */
+  --tab-border-color: rgba(139, 164, 176, 0.3); /* Subtle border from primary */
+  --tab-active-border-color: rgba(212, 175, 55, 0.5); /* Stronger border for active tab from header-text-color */
+  --tab-container-border-color: rgba(139, 164, 176, 0.3); /* Border below tabs */
 
   /* --- Derived & Default Colors --- */
   /* Backgrounds (Using Kanagawa palette colors where possible) */
@@ -87,11 +106,17 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
-  --panel-tab-bg: var(--panel-tab-bg-dark);
-  --panel-tab-active-bg: var(--panel-tab-active-bg-dark);
-  --panel-tab-text: var(--panel-tab-text-dark);
-  --panel-tab-active-text: var(--panel-tab-active-text-dark);
+  
+  /* Tab Overrides */
+  --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
+  --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-dark));
+  --panel-tab-text: var(--tab-inactive-color, var(--panel-tab-text-dark));
+  --panel-tab-active-text: var(--tab-active-color, var(--panel-tab-active-text-dark));
   --panel-container-bg: var(--panel-container-bg-dark);
+  
+  /* Chat Bubble Styles */
+  --surface-user-msg: var(--user-bubble-bg, var(--surface-dark));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--surface-dark));
 
   /* Button Base Variables */
   --primary: var(--primary-dark);
@@ -125,6 +150,25 @@ body.light-mode {
   --user-message-glow-color: #f0a0aa; /* Muted Pink Glow */
   --backend-message-glow-color: #ffcc80; /* Warm Orange Glow */
   --button-background-base: #d4af37; /* Override original mapping */
+  
+  /* Chat Message Light Mode Overrides */
+  --user-bubble-bg: rgba(240, 160, 170, 0.15); /* Light pink tint */
+  --user-bubble-border: rgba(240, 160, 170, 0.4); /* Soft pink border */
+  --user-bubble-glow: rgba(240, 160, 170, 0.1); /* Subtle glow */
+  --assistant-bubble-bg: rgba(255, 204, 128, 0.12); /* Very light orange */
+  --assistant-bubble-border: rgba(255, 204, 128, 0.35); /* Soft orange border */
+  --assistant-bubble-glow: rgba(255, 204, 128, 0.1); /* Subtle glow */
+  
+  /* Tab Light Mode Overrides */
+  --tab-inactive-bg: rgba(245, 234, 216, 0.8); /* Light variant of panel-bg-light */
+  --tab-inactive-color: #a0522d; /* Match header-text-color */
+  --tab-hover-bg: rgba(212, 175, 55, 0.15); /* Light gold from primary-light */
+  --tab-hover-color: #8b4513; /* Darker sienna on hover */
+  --tab-active-bg: rgba(224, 122, 95, 0.15); /* Very light terracotta from button-bg-light */
+  --tab-active-color: #6b4f37; /* Match ui-text-primary */
+  --tab-border-color: rgba(224, 216, 192, 0.8); /* Light border from disabled-bg-light */
+  --tab-active-border-color: rgba(212, 175, 55, 0.5); /* Gold border for active tab */
+  --tab-container-border-color: rgba(224, 216, 192, 0.8); /* Light border below tabs */
 
   /* Base */
   --background: var(--background-light);
@@ -135,11 +179,15 @@ body.light-mode {
   --disabled-fg: var(--disabled-fg-light);
 
   /* Panel Tabs */
-  --panel-tab-bg: var(--panel-tab-bg-light);
-  --panel-tab-active-bg: var(--panel-tab-active-bg-light);
-  --panel-tab-text: var(--panel-tab-text-light);
-  --panel-tab-active-text: var(--panel-tab-active-text-light);
+  --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-light));
+  --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-light));
+  --panel-tab-text: var(--tab-inactive-color, var(--panel-tab-text-light));
+  --panel-tab-active-text: var(--tab-active-color, var(--panel-tab-active-text-light));
   --panel-container-bg: var(--panel-container-bg-light);
+  
+  /* Chat Bubble Styles - Light Mode */
+  --surface-user-msg: var(--user-bubble-bg, var(--surface-light));
+  --surface-backend-msg: var(--assistant-bubble-bg, var(--surface-light));
 
   /* Button Base Variables */
   --primary: var(--primary-light);

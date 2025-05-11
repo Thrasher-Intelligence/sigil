@@ -21,11 +21,11 @@
 /* User bubble */
 .userBubble {
   composes: chatBubble;
-  background: rgba(51, 51, 77, 0.75);
+  background: var(--user-bubble-bg, rgba(51, 51, 77, 0.75));
   color: var(--foreground, #e0e0e0);
   margin-left: auto;
-  box-shadow: 0 8px 32px rgba(3, 218, 198, 0.07);
-  border-right: 2px solid rgba(3, 218, 198, 0.3);
+  box-shadow: 0 8px 32px var(--user-bubble-glow, rgba(3, 218, 198, 0.07));
+  border-right: 2px solid var(--user-bubble-border, rgba(3, 218, 198, 0.3));
   position: relative;
 }
 
@@ -36,17 +36,20 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(3, 218, 198, 0), rgba(3, 218, 198, 0.3), rgba(3, 218, 198, 0));
+  background: linear-gradient(90deg, 
+    rgba(3, 218, 198, 0), 
+    var(--user-bubble-border, rgba(3, 218, 198, 0.3)), 
+    rgba(3, 218, 198, 0));
 }
 
 /* Assistant bubble */
 .assistantBubble {
   composes: chatBubble;
-  background: rgba(42, 42, 42, 0.75);
+  background: var(--assistant-bubble-bg, rgba(42, 42, 42, 0.75));
   color: var(--foreground, #e0e0e0);
   margin-right: auto;
-  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.07);
-  border-left: 2px solid rgba(187, 134, 252, 0.3);
+  box-shadow: 0 8px 32px var(--assistant-bubble-glow, rgba(187, 134, 252, 0.07));
+  border-left: 2px solid var(--assistant-bubble-border, rgba(187, 134, 252, 0.3));
   position: relative;
 }
 
@@ -57,7 +60,10 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(187, 134, 252, 0.3), rgba(187, 134, 252, 0), rgba(187, 134, 252, 0));
+  background: linear-gradient(90deg, 
+    var(--assistant-bubble-border, rgba(187, 134, 252, 0.3)), 
+    rgba(187, 134, 252, 0), 
+    rgba(187, 134, 252, 0));
 }
 
 /* Loading bubble */
@@ -127,11 +133,11 @@
 }
 
 .userBubble .tokenCounter {
-  color: rgba(3, 218, 198, 0.7);
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.7));
 }
 
 .assistantBubble .tokenCounter {
-  color: rgba(187, 134, 252, 0.7);
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.7));
 }
 
 .chatBubble:hover .tokenCounter {
@@ -148,7 +154,7 @@
   height: 8px;
   width: 8px;
   margin-right: 4px;
-  background-color: rgba(187, 134, 252, 0.7);
+  background-color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.7));
   border-radius: 50%;
   display: inline-block;
   animation: bounce-flash 1.4s infinite ease-in-out both;
@@ -165,7 +171,7 @@
   } 40% { 
     transform: scale(1.0); 
     opacity: 1;
-    box-shadow: 0 0 8px rgba(187, 134, 252, 0.6);
+    box-shadow: 0 0 8px var(--assistant-bubble-glow, rgba(187, 134, 252, 0.6));
   }
 }
 
@@ -176,9 +182,9 @@
 }
 
 .userBubble:hover {
-  box-shadow: 0 8px 32px rgba(3, 218, 198, 0.12);
+  box-shadow: 0 8px 32px var(--user-bubble-glow, rgba(3, 218, 198, 0.12));
 }
 
 .assistantBubble:hover {
-  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.12);
+  box-shadow: 0 8px 32px var(--assistant-bubble-glow, rgba(187, 134, 252, 0.12));
 }
