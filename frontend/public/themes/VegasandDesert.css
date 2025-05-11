@@ -1,0 +1,221 @@
+/* Vegas and Mojave Desert Theme - CSS Variables */
+:root {
+  /* --- Vegas Night (Dark Mode) Core Colors --- */
+  
+  /* Primary Neon Colors */
+  --vegas-neon-pink: #FF0090;
+  --vegas-neon-blue: #00E1FF;
+  --vegas-neon-purple: #9D00FF;
+  --vegas-neon-gold: #FFD700;
+  --vegas-neon-red: #FF2D55;
+  --vegas-neon-green: #39FF14;
+  
+  /* Casino/Luxury Elements */
+  --vegas-gold: #D4AF37;
+  --vegas-royal-purple: #4B0082;
+  --vegas-deep-red: #8B0000;
+  --vegas-dark-blue: #191970;
+  
+  /* Dark Mode Background Gradients */
+  --vegas-background-deep: #0F0718; /* Deep purple-black */
+  --vegas-background-surface: #1A112A; /* Slightly lighter */
+  --vegas-panel-bg: #241535; /* Panels with slight purple tint */
+  
+  /* --- Mojave Desert (Light Mode) Core Colors --- */
+  
+  /* Natural Desert Colors */
+  --mojave-sand: #E5D1A4;
+  --mojave-terracotta: #C56C39;
+  --mojave-sage: #9CAF88;
+  --mojave-sunset-orange: #FF7F50;
+  --mojave-canyon-red: #A65344;
+  --mojave-desert-blue: #7CA1BF; /* Desert sky blue */
+  
+  /* Light Mode Background Layers */
+  --mojave-background-sand: #F2E6D0; /* Light sandy tone */
+  --mojave-background-surface: #EAD7B7; /* Slightly darker sand */
+  --mojave-panel-bg: #DECCAA; /* Panel sand color */
+
+  /* --- Original Palette Mappings for Dark Mode (Vegas) --- */
+  --button-background-base: var(--vegas-neon-red);
+  --header-text-color: var(--vegas-neon-gold);
+  --input-text-color: #F9F1E6; /* Slightly warmer off-white */
+  --ui-text-primary: #F9F1E6;
+  --user-message-glow-color: var(--vegas-neon-pink);
+  --backend-message-glow-color: var(--vegas-neon-blue);
+
+  /* --- Backgrounds (Dark Mode - Vegas) --- */
+  --background-dark: var(--vegas-background-deep);
+  --surface-dark: var(--vegas-background-surface);
+  --panel-bg-dark: var(--vegas-panel-bg);
+
+  /* --- Input Area Colors (Dark Mode - Vegas) --- */
+  --input-bg-dark: rgba(26, 17, 42, 0.8); /* Slightly transparent surface */
+  --disabled-bg-dark: #352447; /* Muted purple-gray */
+  --disabled-fg-dark: #7A6B98; /* Lighter muted purple */
+
+  /* --- Panel Tab/Container Colors (Dark Mode - Vegas) --- */
+  --panel-tab-bg-dark: var(--vegas-panel-bg);
+  --panel-tab-active-bg-dark: #2E1B41; /* Slightly lighter purple */
+  --panel-tab-text-dark: #B099D0; /* Light purplish text */
+  --panel-tab-active-text-dark: var(--vegas-neon-gold); /* Gold for active tabs */
+  --panel-container-bg-dark: var(--vegas-panel-bg);
+
+  /* --- Button Colors (Dark Mode - Vegas) --- */
+  --primary-dark: var(--vegas-gold);
+  --primary-hover-dark: #E6C44C; /* Brighter gold on hover */
+  --button-foreground-dark: #0F0718; /* Dark text on gold buttons */
+
+  --button-bg-dark: var(--vegas-deep-red);
+  --button-hover-bg-dark: #A00000; /* Brighter red on hover */
+  --button-border-dark: #6E0000; /* Darker red border */
+  --button-text-dark: #FFFFFF; /* White text on red */
+
+  /* --- Focus Ring Color (Dark Mode - Vegas) --- */
+  --primary-focus-dark: rgba(212, 175, 55, 0.5); /* Gold with alpha */
+
+  /* --- Settings Panel & Input Details (Dark Mode - Vegas) --- */
+  --surface-input-dark: #221433; /* Slightly darker than vegas surface */
+  --border-input-dark: #432963; /* Purple border */
+  --focus-ring-accent-dark: var(--vegas-neon-gold);
+  --focus-ring-color-dark: var(--primary-focus-dark);
+  --text-secondary-dark: #B099D0; /* Light purplish secondary text */
+  --primary-contrast-dark: var(--button-foreground-dark);
+  --surface-disabled-dark: #352447; /* Muted purple background */
+  --text-disabled-dark: #7A6B98; /* Muted purple text */
+  --surface-hover-dark: #2E1B41; /* Slightly lighter on hover */
+  --border-input-hover-dark: #5A3B85; /* Brighter purple border on hover */
+
+  /* --- Light Mode (Mojave) Colors --- */
+  --background-light: var(--mojave-background-sand);
+  --surface-light: var(--mojave-background-surface);
+  --panel-bg-light: var(--mojave-panel-bg);
+
+  /* --- Input Area Colors (Light Mode - Mojave) --- */
+  --input-bg-light: #F7F1E3; /* Slightly lighter than background */
+  --disabled-bg-light: #D1C3A3; /* Muted sand */
+  --disabled-fg-light: #A59880; /* Darker muted sand */
+
+  /* --- Panel Tab/Container Colors (Light Mode - Mojave) --- */
+  --panel-tab-bg-light: var(--mojave-panel-bg);
+  --panel-tab-active-bg-light: #F7F1E3; /* Lighter sand for active tabs */
+  --panel-tab-text-light: #876D4C; /* Medium brown text */
+  --panel-tab-active-text-light: var(--mojave-canyon-red); /* Canyon red for active tabs */
+  --panel-container-bg-light: var(--mojave-panel-bg);
+
+  /* --- Button Colors (Light Mode - Mojave) --- */
+  --primary-light: var(--mojave-terracotta);
+  --primary-hover-light: #D47C46; /* Brighter terracotta on hover */
+  --button-foreground-light: #FFFFFF; /* White text on terracotta */
+
+  --button-bg-light: var(--mojave-desert-blue);
+  --button-hover-bg-light: #8DB3D3; /* Lighter blue on hover */
+  --button-border-light: #5E89A7; /* Darker blue border */
+  --button-text-light: #FFFFFF; /* White text on blue */
+
+  /* --- Focus Ring Color (Light Mode - Mojave) --- */
+  --primary-focus-light: rgba(197, 108, 57, 0.4); /* Terracotta with alpha */
+
+  /* --- Settings Panel & Input Details (Light Mode - Mojave) --- */
+  --surface-input-light: #F7F1E3; /* Slightly lighter than background */
+  --border-input-light: #C8B797; /* Sand border */
+  --focus-ring-accent-light: var(--mojave-terracotta);
+  --focus-ring-color-light: var(--primary-focus-light);
+  --text-secondary-light: #876D4C; /* Medium brown text */
+  --primary-contrast-light: var(--button-foreground-light);
+  --surface-disabled-light: #D1C3A3; /* Muted sand */
+  --text-disabled-light: #A59880; /* Darker muted sand */
+  --surface-hover-light: #F7F1E3; /* Slightly lighter on hover */
+  --border-input-hover-light: #B0A082; /* Darker sand border on hover */
+
+  /* Base variables that will be switched (Default: Vegas/Dark Mode) */
+  --background: var(--background-dark);
+  --surface: var(--surface-dark);
+  --panel-bg-color: var(--panel-bg-dark);
+  --input-bg: var(--input-bg-dark);
+  --disabled-bg: var(--disabled-bg-dark);
+  --disabled-fg: var(--disabled-fg-dark);
+  --panel-tab-bg: var(--panel-tab-bg-dark);
+  --panel-tab-active-bg: var(--panel-tab-active-bg-dark);
+  --panel-tab-text: var(--panel-tab-text-dark);
+  --panel-tab-active-text: var(--panel-tab-active-text-dark);
+  --panel-container-bg: var(--panel-container-bg-dark);
+
+  /* Button Base Variables */
+  --primary: var(--primary-dark);
+  --primary-hover: var(--primary-hover-dark);
+  --button-foreground: var(--button-foreground-dark);
+  --button-bg: var(--button-bg-dark);
+  --button-hover-bg: var(--button-hover-bg-dark);
+  --button-border: var(--button-border-dark);
+  --button-text: var(--button-text-dark);
+  --primary-focus: var(--primary-focus-dark);
+
+  /* Settings Panel Base Variables */
+  --surface-input: var(--surface-input-dark);
+  --border-input: var(--border-input-dark);
+  --focus-ring-accent: var(--focus-ring-accent-dark);
+  --focus-ring-color: var(--focus-ring-color-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --primary-contrast: var(--primary-contrast-dark);
+  --surface-disabled: var(--surface-disabled-dark);
+  --text-disabled: var(--text-disabled-dark);
+  --surface-hover: var(--surface-hover-dark);
+  --border-input-hover: var(--border-input-hover-dark);
+}
+
+/* --- Light Mode (Mojave Desert) Overrides --- */
+body.light-mode {
+  /* Override core colors for light mode */
+  --ui-text-primary: #583E25; /* Rich brown text */
+  --input-text-color: #583E25; /* Match UI text */
+  --header-text-color: var(--mojave-canyon-red); /* Header text - canyon red */
+  --user-message-glow-color: var(--mojave-sunset-orange); /* User message glow */
+  --backend-message-glow-color: var(--mojave-desert-blue); /* Backend message glow */
+  --button-background-base: var(--mojave-terracotta); /* Button base color */
+
+  /* Base */
+  --background: var(--background-light);
+  --surface: var(--surface-light);
+  --panel-bg-color: var(--panel-bg-light);
+  --input-bg: var(--input-bg-light);
+  --disabled-bg: var(--disabled-bg-light);
+  --disabled-fg: var(--disabled-fg-light);
+
+  /* Panel Tabs */
+  --panel-tab-bg: var(--panel-tab-bg-light);
+  --panel-tab-active-bg: var(--panel-tab-active-bg-light);
+  --panel-tab-text: var(--panel-tab-text-light);
+  --panel-tab-active-text: var(--panel-tab-active-text-light);
+  --panel-container-bg: var(--panel-container-bg-light);
+
+  /* Button Base Variables */
+  --primary: var(--primary-light);
+  --primary-hover: var(--primary-hover-light);
+  --button-foreground: var(--button-foreground-light);
+  --button-bg: var(--button-bg-light);
+  --button-hover-bg: var(--button-hover-bg-light);
+  --button-border: var(--button-border-light);
+  --button-text: var(--button-text-light);
+  --primary-focus: var(--primary-focus-light);
+
+  /* Settings Panel Base Variables */
+  --surface-input: var(--surface-input-light);
+  --border-input: var(--border-input-light);
+  --focus-ring-accent: var(--focus-ring-accent-light);
+  --focus-ring-color: var(--focus-ring-color-light);
+  --text-secondary: var(--text-secondary-light);
+  --primary-contrast: var(--primary-contrast-light);
+  --surface-disabled: var(--surface-disabled-light);
+  --text-disabled: var(--text-disabled-light);
+  --surface-hover: var(--surface-hover-light);
+  --border-input-hover: var(--border-input-hover-light);
+}
+
+/* Optional Vegas neon text effect class that can be applied to specific elements */
+.vegas-neon-text {
+  text-shadow: 
+    0 0 5px var(--vegas-neon-gold),
+    0 0 10px var(--vegas-neon-gold),
+    0 0 20px var(--vegas-neon-gold);
+}

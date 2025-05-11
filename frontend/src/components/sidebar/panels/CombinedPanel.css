@@ -1,0 +1,163 @@
+/* CombinedPanel styles */
+
+/* Tab buttons */
+.panel-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.panel-tab-button {
+  padding: 6px 10px;
+  border: 1px solid var(--border, #383838);
+  background: var(--panel-tab-bg);
+  color: var(--panel-tab-text);
+  cursor: pointer;
+  margin-right: 4px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.panel-tab-button.active {
+  background: var(--panel-tab-active-bg);
+  color: var(--panel-tab-active-text);
+  border-bottom: none;
+}
+
+.panel-tab-button:hover:not(.active) {
+  background: var(--panel-tab-hover-bg, #2a2a2a);
+}
+
+/* Tab content container */
+.panel-content {
+  border: 1px solid var(--border, #383838);
+  border-top: none;
+  padding: 15px;
+  background: var(--panel-container-bg);
+  border-radius: 0 0 5px 5px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Settings group */
+.ui-settings-group {
+  margin-bottom: 20px;
+}
+
+/* Label for settings */
+.ui-settings-label {
+  display: block;
+  margin-bottom: var(--spacing-small, 0.5rem);
+  color: var(--text-secondary, #ccc);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Select input */
+.ui-settings-select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: var(--surface-input);
+  border: 1px solid var(--border-input);
+  color: var(--input-text-color);
+  border-radius: var(--border-radius-small);
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: auto;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ui-settings-select:focus {
+  border-color: var(--focus-ring-accent);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.ui-settings-select option {
+  padding: 0.5rem;
+}
+
+/* Font preview */
+.font-preview-bubble {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius-large);
+  background: rgba(42, 42, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  color: var(--foreground);
+  transition: box-shadow 0.3s ease;
+}
+
+.font-preview-bubble::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(187, 134, 252, 0.3), rgba(187, 134, 252, 0), rgba(187, 134, 252, 0.3));
+}
+
+.font-preview-bubble:hover {
+  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.12);
+}
+
+/* Font token counter style */
+.font-preview-tokens {
+  font-size: 0.7rem;
+  color: rgba(187, 134, 252, 0.7);
+  text-align: right;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+  font-style: italic;
+  position: relative;
+  display: block;
+  padding-right: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+/* Mode toggle container */
+.mode-toggle-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mode-toggle-label {
+  margin-right: 10px;
+}
+
+.mode-toggle-value {
+  margin-left: 10px;
+  text-transform: capitalize;
+}
+
+/* Help content */
+.help-content h4 {
+  color: var(--header-text-color);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.help-content ul {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.help-content li {
+  margin-bottom: 0.5rem;
+}
+
+.help-content code {
+  background-color: var(--surface-light);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}

@@ -145,4 +145,58 @@
 .reload-error {
   background-color: var(--error-background);
   color: var(--error);
+}
+
+/* Font selection styles */
+.font-select {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  background-color: var(--surface-input);
+  border: 1px solid var(--border-input);
+  color: var(--input-text-color);
+  font-family: inherit;
+  font-size: 0.95rem;
+  border-radius: var(--border-radius-small);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  appearance: auto;
+}
+
+.font-select:focus {
+  border-color: var(--focus-ring-accent);
+  box-shadow: 0 0 0 var(--focus-ring-width) var(--focus-ring-color);
+}
+
+.font-select option {
+  padding: 0.5rem;
+}
+
+.font-preview {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius-large);
+  background: rgba(42, 42, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  color: var(--foreground);
+  transition: box-shadow 0.3s ease;
+}
+
+.font-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(187, 134, 252, 0.3), rgba(187, 134, 252, 0), rgba(187, 134, 252, 0.3));
+}
+
+.font-preview:hover {
+  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.12);
 } 

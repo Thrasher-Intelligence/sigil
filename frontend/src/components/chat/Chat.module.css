@@ -2,41 +2,72 @@
 
 /* Base Chat Bubble */
 .chatBubble {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--spacing-large);
   padding: 0.75rem 1.25rem;
-  border-radius: 8px;
+  border-radius: var(--border-radius-large);
   max-width: 75%;
   word-wrap: break-word;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
   overflow: hidden;
   transition: height 0.3s ease-out, padding 0.3s ease-out, margin 0.3s ease-out;
   position: relative;
+  background: rgba(30, 30, 30, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 /* User bubble */
 .userBubble {
   composes: chatBubble;
-  background-color: var(--surface-user-msg, #4a4a70);
+  background: rgba(51, 51, 77, 0.75);
   color: var(--foreground, #e0e0e0);
   margin-left: auto;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 15px var(--user-message-glow-color, rgba(3, 218, 198, 0.4));
+  box-shadow: 0 8px 32px rgba(3, 218, 198, 0.07);
+  border-right: 2px solid rgba(3, 218, 198, 0.3);
+  position: relative;
+}
+
+.userBubble::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(3, 218, 198, 0), rgba(3, 218, 198, 0.3), rgba(3, 218, 198, 0));
 }
 
 /* Assistant bubble */
 .assistantBubble {
   composes: chatBubble;
-  background-color: var(--surface-backend-msg, #2a2a2a);
+  background: rgba(42, 42, 42, 0.75);
   color: var(--foreground, #e0e0e0);
   margin-right: auto;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15), 0 0 15px var(--backend-message-glow-color, rgba(187, 134, 252, 0.4));
+  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.07);
+  border-left: 2px solid rgba(187, 134, 252, 0.3);
+  position: relative;
+}
+
+.assistantBubble::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(187, 134, 252, 0.3), rgba(187, 134, 252, 0), rgba(187, 134, 252, 0));
 }
 
 /* Loading bubble */
 .loadingBubble {
   composes: chatBubble;
-  background-color: transparent;
-  box-shadow: none;
-  border: none;
+  background: rgba(30, 30, 30, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   margin-right: auto;
   margin-left: 0;
   padding: 0.5rem 1.25rem;
@@ -49,25 +80,30 @@
 /* System message */
 .systemMessage {
   composes: chatBubble;
-  color: var(--foreground-muted, #aaa);
+  color: var(--text-placeholder, #aaa);
   font-style: italic;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
   max-width: 90%;
   padding: 0.5rem 1rem;
-  background-color: transparent;
-  border: none;
+  background: rgba(30, 30, 30, 0.3);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
   box-shadow: none;
 }
 
 /* Error system message */
 .errorMessage {
   composes: systemMessage;
-  color: var(--error-color, #cf6679);
-  background-color: var(--error-bg-faded, rgba(207, 102, 121, 0.1));
+  color: var(--error, #cf6679);
+  background: rgba(207, 102, 121, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   font-style: normal;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
+  border: 1px solid rgba(207, 102, 121, 0.3);
 }
 
 /* Bubble content */
@@ -87,12 +123,15 @@
   position: relative;
   display: block;
   padding-right: 0.25rem;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, color 0.2s ease;
 }
 
-.userBubble .tokenCounter, 
+.userBubble .tokenCounter {
+  color: rgba(3, 218, 198, 0.7);
+}
+
 .assistantBubble .tokenCounter {
-  color: var(--text-placeholder, #aaa);
+  color: rgba(187, 134, 252, 0.7);
 }
 
 .chatBubble:hover .tokenCounter {
@@ -109,7 +148,7 @@
   height: 8px;
   width: 8px;
   margin-right: 4px;
-  background-color: var(--foreground-muted, #aaa);
+  background-color: rgba(187, 134, 252, 0.7);
   border-radius: 50%;
   display: inline-block;
   animation: bounce-flash 1.4s infinite ease-in-out both;
@@ -126,5 +165,20 @@
   } 40% { 
     transform: scale(1.0); 
     opacity: 1;
+    box-shadow: 0 0 8px rgba(187, 134, 252, 0.6);
   }
+}
+
+/* Add hover effect to chat bubbles */
+.userBubble:hover, .assistantBubble:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.userBubble:hover {
+  box-shadow: 0 8px 32px rgba(3, 218, 198, 0.12);
+}
+
+.assistantBubble:hover {
+  box-shadow: 0 8px 32px rgba(187, 134, 252, 0.12);
 }

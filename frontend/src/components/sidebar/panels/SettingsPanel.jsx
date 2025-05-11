@@ -253,6 +253,8 @@ function SettingsPanel({
           disabled={isDisabled}
         />
       </div>
+
+
       {/* --- RESTORED: Apply Settings Button --- */}
       {/* This button updates the backend's global/default settings */}
       {/* Enabled only when model is loaded */}
