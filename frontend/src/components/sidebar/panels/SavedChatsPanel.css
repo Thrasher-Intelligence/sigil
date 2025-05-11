@@ -1,32 +1,63 @@
 .saved-chats-panel {
   padding: var(--spacing-large, 1.5rem);
   overflow-y: auto; /* Allow scrolling if list is long */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  position: relative; /* For proper layout containment */
 }
 
-.saved-chats-panel h4 {
+/* When inside a glass-panel, don't apply duplicate background effects */
+.glass-panel .saved-chats-panel {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  width: 100%;
+}
+
+.saved-chats-panel h2,
+.saved-chats-panel .panel-title {
   margin-top: 0;
   margin-bottom: var(--spacing-large, 1.5rem);
   border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   padding-bottom: 8px;
   color: var(--header-text-color, #e08009);
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 600;
   text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .saved-chats-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex-grow: 1;
+  overflow: hidden; /* Ensure list doesn't overflow */
+  position: relative; /* For proper stacking context */
 }
 
 .session-item {
   display: flex; /* Use flexbox to align info and button */
   justify-content: space-between; /* Push info to left, button to right */
   align-items: center; /* Vertically center items */
-  padding: 8px 10px;
+  padding: 6px 8px;
   margin-bottom: 8px;
   cursor: pointer;
   border-radius: var(--border-radius-small, 4px);
@@ -35,6 +66,12 @@
   border: 1px solid rgba(43, 156, 124, 0.3);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+  min-width: 0;
+  position: relative; /* For proper layout containment */
 }
 
 /* Apply hover effect only when not deleting */
@@ -47,51 +84,80 @@
 
 /* Dim the item slightly when deleting */
 .session-item.is-deleting {
-    opacity: 0.7;
-    cursor: default; /* No pointer cursor when deleting */
+  opacity: 0.7;
+  cursor: default; /* No pointer cursor when deleting */
 }
 
-.session-item .session-info {
-    /* Allow info block to grow but prevent overflow */
-    flex-grow: 1;
-    margin-right: 10px; /* Space between info and delete button */
-    overflow: hidden; /* Hide overflow if text is too long */
+.session-info {
+  /* Allow info block to grow but prevent overflow */
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin-right: 8px; /* Space between info and delete button */
+  overflow: hidden; /* Hide overflow if text is too long */
+  min-width: 0; /* Crucial for text truncation in flex items */
+  width: calc(100% - 60px); /* Ensure text area has correct width */
+  transition: color 0.3s ease;
+  max-width: 100%; /* Ensure it doesn't exceed container */
+  display: block; /* Proper block behavior */
 }
 
 .session-item strong {
   display: block; /* Title on its own line */
   margin-bottom: 3px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   color: var(--user-message-text-color, #33b690);
   white-space: nowrap; /* Prevent title wrap */
   overflow: hidden;
   text-overflow: ellipsis; /* Add ellipsis if title too long */
   text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
+  width: 100%;
+  max-width: 100%; /* Ensure no overflow */
+  box-sizing: border-box;
 }
 
 .session-item span {
-  font-size: 0.8em;
+  font-size: 0.75em; /* Keep ID text small */
   color: var(--text-secondary, #aaa);
-  word-break: break-all; /* Prevent long IDs from overflowing */
   display: block; /* Ensure ID is on its own line if shown */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  max-width: 100%; /* Ensure no overflow */
+  box-sizing: border-box;
 }
 
-/* --- UPDATED: Group common button styles --- */
+/* Style for the session actions container */
+.session-actions {
+  display: flex;
+  flex: 0 0 auto; /* Don't grow or shrink */
+  gap: 2px;
+  width: 52px; /* Fixed width for buttons area */
+  justify-content: flex-end;
+  margin-left: auto; /* Push to the right */
+  z-index: 2; /* Ensure buttons stay above potentially overflowing text */
+}
+
+/* --- Group common button styles --- */
 .edit-session-button,
 .delete-session-button {
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
-  padding: 3px 7px;             /* Unified padding - slightly adjusted for visual balance */
-  margin-left: 5px;             /* Keep existing margin */
-  border-radius: var(--border-radius-small, 4px); /* Use theme variable or default */
+  padding: 2px 4px;
+  margin-left: 2px;
+  border-radius: var(--border-radius-small, 4px);
   cursor: pointer;
-  font-size: 0.9em;             /* Unified font size */
-  line-height: 1.2;             /* Slightly adjusted for better vertical alignment */
+  font-size: 0.85em;
+  line-height: 1.2;
   transition: all 0.3s ease;
-  flex-shrink: 0;               /* Prevent buttons from shrinking */
+  flex-shrink: 0;
   background-color: rgba(30, 30, 30, 0.65);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15);
+  min-width: 22px;
+  text-align: center;
+  max-width: 28px;
+  overflow: hidden;
 }
 
 /* --- Styling for the edit button --- */
@@ -126,8 +192,7 @@
   transform: translateY(-1px);
 }
 
-/* --- UPDATED: Unified disabled styles --- */
-/* REPLACED previous .delete-session-button:disabled rule */
+/* --- Unified disabled styles --- */
 .edit-session-button:disabled,
 .delete-session-button:disabled {
   opacity: 0.5;
@@ -144,9 +209,14 @@
 /* Delete confirmation option styling */
 .delete-confirm-option {
   margin-top: 10px;
-  font-size: 0.9em;
+  margin-bottom: 10px;
+  font-size: 0.8em;
   display: flex;
   align-items: center;
+  width: 100%;
+  overflow: hidden;
+  flex-wrap: wrap;
+  line-height: 1.2;
 }
 
 .delete-confirm-option label {
@@ -157,41 +227,50 @@
 
 .delete-confirm-option input[type="checkbox"] {
   margin-right: 8px;
+  accent-color: var(--user-message-text-color, #33b690);
 }
 
 .error-message {
-    color: var(--header-text-color, #e08009);
-    font-size: 0.9em;
-    margin-top: 8px;
-    margin-bottom: 15px;
-    padding: 8px;
-    background-color: rgba(224, 128, 9, 0.2);
-    border-radius: var(--border-radius-small, 4px);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    text-align: center;
+  color: var(--header-text-color, #e08009);
+  font-size: 0.9em;
+  margin-top: 8px;
+  margin-bottom: 15px;
+  padding: 8px;
+  background-color: rgba(224, 128, 9, 0.2);
+  border-radius: var(--border-radius-small, 4px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  text-align: center;
 }
 
-/* --- ADDED: Styles for the rename input and its buttons --- */
+/* --- Styles for the rename input and its buttons --- */
 .session-edit-controls {
   display: flex;
   align-items: center;
-  width: 100%; /* Take full width */
-  gap: 5px;
+  width: 100%;
+  gap: 3px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .session-edit-input {
-  flex-grow: 1; /* Input takes most space */
-  padding: 4px 8px;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 4px 6px;
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   border-radius: var(--border-radius-small, 4px);
   background-color: rgba(30, 30, 30, 0.65);
   color: var(--input-text-color, #33b690);
-  font-size: 0.9em;
+  font-size: 0.85em;
   line-height: 1.2;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-width: 0;
+  width: calc(100% - 60px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .session-edit-input:focus {
@@ -201,19 +280,21 @@
 }
 
 .session-edit-button {
-  padding: 3px 7px; /* Match other buttons */
+  padding: 3px 5px; /* Smaller padding */
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   border-radius: var(--border-radius-small, 4px);
   background-color: rgba(30, 30, 30, 0.65);
   color: var(--user-message-text-color, #33b690);
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.85em;
   line-height: 1.2;
   transition: all 0.3s ease;
   flex-shrink: 0;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15);
+  min-width: 24px;
+  max-width: 28px;
 }
 
 .session-edit-button.save:hover:not(:disabled) {
@@ -241,4 +322,91 @@
 .session-item.is-editing {
   padding: 5px; /* Adjust padding slightly for editing */
 }
-/* END OF ADDED/MODIFIED STYLES */ 
+
+/* Match the panel styling from CombinedPanel */
+.panel-container .saved-chats-panel,
+.glass-panel .saved-chats-panel {
+  height: 100%;
+  width: 100%;
+  padding: var(--spacing-large, 1.5rem);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Match panel title button styling */
+.panel-title button {
+  background: transparent;
+  border: none;
+  color: var(--user-message-text-color, #33b690);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 3px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 20px;
+}
+
+.panel-title button:hover:not(:disabled) {
+  background-color: rgba(16, 115, 67, 0.25);
+  color: var(--header-text-color, #e08009);
+  transform: rotate(180deg);
+}
+
+.panel-title button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 600px) {
+  .session-edit-controls {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .session-edit-input {
+    font-size: 0.8em;
+    padding: 3px 5px;
+  }
+  
+  .session-edit-button {
+    font-size: 0.8em;
+    padding: 2px 4px;
+  }
+  
+  .session-actions {
+    gap: 2px;
+    min-width: 50px;
+    width: 50px;
+  }
+  
+  .edit-session-button,
+  .delete-session-button {
+    font-size: 0.8em;
+    padding: 2px 4px;
+    margin-left: 2px;
+    min-width: 20px;
+  }
+  
+  .session-item strong {
+    font-size: 0.85em;
+  }
+  
+  .session-item span {
+    font-size: 0.7em;
+  }
+  
+  .saved-chats-panel h2,
+  .saved-chats-panel .panel-title {
+    font-size: 1.1rem;
+    gap: 3px;
+  }
+  
+  .session-info {
+    width: calc(100% - 55px);
+  }
+}
