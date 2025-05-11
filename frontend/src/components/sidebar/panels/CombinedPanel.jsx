@@ -36,21 +36,8 @@ const CombinedPanel = (props) => {
 
   // --- State for UI settings ---
   const [colorMode, setColorMode] = useState('dark'); // Default to 'dark'
-  const [fontFamily, setFontFamily] = useState(() => {
-    return localStorage.getItem('fontFamily') || 'system-ui';
-  });
-  
-  // Available font options
-  const FONT_OPTIONS = [
-    { value: "system-ui", label: "System Default" },
-    { value: "Fira Code", label: "Fira Code" },
-    { value: "JetBrains Mono", label: "JetBrains Mono Regular" },
-    { value: "JetBrains Mono Medium", label: "JetBrains Mono Medium" },
-    { value: "Inter", label: "Inter" },
-    { value: "Space Grotesk", label: "Space Grotesk" },
-    { value: "Satoshi", label: "Satoshi" },
-    { value: "Orbitron", label: "Orbitron" },
-  ];
+  // Always use Fira Code as the interface font
+  const fontFamily = 'Fira Code';
 
   // --- Effects to apply UI settings ---
   useEffect(() => {
@@ -58,11 +45,10 @@ const CombinedPanel = (props) => {
     document.body.classList.add(`${colorMode}-mode`); // Add current mode class
   }, [colorMode]); // Re-run only when colorMode changes
   
-  // Effect to apply font family
+  // Apply Fira Code font family
   useEffect(() => {
-    document.documentElement.style.setProperty('--font-family', fontFamily);
-    localStorage.setItem('fontFamily', fontFamily);
-  }, [fontFamily]);
+    document.documentElement.style.setProperty('--font-family', 'Fira Code');
+  }, []);
 
   // Effect to switch tab if device changes away from CUDA
   useEffect(() => {
@@ -169,30 +155,6 @@ const CombinedPanel = (props) => {
               </select>
             </div>
 
-            {/* Font Selection */}
-            <div className="ui-settings-group">
-              <label htmlFor="font-select" className="ui-settings-label">Interface Font:</label>
-              <select 
-                id="font-select" 
-                value={fontFamily} 
-                onChange={e => setFontFamily(e.target.value)}
-                className="ui-settings-select"
-              >
-                {FONT_OPTIONS.map(option => (
-                  <option key={option.value} value={option.value} style={{ fontFamily: option.value }}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              
-              {/* Font Preview with Chat Bubble Style */}
-              <div className="font-preview-bubble" style={{ fontFamily: fontFamily }}>
-                The quick brown fox jumps over the lazy dog
-                <div className="font-preview-tokens">
-                  1234567890 !@#$%^&*()
-                </div>
-              </div>
-            </div>
 
             {/* Light/Dark Mode Toggle */}
             <div className="mode-toggle-container">
