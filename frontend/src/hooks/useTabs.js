@@ -30,25 +30,42 @@ export const useTabs = ({
   const handleTabSelect = useCallback(async (tabId) => {
     if (tabId === activeTabId) return;
     
+    console.log(`useTabs: Switching to tab ${tabId}`);
+    
+    // First update the activeTabId to ensure the UI reflects the tab change immediately
     setActiveTabId(tabId);
 
-    if (tabId === NEW_CHAT_TAB_ID) {
-      if (onClearChatRequest) {
-        onClearChatRequest();
+    try {
+      // Then load the appropriate content based on the tab type
+      if (tabId === NEW_CHAT_TAB_ID) {
+        console.log('useTabs: Switching to New Chat tab, clearing chat state');
+        if (onClearChatRequest) {
+          onClearChatRequest();
+        }
+      } else {
+        console.log(`useTabs: Switching to session tab ${tabId}, loading session data`);
+        if (onLoadSessionRequest) {
+          // Immediately start loading the session data
+          onLoadSessionRequest(tabId);
+          
+          // Schedule a second load attempt with a delay as a backup to ensure successful loading
+          setTimeout(async () => {
+            console.log(`useTabs: Secondary load attempt for tab ${tabId}`);
+            await onLoadSessionRequest(tabId);
+            
+            // After loading session data, ensure we scroll to the bottom
+            setTimeout(() => {
+              const messagesEndElement = document.querySelector(".messages-end-ref");
+              if (messagesEndElement) {
+                messagesEndElement.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 150);
+          }, 300);
+        }
       }
-    } else {
-      if (onLoadSessionRequest) {
-        await onLoadSessionRequest(tabId);
-      }
+    } catch (err) {
+      console.error("Error during tab selection:", err);
     }
-    
-    // Scroll to the bottom of the chat after tab switch
-    setTimeout(() => {
-      const messagesEndElement = document.querySelector(".messages-end-ref");
-      if (messagesEndElement) {
-        messagesEndElement.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
   }, [activeTabId, NEW_CHAT_TAB_ID, onClearChatRequest, onLoadSessionRequest, setActiveTabId]);
 
   // Handler for closing a tab
@@ -160,12 +177,36 @@ export const useTabs = ({
     // This ensures the user is automatically switched to their new chat tab
     // Always make the new thread tab active when creating from New Chat
     if (newThreadId !== NEW_CHAT_TAB_ID) {
-        // Set a small timeout to ensure the tab is created before switching
-        setTimeout(() => {
-            setActiveTabId(newThreadId);
-            // We don't need to call onLoadSessionRequest here because the session data
-            // is already loaded in memory from the send message operation
-        }, 50);
+        console.log(`useTabs: Activating new session tab ${newThreadId}`);
+        
+        // First update the tab state
+        setActiveTabId(newThreadId);
+        
+        // We need to ensure the data is loaded properly for this tab
+        if (onLoadSessionRequest) {
+          // Immediately try to load the session data
+          onLoadSessionRequest(newThreadId);
+          
+          // Make additional load attempts with increasing delays to ensure success
+          // This mirrors the successful behavior of sidebar loading
+          setTimeout(async () => {
+            console.log(`useTabs: Second load attempt for new tab ${newThreadId}`);
+            await onLoadSessionRequest(newThreadId);
+          }, 150);
+          
+          setTimeout(async () => {
+            console.log(`useTabs: Final load attempt for new tab ${newThreadId}`);
+            await onLoadSessionRequest(newThreadId);
+            
+            // After final loading attempt, ensure we scroll to the bottom
+            setTimeout(() => {
+              const messagesEndElement = document.querySelector(".messages-end-ref");
+              if (messagesEndElement) {
+                messagesEndElement.scrollIntoView({ behavior: "smooth" });
+              }
+            }, 100);
+          }, 350);
+        }
     }
   }, [setOpenTabs, setActiveTabId, NEW_CHAT_TAB_ID]);
 

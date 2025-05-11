@@ -31,154 +31,101 @@ export const useChat = ({
   const loadingMessageIdRef = useRef(null); // Ref to store loading message ID
   const preservedHistoryRef = useRef(null); // Ref to store chat history during tab transitions
   const preservedSettingsRef = useRef(null); // Ref to store settings during tab transitions
-  const directFetchInProgressRef = useRef(false); // Prevent duplicate fetches
 
   // This internal isLoading is specific to the send message operation
   const [isSendingMessage, setIsSendingMessage] = useState(false); 
   // This internal error is specific to the send message operation
   const [sendError, setSendError] = useState(null); 
 
-  // Helper function to format chat history from session data
-  // Use this directly to avoid circular references
-  const formatChatHistoryFromSession = (sessionData) => {
-    if (!sessionData || !sessionData.thread_id || !sessionData.messages) {
-      return [];
-    }
-    
-    return sessionData.messages.map((msg, index) => ({
-      role: msg.role || 'unknown',
-      content: msg.content || '',
-      text: msg.content || '',
-      id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
-      sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
-      tokens: msg.token_count || msg.tokens || null
-    }));
-  };
-
-  // Helper function to extract settings from session data
-  const extractSettingsFromSession = (sessionData) => {
-    if (!sessionData) return null;
-    
-    return {
-      systemPrompt: sessionData.system_prompt || newChatSettings.systemPrompt,
-      temperature: sessionData.sampling_settings?.temperature || newChatSettings.temperature,
-      topP: sessionData.sampling_settings?.top_p || newChatSettings.topP,
-      maxTokens: sessionData.sampling_settings?.max_new_tokens || newChatSettings.maxTokens
-    };
-  };
-
-  // Direct fetch of a session from the backend - used as a reliable fallback
-  const fetchSessionDirectly = useCallback(async (sessionId) => {
-    if (directFetchInProgressRef.current || !sessionId || sessionId === NEW_CHAT_TAB_ID) {
-      return null;
-    }
-    
-    directFetchInProgressRef.current = true;
-    try {
-      console.log(`useChat: Directly fetching session ${sessionId} from backend`);
-      const response = await fetch(`${API_BASE_URL}/api/v1/chat/session/${sessionId}`);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch session ${sessionId}: ${response.status}`);
-      }
-      
-      const sessionData = await response.json();
-      console.log(`useChat: Successfully fetched session ${sessionId}`, sessionData);
-      return sessionData;
-    } catch (error) {
-      console.error(`Error directly fetching session ${sessionId}:`, error);
-      return null;
-    } finally {
-      directFetchInProgressRef.current = false;
-    }
-  }, [NEW_CHAT_TAB_ID]);
-
   // Track the active tab ID changes to properly handle history and settings synchronization
   useEffect(() => {
-    console.log(`useChat: Active tab changed to ${activeTabId}`);
-    
     // When active tab changes and we have preserved history, apply it
     if (preservedHistoryRef.current && 
         preservedHistoryRef.current.threadId && 
         preservedHistoryRef.current.threadId === activeTabId) {
-      console.log(`useChat: Applying preserved history for ${activeTabId}`);
-      
       // Small delay to ensure DOM is ready
       setTimeout(() => {
         // First apply settings if we have them
         if (preservedSettingsRef.current && 
             preservedSettingsRef.current.threadId === activeTabId) {
-          console.log(`useChat: Applying preserved settings for ${activeTabId}`);
           onUpdateCurrentSessionSettings?.(preservedSettingsRef.current.settings);
-          
           // Wait for settings to apply before setting history
           setTimeout(() => {
             setChatHistory(preservedHistoryRef.current.history);
-            console.log(`useChat: Applied preserved history for ${activeTabId}`);
-            
             // Clear the preserved history since we've used it
             preservedHistoryRef.current = null;
             preservedSettingsRef.current = null;
             
-            // Ensure we scroll to the bottom
-            setTimeout(() => {
-              const messagesEndElement = document.querySelector(".messages-end-ref");
-              if (messagesEndElement) {
-                messagesEndElement.scrollIntoView({ behavior: "smooth" });
+            // Also try to explicitly load the session from backend as a fallback
+            // This mirrors the successful sidebar loading behavior
+            setTimeout(async () => {
+              try {
+                console.log(`useEffect: Explicitly loading session ${activeTabId} as fallback`);
+                const response = await fetch(`${API_BASE_URL}/api/v1/chat/session/${activeTabId}`);
+                if (!response.ok) {
+                  throw new Error(`HTTP error ${response.status}`);
+                }
+                const sessionData = await response.json();
+                // Direct application of session data to avoid circular reference
+                if (sessionData && sessionData.thread_id && sessionData.messages) {
+                  const formattedHistory = sessionData.messages.map((msg, index) => ({
+                    role: msg.role || 'unknown',
+                    content: msg.content || '',
+                    text: msg.content || '',
+                    id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
+                    sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
+                    tokens: msg.token_count || msg.tokens || null
+                  }));
+                  setChatHistory(formattedHistory);
+                }
+              } catch (err) {
+                console.log(`Failed to load session fallback: ${err.message}`);
               }
-            }, 50);
+            }, 100);
           }, 50);
         } else {
           // No settings to apply, just set history
           setChatHistory(preservedHistoryRef.current.history);
           preservedHistoryRef.current = null;
-          
-          setTimeout(() => {
-            const messagesEndElement = document.querySelector(".messages-end-ref");
-            if (messagesEndElement) {
-              messagesEndElement.scrollIntoView({ behavior: "smooth" });
-            }
-          }, 50);
         }
       }, 100);
     } else if (preservedSettingsRef.current && 
               preservedSettingsRef.current.threadId === activeTabId) {
       // We have settings but no history (rare case)
-      console.log(`useChat: Applying only preserved settings for ${activeTabId}`);
       setTimeout(() => {
         onUpdateCurrentSessionSettings?.(preservedSettingsRef.current.settings);
         preservedSettingsRef.current = null;
       }, 100);
     } else if (activeTabId && activeTabId !== NEW_CHAT_TAB_ID) {
       // We don't have preserved history or settings, but we have a non-new-chat tab ID
-      // Try to fetch directly from backend as a fallback - this mirrors the sidebar behavior
+      // Try to explicitly load from backend - this is the most reliable approach
       setTimeout(async () => {
-        console.log(`useChat: No preserved data, fetching ${activeTabId} from backend`);
-        const sessionData = await fetchSessionDirectly(activeTabId);
-        
-        if (sessionData) {
-          // Apply session data directly
-          const formattedHistory = formatChatHistoryFromSession(sessionData);
-          setChatHistory(formattedHistory);
-          setCurrentThreadId(sessionData.thread_id);
-          
-          // Extract and apply settings
-          const settings = extractSettingsFromSession(sessionData);
-          if (settings && onUpdateCurrentSessionSettings) {
-            onUpdateCurrentSessionSettings(settings);
+        try {
+          console.log(`useEffect: No preserved data, explicitly loading ${activeTabId}`);
+          const response = await fetch(`${API_BASE_URL}/api/v1/chat/session/${activeTabId}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
           }
-          
-          // Ensure we scroll to the bottom after loading
-          setTimeout(() => {
-            const messagesEndElement = document.querySelector(".messages-end-ref");
-            if (messagesEndElement) {
-              messagesEndElement.scrollIntoView({ behavior: "smooth" });
-            }
-          }, 100);
+          const sessionData = await response.json();
+          // Don't use _loadChatState inside this useEffect to avoid circular dependency
+          if (sessionData && sessionData.thread_id && sessionData.messages) {
+            const formattedHistory = sessionData.messages.map((msg, index) => ({
+              role: msg.role || 'unknown',
+              content: msg.content || '',
+              text: msg.content || '',
+              id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
+              sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
+              tokens: msg.token_count || msg.tokens || null
+            }));
+            setChatHistory(formattedHistory);
+            setCurrentThreadId(sessionData.thread_id);
+          }
+        } catch (err) {
+          console.log(`Failed to load session directly: ${err.message}`);
         }
       }, 150);
     }
-  }, [activeTabId, onUpdateCurrentSessionSettings, NEW_CHAT_TAB_ID, fetchSessionDirectly, newChatSettings]);
+  }, [activeTabId, onUpdateCurrentSessionSettings, NEW_CHAT_TAB_ID, setChatHistory, setCurrentThreadId]);
 
   const clearChatStateAndSettings = useCallback(() => {
     setChatHistory([]);
@@ -201,10 +148,16 @@ export const useChat = ({
     }
     console.log(`useChat: Loading session ${sessionData.thread_id} into hook state`);
 
-    // Format the chat history from session data
-    const formattedHistory = formatChatHistoryFromSession(sessionData);
-    
-    // Update state with the formatted history
+    const formattedHistory = sessionData.messages.map((msg, index) => {
+      return {
+        role: msg.role || 'unknown',
+        content: msg.content || '',
+        text: msg.content || '', // For display
+        id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
+        sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
+        tokens: msg.token_count || msg.tokens || null // Use any available token count
+      };
+    });
     setChatHistory(formattedHistory);
     setCurrentThreadId(sessionData.thread_id);
     
@@ -216,7 +169,12 @@ export const useChat = ({
     
     // Extract settings from sessionData if available
     if (sessionData.sampling_settings || sessionData.system_prompt) {
-      const extractedSettings = extractSettingsFromSession(sessionData);
+      const extractedSettings = {
+        systemPrompt: sessionData.system_prompt || newChatSettings.systemPrompt,
+        temperature: sessionData.sampling_settings?.temperature || newChatSettings.temperature,
+        topP: sessionData.sampling_settings?.top_p || newChatSettings.topP,
+        maxTokens: sessionData.sampling_settings?.max_new_tokens || newChatSettings.maxTokens
+      };
       
       // Store settings for tab transitions
       preservedSettingsRef.current = {
@@ -378,15 +336,31 @@ export const useChat = ({
         onAddSessionTabAndMakeActive?.(newThreadId, newLabel, activeTabId);
         
         // After creating the tab, explicitly fetch and load the full session data
-        // This mirrors the successful behavior of loading from sidebar
+        // This mirrors the behavior of loading from sidebar which works reliably
         setTimeout(async () => {
-          console.log(`useChat: Explicitly fetching full session data for new tab ${newThreadId}`);
-          const sessionData = await fetchSessionDirectly(newThreadId);
-          
-          if (sessionData) {
-            // Apply the session data
-            console.log(`useChat: Applying fetched session data for ${newThreadId}`);
-            loadChatState(sessionData);
+          try {
+            console.log(`useChat: Explicitly loading full session data for new tab ${newThreadId}`);
+            const response = await fetch(`${API_BASE_URL}/api/v1/chat/session/${newThreadId}`);
+            if (!response.ok) {
+              throw new Error(`Failed to fetch session ${newThreadId}: ${response.status}`);
+            }
+            const sessionData = await response.json();
+            
+            // Apply session data directly
+            _loadChatState(sessionData);
+            
+            // Also update settings via callback
+            if (onUpdateCurrentSessionSettings && sessionData.sampling_settings) {
+              const extractedSettings = {
+                systemPrompt: sessionData.system_prompt || newChatSettings.systemPrompt,
+                temperature: sessionData.sampling_settings?.temperature || newChatSettings.temperature,
+                topP: sessionData.sampling_settings?.top_p || newChatSettings.topP,
+                maxTokens: sessionData.sampling_settings?.max_new_tokens || newChatSettings.maxTokens
+              };
+              onUpdateCurrentSessionSettings(extractedSettings);
+            }
+          } catch (err) {
+            console.error(`Error loading full session data for new tab: ${err.message}`);
           }
         }, 300);
       } else if (newThreadId && newThreadId === currentThreadId && activeTabId === NEW_CHAT_TAB_ID) {
@@ -394,14 +368,29 @@ export const useChat = ({
         const newLabel = currentUserInput.substring(0, 30) + (currentUserInput.length > 30 ? '...' : '');
         onAddSessionTabAndMakeActive?.(newThreadId, newLabel, activeTabId);
         
-        // Also fetch and load full session for consistency
+        // Apply the same explicit fetch as above
         setTimeout(async () => {
-          console.log(`useChat: Explicitly fetching full session data for upgraded tab ${newThreadId}`);
-          const sessionData = await fetchSessionDirectly(newThreadId);
-          
-          if (sessionData) {
-            console.log(`useChat: Applying fetched session data for upgraded tab ${newThreadId}`);
-            loadChatState(sessionData);
+          try {
+            console.log(`useChat: Explicitly loading full session data for upgraded tab ${newThreadId}`);
+            const response = await fetch(`${API_BASE_URL}/api/v1/chat/session/${newThreadId}`);
+            if (!response.ok) {
+              throw new Error(`Failed to fetch session ${newThreadId}: ${response.status}`);
+            }
+            const sessionData = await response.json();
+            
+            _loadChatState(sessionData);
+            
+            if (onUpdateCurrentSessionSettings && sessionData.sampling_settings) {
+              const extractedSettings = {
+                systemPrompt: sessionData.system_prompt || newChatSettings.systemPrompt,
+                temperature: sessionData.sampling_settings?.temperature || newChatSettings.temperature,
+                topP: sessionData.sampling_settings?.top_p || newChatSettings.topP,
+                maxTokens: sessionData.sampling_settings?.max_new_tokens || newChatSettings.maxTokens
+              };
+              onUpdateCurrentSessionSettings(extractedSettings);
+            }
+          } catch (err) {
+            console.error(`Error loading full session data for upgraded tab: ${err.message}`);
           }
         }, 300);
       }
@@ -455,14 +444,14 @@ export const useChat = ({
     onSetAppIsLoading,
     onSetAppCurrentThreadId,
     onAddSessionTabAndMakeActive,
-    fetchSessionDirectly,
-    loadChatState,
+    onUpdateCurrentSessionSettings,
     clearChatStateAndSettings,
     setChatHistory,
     setCurrentThreadId,
     setUserInput,
     setIsSendingMessage,
     setSendError,
+
   ]);
 
   return {

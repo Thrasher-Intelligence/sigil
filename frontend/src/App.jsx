@@ -91,6 +91,7 @@ function App() {
 
   // --- Initialize useChat Hook (now we have activeTabId & addSessionTabAndMakeActive) ---
   const chatHook = useChat({
+    initialChatHistory: [], // Start with empty history and update it when needed
     appChatMode,
     newChatSettings,
     currentSessionSettings,
@@ -101,6 +102,8 @@ function App() {
     onSetAppError: setError,
     onSetAppCurrentThreadId: setAppCurrentThreadId,
     onAddSessionTabAndMakeActive: addSessionTabAndMakeActive, // Now passing the actual function from useTabs
+    // Add current session settings updater to allow chat hook to update settings when needed
+    onUpdateCurrentSessionSettings: setCurrentSessionSettings,
   });
   const { chatHistory, userInput, setUserInput, isSendingMessage, sendError, sendMessage, loadChatState, clearChatStateAndSettings: clearChatHookState } = chatHook;
 
@@ -127,20 +130,40 @@ function App() {
     }
     console.log(`App: Loading session data ${sessionData.thread_id} into app state and chat hook`);
 
+    // First update thread ID to ensure consistent state
     setAppCurrentThreadId(sessionData.thread_id);
-    loadChatState(sessionData);
-
+    
+    // Extract settings before loading chat state to ensure they're available
     const loadedSettings = {
       systemPrompt: sessionData.system_prompt ?? DEFAULTS.SYSTEM_PROMPT,
       temperature: sessionData.sampling_settings?.temperature ?? DEFAULTS.TEMPERATURE,
       topP: sessionData.sampling_settings?.top_p ?? DEFAULTS.TOP_P,
       maxTokens: sessionData.sampling_settings?.max_new_tokens ?? DEFAULTS.MAX_TOKENS,
     };
-    setCurrentSessionSettings(loadedSettings);
     
+    // Apply settings immediately
+    setCurrentSessionSettings(loadedSettings);
     console.log("App: Applied session settings:", loadedSettings);
+    
+    // Pre-process the chat history for immediate display
+    const formattedHistory = sessionData.messages.map((msg, index) => ({
+      role: msg.role || 'unknown',
+      content: msg.content || '',
+      text: msg.content || '',
+      id: `${msg.role || 'msg'}-${sessionData.thread_id}-${index}-${Date.now()}`,
+      sender: msg.role === 'assistant' ? 'backend' : (msg.role || 'unknown'),
+      tokens: msg.token_count || msg.tokens || null
+    }));
+    
+    // Apply chat history immediately if we have access to chat hook's setChatHistory
+    if (chatHook && chatHook.setChatHistory) {
+      chatHook.setChatHistory(formattedHistory);
+    }
+    
+    // Also pass to loadChatState to ensure complete synchronization
+    loadChatState(sessionData);
     setError(null);
-  }, [loadChatState, setAppCurrentThreadId, setCurrentSessionSettings, setError]);
+  }, [loadChatState, setAppCurrentThreadId, setCurrentSessionSettings, setError, chatHook]);
 
   const appLevelLoadSession = useCallback(async (tabIdToLoad) => {
     console.log(`App: Request to load session for tab ${tabIdToLoad} (from appLevelLoadSession)`);
@@ -152,19 +175,45 @@ function App() {
         const errorData = await response.json().catch(() => ({ detail: `HTTP error! status: ${response.status}` }));
         throw new Error(errorData.detail || `Failed to fetch session ${tabIdToLoad}`);
       }
+      
       const sessionData = await response.json();
-      handleLoadSessionDataToState(sessionData); // Process the fetched data
+      console.log(`App: Successfully fetched session data for ${tabIdToLoad}`, sessionData);
+      
+      // First update the app level thread ID immediately
+      setAppCurrentThreadId(sessionData.thread_id);
+      
+      // Directly process the fetched data
+      handleLoadSessionDataToState(sessionData);
+      
+      // Force a re-render of the chat interface by updating chat hook state directly
+      if (chatHook && chatHook.loadChatState) {
+        // We need to ensure chat hook state is consistent with app state
+        chatHook.loadChatState(sessionData);
+      }
+      
+      // Schedule a scroll to bottom to ensure content is visible
+      setTimeout(() => {
+        const messagesEndElement = document.querySelector(".messages-end-ref");
+        if (messagesEndElement) {
+          messagesEndElement.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 100);
     } catch (e) {
       console.error(`Error fetching session ${tabIdToLoad}:`, e);
       setError(`Failed to load session ${tabIdToLoad}: ${e.message}`); // Global error
       // Clear relevant App state on failure
-      // clearChatHookState(); // Already called by appLevelClearChatActions if needed
+      if (chatHook && chatHook.clearChatStateAndSettings) {
+        chatHook.clearChatStateAndSettings();
+      }
       setAppCurrentThreadId(null);
       setCurrentSessionSettings(null);
     } finally {
-      setIsLoading(false); // Stop global loading
+      // Set a short timeout to ensure the loading state is visible long enough for UI updates
+      setTimeout(() => {
+        setIsLoading(false); // Stop global loading
+      }, 200);
     }
-  }, [setIsLoading, setError, handleLoadSessionDataToState /*, clearChatHookState, setAppCurrentThreadId, setCurrentSessionSettings */]);
+  }, [setIsLoading, setError, handleLoadSessionDataToState, chatHook, setAppCurrentThreadId, setCurrentSessionSettings]);
 
   loadSessionRequestRef.current = appLevelLoadSession; // UseTabs will call proxy -> ref
 
@@ -275,14 +324,30 @@ function App() {
           themeList={themeList}
           onClearChat={handleClearChat} // Already uses appLevelClearChatActions -> clearChatHookState
           onLoadSession={(sessionData) => {
-            handleLoadSessionDataToState(sessionData); // Updated to use new handler
+            // First create and activate the tab
             if (sessionData && sessionData.thread_id) {
+                console.log(`App: Sidebar requested to load session ${sessionData.thread_id}`);
+                
+                // First create and activate the tab
                 const tabLabel = sessionData.custom_title || sessionData.title || `Session ${sessionData.thread_id.substring(0,6)}...`;
                 addSessionTabAndMakeActive(sessionData.thread_id, tabLabel, activeTabId);
-                // Force a small delay to ensure tab switching completes
+                
+                // Then process the session data with a delay to ensure tab is created
                 setTimeout(() => {
-                    handleTabSelect(sessionData.thread_id);
-                }, 100);
+                    console.log(`App: Loading session data for ${sessionData.thread_id} after tab creation`);
+                    handleLoadSessionDataToState(sessionData);
+                    
+                    // Make multiple attempts to ensure history loads properly
+                    setTimeout(() => {
+                        console.log(`App: Reinforcement load for ${sessionData.thread_id}`);
+                        // Re-sync chat history to ensure it's displayed
+                        if (chatHook && chatHook.loadChatState) {
+                            chatHook.loadChatState(sessionData);
+                        }
+                        // Ensure the tab is selected
+                        handleTabSelect(sessionData.thread_id);
+                    }, 200);
+                }, 150);
             }
           }}
           loadedSessionSettings={currentSessionSettings}
