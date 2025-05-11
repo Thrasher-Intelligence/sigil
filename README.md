@@ -47,7 +47,7 @@ Sigil is built for developers who want full control over local inference workflo
 
 ### Backend Architecture
 
-- FastAPI-based REST API with modular routers (`chat`, `settings`, `models`)
+- FastAPI-based REST API with modular routers (`chat`, `settings`, `models`, and more)
 - Endpoints for chat, model loading (by path or name), VRAM status, runtime settings, theme listing, and model listing.
 - Model configuration and inference settings stored in application state for easy access and live updates
 - Full backend logging to `backend_api.log` for transparency and debugging
@@ -109,7 +109,7 @@ After loading a model, the frontend presents a clean interface to interact with 
 - Frontend displays complete output once inference is completed
 - **Chats are Saved:** Your conversations are automatically saved locally, so you can close the application and resume your chat later.
 - **Settings Persist:** Sampling parameters (like temperature, top_p, etc.) are saved with each chat and will be restored when you reopen it.
-- **Multiple Chats:** You can open multiple Sigil instances in different browser tabs to work with different models or conversations simultaneously.
+- **Multiple Chats:** Sigil supports multiple chat instances, allowing you to work with different models or conversations simultaneously.
 
 ![Chat Interface Inference Example](assets/inference.gif)
 
@@ -120,8 +120,7 @@ Sigil supports both light and dark variants of each theme. The theme system is d
 - Each theme consists of CSS variables defining colors and UI properties
 - Themes automatically support both light and dark modes
 - Custom themes can be added by creating new CSS files in the `frontend/public/themes` directory
-- A theme creation helper tool is planned for future releases
-
+- **Update:** An AI Assistant plugin for automated theme creation is currently in development.
 
 ### Examples of a few themes
 
@@ -225,21 +224,38 @@ This interface is ideal for local experimentation, debugging, and integrating li
 
 *   `start_dev.sh`: Main development environment startup script. Manages backend/frontend processes.
 *   `requirements.txt`: Python dependencies for the backend.
-*   `package.json`: Frontend dependencies (`npm`) and scripts (`dev`, `build`, `lint`). Located in the root.
-*   `vite.config.js`: Vite configuration file. Located in the root.
-*   `index.html`: Main HTML entry point for Vite. Located in the root.
 *   `backend/`: Contains the backend API code.
-    *   `api/`: FastAPI application setup (`main.py`) and route definitions (`routes/`).
-    *   `core/`: Core logic like model loading (`model_loader.py`).
+    *   `api/`: FastAPI application setup and route definitions.
+        *   `main.py`: Main FastAPI application entry point.
+        *   `routes/`: Contains API route definitions for different endpoints.
+        *   `schemas/`: Pydantic schemas for request/response validation.
+        *   `core/`: Core backend functionality and utilities.
+        *   `.model_path.cfg`: Configuration file for model paths.
+        *   `model-cli.py`: Command-line interface for model management.
     *   `models/`: Default location for storing model directories to be loaded by name.
-    *   `utils/`: Utility functions.
-    *   `schemas/`: Pydantic schemas (likely moved here, implied by imports).
-    *   `backend_api.log`: Log file for the running backend server (created by `start_dev.sh`).
-*   `frontend/`: Contains the React/Vite frontend source code.
+    *   `utils/`: Utility functions for the backend.
+*   `frontend/`: Contains the React frontend source code.
+    *   `src/`: React components and application code.
     *   `public/`: Static assets, including themes (`public/themes/`).
-    *   *(Other config files like `.gitignore`, `eslint.config.js`)*
-*   `venv/`: (Created by you) Python virtual environment.
+    *   `plugins/`: Frontend plugins.
+    *   `scripts/`: Utility scripts for the frontend.
+    *   `package.json`: Frontend dependencies and scripts.
+    *   `vite.config.js`: Vite configuration for the frontend.
+    *   `index.html`: Main HTML entry point.
+*   `src/`: Shared code between frontend and backend.
+    *   `types/`: TypeScript type definitions.
 *   `assets/`: Contains images and GIFs for the README.
+*   `saved_chats/`: Directory where chat conversations are saved.
+*   `tests/`: Contains project test files.
+*   Log files:
+    *   `backend_api.log`: Log file for the running backend server.
+    *   `console.log`, `console2.log`: Additional log files for debugging.
+*   `venv/`: (Created by you) Python virtual environment.
+
+Key configuration files:
+- Frontend configuration is in `frontend/vite.config.js` and `frontend/package.json`
+- Backend settings are defined in `backend/api/main.py` and related config files
+- Model loading paths can be configured via `.model_path.cfg`
 
 [Back to Top](#top)
 
