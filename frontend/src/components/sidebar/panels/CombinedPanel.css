@@ -3,41 +3,66 @@
 /* Tab buttons */
 .panel-tabs {
   display: flex;
-  flex-wrap: wrap;
-  flex-shrink: 0;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 40px;
+  z-index: 10;
+  padding: 10px 0;
+  background: var(--surface, #1e1e1e);
+  border-right: 1px solid var(--border, #383838);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  box-shadow: var(--shadow-small);
 }
 
 .panel-tab-button {
-  padding: 6px 10px;
-  border: 1px solid var(--border, #383838);
-  background: var(--panel-tab-bg);
-  color: var(--panel-tab-text);
+  padding: 8px 0;
+  width: 100%;
+  font-size: 0.7rem;
+  border: none;
+  border-left: 3px solid transparent;
+  background: transparent;
+  color: var(--panel-tab-text, var(--text-secondary, #ccc));
   cursor: pointer;
-  margin-right: 4px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  margin-bottom: 8px;
+  text-align: center;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .panel-tab-button.active {
-  background: var(--panel-tab-active-bg);
-  color: var(--panel-tab-active-text);
-  border-bottom: none;
+  background: var(--panel-tab-active-bg, rgba(187, 134, 252, 0.1));
+  color: var(--panel-tab-active-text, var(--accent, #bb86fc));
+  border-left: 3px solid var(--accent, #bb86fc);
 }
 
 .panel-tab-button:hover:not(.active) {
-  background: var(--panel-tab-hover-bg, #2a2a2a);
+  background: var(--panel-tab-hover-bg, rgba(255, 255, 255, 0.05));
+  border-left: 3px solid var(--border-medium, #444444);
 }
 
 /* Tab content container */
 .panel-content {
   border: 1px solid var(--border, #383838);
-  border-top: none;
   padding: 15px;
-  background: var(--panel-container-bg);
-  border-radius: 0 0 5px 5px;
+  margin-left: 40px; /* Match the width of the fixed sidebar */
+  background: var(--panel-container-bg, var(--surface, #1e1e1e));
+  border-radius: 5px;
   flex-grow: 1;
   overflow-y: auto;
+  min-height: 350px; /* Ensure there's enough vertical space */
+}
+
+.panel-button-text {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: -0.5px;
+  white-space: nowrap;
 }
 
 /* Settings group */

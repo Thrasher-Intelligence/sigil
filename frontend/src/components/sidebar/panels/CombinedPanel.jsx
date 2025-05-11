@@ -61,47 +61,59 @@ const CombinedPanel = (props) => {
   // Using CSS classes instead of inline styles
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* Tab Buttons */}
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      {/* Fixed Tab Buttons */}
       <div className="panel-tabs">
         <button
           className={`panel-tab-button ${activeTab === 'settings' ? 'active' : ''}`}
           onClick={() => setActiveTab('settings')}
+          title="Settings"
+          aria-label="Settings panel"
         >
-          Settings
+          <span className="panel-button-text">Set</span>
         </button>
         <button
           className={`panel-tab-button ${activeTab === 'modelLoad' ? 'active' : ''}`}
           onClick={() => setActiveTab('modelLoad')}
+          title="Load Model"
+          aria-label="Load Model panel"
         >
-          Load Model
+          <span className="panel-button-text">Mod</span>
         </button>
         <button
           className={`panel-tab-button ${activeTab === 'savedChats' ? 'active' : ''}`}
           onClick={() => setActiveTab('savedChats')}
+          title="Saved Chats"
+          aria-label="Saved Chats panel"
         >
-          Saved Chats
+          <span className="panel-button-text">Chat</span>
         </button>
         <button
           className={`panel-tab-button ${activeTab === 'interface' ? 'active' : ''}`}
           onClick={() => setActiveTab('interface')}
+          title="Interface"
+          aria-label="Interface panel"
         >
-          Interface
+          <span className="panel-button-text">UI</span>
         </button>
         {/* Conditionally render Precision tab button */}
         {currentDevice === 'cuda' && (
            <button
             className={`panel-tab-button ${activeTab === 'precision' ? 'active' : ''}`}
             onClick={() => setActiveTab('precision')}
+            title="Precision"
+            aria-label="Precision settings panel"
           >
-            Precision
+            <span className="panel-button-text">Prec</span>
           </button>
         )}
         <button
           className={`panel-tab-button ${activeTab === 'help' ? 'active' : ''}`}
           onClick={() => setActiveTab('help')}
+          title="Help"
+          aria-label="Help panel"
         >
-          Help
+          <span className="panel-button-text">Help</span>
         </button>
       </div>
 

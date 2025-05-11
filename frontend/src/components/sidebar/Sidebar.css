@@ -29,6 +29,7 @@
 }
 
 /* Restore original styling for the content area */
+/* Sidebar content */
 .sidebar-content {
   flex-grow: 1; /* Allows the content to fill the sidebar */
   overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
@@ -39,6 +40,7 @@
   opacity: 1;
   transition: opacity 0.1s linear;
   min-height: 0; /* Needed for flex-grow in flex column */
+  position: relative; /* To properly position fixed elements within */
 }
 
 .sidebar.closed .sidebar-content {
