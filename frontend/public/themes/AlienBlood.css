@@ -3,8 +3,8 @@
   /* Original Mappings */
   --button-background-base: #2f6a7f; /* Mapped to --primary-dark */
   --header-text-color: #e08009;
-  --input-text-color: #637d75; /* Base Text */
-  --ui-text-primary: #637d75; /* Base Text */
+  --input-text-color: #2b9c7c; /* Brighter balanced green */
+  --ui-text-primary: #2b9c7c; /* Brighter balanced green */
   --user-message-glow-color: #107343;
   --backend-message-glow-color: #e08009;
 
@@ -120,7 +120,7 @@
 body.light-mode {
   /* Override root colors for light mode */
   --ui-text-primary: #4a5568; /* Darker Grey Text */
-  --input-text-color: #4a5568;
+  --input-text-color: #2b9c7c; /* Brighter balanced green */
   --header-text-color: #4fd1c5; /* Desaturated Teal */
   --user-message-glow-color: #f6ad55; /* Muted Orange Glow */
   --backend-message-glow-color: #e57373; /* Muted Red Glow */

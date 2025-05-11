@@ -2,11 +2,11 @@
 :root {
   /* Original Mappings */
   --button-background-base: #8ba4b0; /* Mapped to --primary-dark */
-  --header-text-color: #e46876;
+  --header-text-color: #d4af37; /* Imperial gold */
   --input-text-color: #c8c093; /* Base Text */
   --ui-text-primary: #c8c093; /* Base Text */
-  --user-message-glow-color: #c4746e;
-  --backend-message-glow-color: #e46876;
+  --user-message-glow-color: #88c6e0; /* Moonlit jade glow */
+  --backend-message-glow-color: #425a77; /* Deep ocean indigo glow */
 
   /* --- Derived & Default Colors --- */
   /* Backgrounds (Using Kanagawa palette colors where possible) */
@@ -45,11 +45,11 @@
   --button-foreground-dark: #16161d; /* Match dark background */
   --button-foreground-light: #5c4033; /* Dark brown text on Gold */
 
-  --button-bg-dark: #4f5666; /* Derived darker blue/grey */
+  --button-bg-dark: #3a5c5c; /* Seaweed green */
   --button-bg-light: #e07a5f; /* Terracotta/Muted Red */
   --button-hover-bg-dark: #5a5a6e; /* Using disabled bg */
   --button-hover-bg-light: #d06a4f; /* Darker Terracotta */
-  --button-border-dark: #838faa; /* Derived */
+  --button-border-dark: #7fb0a5; /* Storm jade border */
   --button-border-light: #c06040; /* Subtler Terracotta Border */
   --button-text-dark: var(--ui-text-primary);
   --button-text-light: #fdf0e0; /* Light text on terracotta */

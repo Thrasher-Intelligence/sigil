@@ -2,11 +2,11 @@
 :root {
   /* Original Mappings */
   --button-background-base: #7e9cd8; /* Mapped to --primary-dark */
-  --header-text-color: #e82424;
+  --header-text-color: #5e81ac; /* Storm blue for harmony */
   --input-text-color: #dcd7ba; /* Base Text */
   --ui-text-primary: #dcd7ba;  /* Base Text */
-  --user-message-glow-color: #c34043;
-  --backend-message-glow-color: #e82424;
+  --user-message-glow-color: #88c6e0; /* Surf blue glow */
+  --backend-message-glow-color: #5e81ac; /* Storm blue glow */
 
   /* --- Derived & Default Colors --- */
   /* Backgrounds (Using Kanagawa palette colors where possible) */
