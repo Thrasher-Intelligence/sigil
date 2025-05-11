@@ -245,17 +245,19 @@
 /* Mode toggle container */
 .mode-toggle-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: 20px;
+  padding-top: 8px;
 }
 
 .mode-toggle-label {
-  margin-right: 10px;
+  margin-bottom: 8px;
 }
 
 .mode-toggle-value {
   margin-left: 10px;
   text-transform: capitalize;
+  font-weight: 500;
 }
 
 /* Help content */

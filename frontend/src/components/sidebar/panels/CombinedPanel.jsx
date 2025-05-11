@@ -186,7 +186,7 @@ const CombinedPanel = (props) => {
         <div className="panel-overlay">
           <div className="panel-container">
             <div className="glass-panel">
-              {/* Theme Selection */}
+              {/* Theme Selection and Mode Selection in one section */}
               <div className="ui-settings-group">
                 <label htmlFor="theme-select" className="ui-settings-label">Theme:</label>
                 <select 
@@ -199,19 +199,21 @@ const CombinedPanel = (props) => {
                     <option key={theme} value={theme}>{theme}</option>
                   ))}
                 </select>
-              </div>
-
-              {/* Light/Dark Mode Toggle */}
-              <div className="mode-toggle-container">
-                <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
-                <ModeToggleSwitch
-                  id="mode-toggle"
-                  isDarkMode={colorMode === 'dark'}
-                  onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
-                />
-                <span className="mode-toggle-value">
-                  {colorMode}
-                </span>
+                
+                {/* Light/Dark Mode Toggle - now positioned directly under theme selection */}
+                <div className="mode-toggle-container" style={{ marginTop: '12px' }}>
+                  <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <ModeToggleSwitch
+                      id="mode-toggle"
+                      isDarkMode={colorMode === 'dark'}
+                      onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
+                    />
+                    <span className="mode-toggle-value" style={{ marginLeft: '10px' }}>
+                      {colorMode}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
