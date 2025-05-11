@@ -1,5 +1,46 @@
 /* CombinedPanel styles */
 
+/* Settings Panel Overlay */
+.settings-panel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Allow clicks to pass through to elements below */
+}
+
+/* Make the settings panel itself receive pointer events */
+.settings-panel-overlay .settings-panel {
+  pointer-events: auto;
+  max-height: 100%;
+  width: 90%;
+  margin: auto;
+  overflow-y: auto;
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  animation: panel-fade-in 0.3s ease-out;
+}
+
+@keyframes panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Tab buttons */
 .panel-tabs {
   display: flex;
@@ -56,6 +97,7 @@
   flex-grow: 1;
   overflow-y: auto;
   min-height: 350px; /* Ensure there's enough vertical space */
+  position: relative; /* Needed for absolute positioning of overlay */
 }
 
 .panel-button-text {

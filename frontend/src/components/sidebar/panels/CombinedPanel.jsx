@@ -119,18 +119,7 @@ const CombinedPanel = (props) => {
 
       {/* Tab Content Area */}
       <div className="panel-content">
-        {activeTab === 'settings' && (
-          // Render SettingsPanel, passing only the props it needs
-          <SettingsPanel 
-            modelLoaded={modelLoaded} 
-            onClearChat={onClearChat}
-            loadedSessionSettings={loadedSessionSettings}
-            activeTabId={activeTabId}
-            newChatSettings={newChatSettings}
-            onNewChatSettingsChange={onNewChatSettingsChange}
-            onSessionSettingsChange={onSessionSettingsChange}
-          />
-        )}
+        {/* Settings panel is rendered as an overlay outside the panel-content */}
         {activeTab === 'modelLoad' && (
           // Render ModelLoadPanel, passing only the props it needs
           <ModelLoadPanel 
@@ -204,6 +193,21 @@ const CombinedPanel = (props) => {
           // If it does, pass them here.
         )}
       </div>
+
+      {/* Render SettingsPanel as an overlay when active */}
+      {activeTab === 'settings' && (
+        <div className="settings-panel-overlay">
+          <SettingsPanel 
+            modelLoaded={modelLoaded} 
+            onClearChat={onClearChat}
+            loadedSessionSettings={loadedSessionSettings}
+            activeTabId={activeTabId}
+            newChatSettings={newChatSettings}
+            onNewChatSettingsChange={onNewChatSettingsChange}
+            onSessionSettingsChange={onSessionSettingsChange}
+          />
+        </div>
+      )}
     </div>
   );
 };
