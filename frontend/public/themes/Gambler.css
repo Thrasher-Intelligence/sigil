@@ -1,5 +1,10 @@
 /* Vegas and Mojave Desert Theme - CSS Variables */
 :root {
+  /* Message Text Colors (will be overridden in light mode) */
+  --user-message-text-color: #FFFFFF; /* Light text for user bubbles in dark mode */
+  --assistant-message-text-color: #FFFFFF; /* Light text for assistant bubbles in dark mode */
+  --foreground: #FFFFFF; /* Text color for messages in dark mode */
+  
   /* --- Vegas Night (Dark Mode) Core Colors --- */
   
   /* Primary Neon Colors */
@@ -11,12 +16,12 @@
   --vegas-neon-green: #39FF14;
   
   /* Chat Message Styling */
-  --user-bubble-bg: rgba(255, 0, 144, 0.25); /* Subtle pink tint from vegas-neon-pink */
-  --user-bubble-border: rgba(255, 0, 144, 0.5); /* From vegas-neon-pink */
-  --user-bubble-glow: rgba(255, 0, 144, 0.2); /* Subtle glow effect */
-  --assistant-bubble-bg: rgba(0, 225, 255, 0.15); /* Subtle blue tint from vegas-neon-blue */
-  --assistant-bubble-border: rgba(0, 225, 255, 0.4); /* From vegas-neon-blue */
-  --assistant-bubble-glow: rgba(0, 225, 255, 0.15); /* Subtle glow effect */
+  --user-bubble-bg: rgba(255, 0, 144, 0.35); /* Stronger pink tint from vegas-neon-pink */
+  --user-bubble-border: rgba(255, 0, 144, 0.7); /* From vegas-neon-pink, higher contrast */
+  --user-bubble-glow: rgba(255, 0, 144, 0.3); /* Enhanced glow effect */
+  --assistant-bubble-bg: rgba(0, 225, 255, 0.25); /* Stronger blue tint from vegas-neon-blue */
+  --assistant-bubble-border: rgba(0, 225, 255, 0.6); /* From vegas-neon-blue, higher contrast */
+  --assistant-bubble-glow: rgba(0, 225, 255, 0.25); /* Enhanced glow effect */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(26, 17, 42, 0.8); /* Darker variant of vegas-background-surface */
@@ -43,23 +48,23 @@
   /* --- Mojave Desert (Light Mode) Core Colors --- */
   
   /* Natural Desert Colors */
-  --mojave-sand: #E5D1A4;
-  --mojave-terracotta: #C56C39;
-  --mojave-sage: #9CAF88;
-  --mojave-sunset-orange: #FF7F50;
-  --mojave-canyon-red: #A65344;
-  --mojave-desert-blue: #7CA1BF; /* Desert sky blue */
+  --mojave-sand: #D5C194; /* Darker sand, less bright */
+  --mojave-terracotta: #B56229; /* Slightly darker terracotta */
+  --mojave-sage: #8C9F78; /* Slightly darker sage */
+  --mojave-sunset-orange: #E06F40; /* Less intense sunset orange */
+  --mojave-canyon-red: #964334; /* Slightly darker canyon red */
+  --mojave-desert-blue: #6C91AF; /* Slightly darker desert sky blue */
   
   /* Light Mode Background Layers */
-  --mojave-background-sand: #F2E6D0; /* Light sandy tone */
-  --mojave-background-surface: #EAD7B7; /* Slightly darker sand */
-  --mojave-panel-bg: #DECCAA; /* Panel sand color */
+  --mojave-background-sand: #E2D6C0; /* Less bright sandy tone */
+  --mojave-background-surface: #DAC7A7; /* Darker sand surface */
+  --mojave-panel-bg: #CEBC9A; /* Darker panel sand color */
 
   /* --- Original Palette Mappings for Dark Mode (Vegas) --- */
   --button-background-base: var(--vegas-neon-red);
   --header-text-color: var(--vegas-neon-gold);
-  --input-text-color: #F9F1E6; /* Slightly warmer off-white */
-  --ui-text-primary: #F9F1E6;
+  --input-text-color: #FFFFFF; /* Pure white for higher contrast */
+  --ui-text-primary: #FFFFFF;
   --user-message-glow-color: var(--vegas-neon-pink);
   --backend-message-glow-color: var(--vegas-neon-blue);
 
@@ -106,46 +111,47 @@
   --border-input-hover-dark: #5A3B85; /* Brighter purple border on hover */
 
   /* --- Light Mode (Mojave) Colors --- */
+  /* --- Light Mode (Mojave Desert) Overrides --- */
   --background-light: var(--mojave-background-sand);
   --surface-light: var(--mojave-background-surface);
   --panel-bg-light: var(--mojave-panel-bg);
 
   /* --- Input Area Colors (Light Mode - Mojave) --- */
-  --input-bg-light: #F7F1E3; /* Slightly lighter than background */
-  --disabled-bg-light: #D1C3A3; /* Muted sand */
-  --disabled-fg-light: #A59880; /* Darker muted sand */
+  --input-bg-light: #E7E1D3; /* Slightly darker, less harsh */
+  --disabled-bg-light: #C1B393; /* Muted sand, less contrast */
+  --disabled-fg-light: #958870; /* Darker muted sand */
 
   /* --- Panel Tab/Container Colors (Light Mode - Mojave) --- */
   --panel-tab-bg-light: var(--mojave-panel-bg);
-  --panel-tab-active-bg-light: #F7F1E3; /* Lighter sand for active tabs */
-  --panel-tab-text-light: #876D4C; /* Medium brown text */
+  --panel-tab-active-bg-light: #D7D1C3; /* Less bright, easier on the eyes */
+  --panel-tab-text-light: #775D3C; /* Darker brown text for better contrast */
   --panel-tab-active-text-light: var(--mojave-canyon-red); /* Canyon red for active tabs */
   --panel-container-bg-light: var(--mojave-panel-bg);
 
   /* --- Button Colors (Light Mode - Mojave) --- */
   --primary-light: var(--mojave-terracotta);
-  --primary-hover-light: #D47C46; /* Brighter terracotta on hover */
+  --primary-hover-light: #C56C39; /* Less bright hover state */
   --button-foreground-light: #FFFFFF; /* White text on terracotta */
 
   --button-bg-light: var(--mojave-desert-blue);
-  --button-hover-bg-light: #8DB3D3; /* Lighter blue on hover */
+  --button-hover-bg-light: #7DA3C3; /* Less bright blue hover */
   --button-border-light: #5E89A7; /* Darker blue border */
   --button-text-light: #FFFFFF; /* White text on blue */
 
   /* --- Focus Ring Color (Light Mode - Mojave) --- */
-  --primary-focus-light: rgba(197, 108, 57, 0.4); /* Terracotta with alpha */
+  --primary-focus-light: rgba(181, 98, 41, 0.5); /* Darker terracotta with higher opacity for better visibility */
 
   /* --- Settings Panel & Input Details (Light Mode - Mojave) --- */
-  --surface-input-light: #F7F1E3; /* Slightly lighter than background */
-  --border-input-light: #C8B797; /* Sand border */
+  --surface-input-light: #E7E1D3; /* Less bright input background */
+  --border-input-light: #B8A787; /* Darker sand border for better contrast */
   --focus-ring-accent-light: var(--mojave-terracotta);
   --focus-ring-color-light: var(--primary-focus-light);
-  --text-secondary-light: #876D4C; /* Medium brown text */
+  --text-secondary-light: #775D3C; /* Darker brown text for better contrast */
   --primary-contrast-light: var(--button-foreground-light);
-  --surface-disabled-light: #D1C3A3; /* Muted sand */
-  --text-disabled-light: #A59880; /* Darker muted sand */
-  --surface-hover-light: #F7F1E3; /* Slightly lighter on hover */
-  --border-input-hover-light: #B0A082; /* Darker sand border on hover */
+  --surface-disabled-light: #C1B393; /* Muted sand */
+  --text-disabled-light: #958870; /* Darker muted sand */
+  --surface-hover-light: #D7D1C3; /* Less bright hover state */
+  --border-input-hover-light: #A09072; /* Darker sand border for better contrast */
 
   /* Base variables that will be switched (Default: Vegas/Dark Mode) */
   --background: var(--background-dark);
@@ -191,12 +197,15 @@
 /* --- Light Mode (Mojave Desert) Overrides --- */
 body.light-mode {
   /* Override core colors for light mode */
-  --ui-text-primary: #583E25; /* Rich brown text */
-  --input-text-color: #583E25; /* Match UI text */
+  --ui-text-primary: #2E1A05; /* Much darker brown text for higher contrast */
+  --input-text-color: #2E1A05; /* Match UI text */
   --header-text-color: var(--mojave-canyon-red); /* Header text - canyon red */
   --user-message-glow-color: var(--mojave-sunset-orange); /* User message glow */
   --backend-message-glow-color: var(--mojave-desert-blue); /* Backend message glow */
   --button-background-base: var(--mojave-terracotta); /* Button base color */
+  --user-message-text-color: #2E1A05; /* Dark text for user bubbles */
+  --assistant-message-text-color: #2E1A05; /* Dark text for assistant bubbles */
+  --foreground: #2E1A05; /* Text color for all messages in light mode */
 
   /* Base */
   --background: var(--background-light);
@@ -214,8 +223,8 @@ body.light-mode {
   --panel-container-bg: var(--panel-container-bg-light);
   
   /* Chat Bubble Styles - Light Mode */
-  --surface-user-msg: var(--user-bubble-bg, var(--mojave-background-surface));
-  --surface-backend-msg: var(--assistant-bubble-bg, var(--mojave-background-surface));
+  --surface-user-msg: var(--user-bubble-bg, rgba(224, 111, 64, 0.22)); /* Stronger orange background */
+  --surface-backend-msg: var(--assistant-bubble-bg, rgba(108, 145, 175, 0.22)); /* Stronger blue background */
 
   /* Button Base Variables */
   --primary: var(--primary-light);

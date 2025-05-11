@@ -1,20 +1,25 @@
 /* Kanagawa Wave Theme - CSS Variables */
 :root {
+  /* Message Text Colors (will be overridden in light mode) */
+  --user-message-text-color: #f0edd8; /* Light text for user bubbles in dark mode */
+  --assistant-message-text-color: #f0edd8; /* Light text for assistant bubbles in dark mode */
+  --foreground: #f0edd8; /* Text color for messages in dark mode */
+  
   /* Original Mappings */
   --button-background-base: #7e9cd8; /* Mapped to --primary-dark */
   --header-text-color: #5e81ac; /* Storm blue for harmony */
-  --input-text-color: #dcd7ba; /* Base Text */
-  --ui-text-primary: #dcd7ba;  /* Base Text */
+  --input-text-color: #f0edd8; /* Base Text - brightened for higher contrast */
+  --ui-text-primary: #f0edd8;  /* Base Text - brightened for higher contrast */
   --user-message-glow-color: #88c6e0; /* Surf blue glow */
   --backend-message-glow-color: #5e81ac; /* Storm blue glow */
   
   /* Chat Message Styling */
-  --user-bubble-bg: rgba(136, 198, 224, 0.25); /* Subtle blue tint from user-message-glow */
-  --user-bubble-border: rgba(136, 198, 224, 0.5); /* From user-message-glow */
-  --user-bubble-glow: rgba(136, 198, 224, 0.2); /* Subtle glow effect */
-  --assistant-bubble-bg: rgba(94, 129, 172, 0.2); /* Subtle storm blue tint from backend-message-glow */
-  --assistant-bubble-border: rgba(94, 129, 172, 0.5); /* From backend-message-glow */
-  --assistant-bubble-glow: rgba(94, 129, 172, 0.15); /* Subtle glow effect */
+  --user-bubble-bg: rgba(136, 198, 224, 0.4); /* Stronger blue tint from user-message-glow for higher contrast */
+  --user-bubble-border: rgba(136, 198, 224, 0.75); /* From user-message-glow, bolder for contrast */
+  --user-bubble-glow: rgba(136, 198, 224, 0.35); /* Enhanced glow effect */
+  --assistant-bubble-bg: rgba(94, 129, 172, 0.35); /* Stronger storm blue tint from backend-message-glow */
+  --assistant-bubble-border: rgba(94, 129, 172, 0.7); /* From backend-message-glow, bolder for contrast */
+  --assistant-bubble-glow: rgba(94, 129, 172, 0.3); /* Enhanced glow effect */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(45, 79, 103, 0.6); /* Lighter variant of surface-dark */
@@ -144,20 +149,23 @@
 /* --- Light Mode Overrides --- */
 body.light-mode {
   /* Override root colors for light mode */
-  --ui-text-primary: #4a5f70; /* Stone Blue/Grey */
-  --input-text-color: #4a5f70;
+  --ui-text-primary: #364755; /* Darker Stone Blue/Grey for higher contrast */
+  --input-text-color: #364755;
   --header-text-color: #5a8bc4; /* Darker Water Blue */
   --user-message-glow-color: #ff8c8c; /* Lighter Red/Orange */
   --backend-message-glow-color: #ffab70; /* Lighter Orange */
   --button-background-base: #6ca0d6; /* Override original mapping */
+  --user-message-text-color: #364755; /* Dark text for user bubbles */
+  --assistant-message-text-color: #364755; /* Dark text for assistant bubbles */
+  --foreground: #364755; /* Text color for all messages in light mode */
   
   /* Chat Message Light Mode Overrides */
-  --user-bubble-bg: rgba(255, 140, 140, 0.15); /* Light red tint */
-  --user-bubble-border: rgba(255, 140, 140, 0.4); /* Soft red border */
-  --user-bubble-glow: rgba(255, 140, 140, 0.1); /* Subtle glow */
-  --assistant-bubble-bg: rgba(255, 171, 112, 0.12); /* Very light orange */
-  --assistant-bubble-border: rgba(255, 171, 112, 0.35); /* Soft orange border */
-  --assistant-bubble-glow: rgba(255, 171, 112, 0.1); /* Subtle glow */
+  --user-bubble-bg: rgba(255, 140, 140, 0.35); /* Stronger red tint for higher contrast */
+  --user-bubble-border: rgba(255, 140, 140, 0.7); /* Bolder red border for better visibility */
+  --user-bubble-glow: rgba(255, 140, 140, 0.25); /* Enhanced glow */
+  --assistant-bubble-bg: rgba(255, 171, 112, 0.3); /* Higher contrast orange */
+  --assistant-bubble-border: rgba(255, 171, 112, 0.65); /* Bolder orange border */
+  --assistant-bubble-glow: rgba(255, 171, 112, 0.25); /* Enhanced glow */
   
   /* Tab Light Mode Overrides */
   --tab-inactive-bg: rgba(230, 240, 245, 0.8); /* Light variant of panel-bg-light */

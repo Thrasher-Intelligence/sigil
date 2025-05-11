@@ -1,20 +1,25 @@
 /* AlienBlood Theme - CSS Variables */
 :root {
+  /* Message Text Colors (will be overridden in light mode) */
+  --user-message-text-color: #33b690; /* Green text for user bubbles in dark mode */
+  --assistant-message-text-color: #33b690; /* Green text for assistant bubbles in dark mode */
+  --foreground: #33b690; /* Text color for messages in dark mode */
+  
   /* Original Mappings */
   --button-background-base: #2f6a7f; /* Mapped to --primary-dark */
   --header-text-color: #e08009;
-  --input-text-color: #2b9c7c; /* Brighter balanced green */
-  --ui-text-primary: #2b9c7c; /* Brighter balanced green */
+  --input-text-color: #33b690; /* Brighter balanced green with higher contrast */
+  --ui-text-primary: #33b690; /* Brighter balanced green with higher contrast */
   --user-message-glow-color: #107343;
   --backend-message-glow-color: #e08009;
   
   /* Chat Message Styling */
-  --user-bubble-bg: rgba(16, 115, 67, 0.25); /* Subtle green tint from user-message-glow */
-  --user-bubble-border: rgba(43, 156, 124, 0.5); /* From ui-text-primary */
-  --user-bubble-glow: rgba(16, 115, 67, 0.2); /* Subtle glow effect */
-  --assistant-bubble-bg: rgba(224, 128, 9, 0.15); /* Subtle orange tint from backend-message-glow */
-  --assistant-bubble-border: rgba(224, 128, 9, 0.4); /* From header-text-color */
-  --assistant-bubble-glow: rgba(224, 128, 9, 0.15); /* Subtle glow effect */
+  --user-bubble-bg: rgba(16, 115, 67, 0.35); /* Stronger green tint from user-message-glow */
+  --user-bubble-border: rgba(43, 156, 124, 0.7); /* From ui-text-primary, higher contrast */
+  --user-bubble-glow: rgba(16, 115, 67, 0.3); /* Enhanced glow effect */
+  --assistant-bubble-bg: rgba(224, 128, 9, 0.25); /* Stronger orange tint from backend-message-glow */
+  --assistant-bubble-border: rgba(224, 128, 9, 0.6); /* From header-text-color, higher contrast */
+  --assistant-bubble-glow: rgba(224, 128, 9, 0.25); /* Enhanced glow effect */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(29, 36, 44, 0.8); /* Darker variant of background */
@@ -32,9 +37,9 @@
   --background-dark: #1a202c; /* Dark blue/grey */
   --surface-dark: #2d3748; /* Slightly lighter */
   --panel-bg-dark: #212a38; /* Derived */
-  --background-light: #f7fafc; /* Very Light Grey/Blue (Lab White) */
-  --surface-light: #e8f0f5; /* Lighter Cool Grey */
-  --panel-bg-light: #dde4eb; /* Medium Cool Grey */
+  --background-light: #e7eaec; /* Darker grey/blue - less bright */
+  --surface-light: #d8e0e5; /* Darker cool grey - easier on eyes */
+  --panel-bg-light: #cdd4db; /* Darker medium cool grey */
 
   /* Inputs */
   --input-bg-dark: var(--panel-bg-dark);
@@ -144,20 +149,23 @@
 /* --- Light Mode Overrides --- */
 body.light-mode {
   /* Override root colors for light mode */
-  --ui-text-primary: #4a5568; /* Darker Grey Text */
-  --input-text-color: #2b9c7c; /* Brighter balanced green */
-  --header-text-color: #4fd1c5; /* Desaturated Teal */
+  --ui-text-primary: #2d3748; /* Much darker Grey Text for higher contrast */
+  --input-text-color: #25886c; /* Darker balanced green for higher contrast */
+  --header-text-color: #38a89d; /* Darker Teal for higher contrast */
   --user-message-glow-color: #f6ad55; /* Muted Orange Glow */
   --backend-message-glow-color: #e57373; /* Muted Red Glow */
   --button-background-base: #9ae6b4; /* Override original mapping */
+  --user-message-text-color: #2d3748; /* Dark text for user bubbles */
+  --assistant-message-text-color: #2d3748; /* Dark text for assistant bubbles */
+  --foreground: #2d3748; /* Text color for all messages in light mode */
   
   /* Chat Message Light Mode Overrides */
-  --user-bubble-bg: rgba(246, 173, 85, 0.1); /* Light orange tint */
-  --user-bubble-border: rgba(43, 156, 124, 0.4); /* Soft green border */
-  --user-bubble-glow: rgba(246, 173, 85, 0.1); /* Subtle glow */
-  --assistant-bubble-bg: rgba(229, 115, 115, 0.08); /* Very light red */
-  --assistant-bubble-border: rgba(229, 115, 115, 0.3); /* Soft red border */
-  --assistant-bubble-glow: rgba(229, 115, 115, 0.1); /* Subtle glow */
+  --user-bubble-bg: rgba(246, 173, 85, 0.3); /* Higher contrast orange tint for better visibility */
+  --user-bubble-border: rgba(43, 156, 124, 0.75); /* Higher contrast green border */
+  --user-bubble-glow: rgba(246, 173, 85, 0.25); /* Enhanced glow */
+  --assistant-bubble-bg: rgba(229, 115, 115, 0.25); /* Higher contrast light red */
+  --assistant-bubble-border: rgba(229, 115, 115, 0.65); /* Higher contrast red border */
+  --assistant-bubble-glow: rgba(229, 115, 115, 0.25); /* Enhanced glow */
   
   /* Tab Light Mode Overrides */
   --tab-inactive-bg: rgba(221, 228, 235, 0.8); /* Light gray background */

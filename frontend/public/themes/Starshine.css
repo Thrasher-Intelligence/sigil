@@ -1,19 +1,24 @@
 /* Starshine Theme - CSS Variables */
 :root {
+  /* Message Text Colors (will be overridden in light mode) */
+  --user-message-text-color: #F0E6FF; /* Light text for user bubbles in dark mode */
+  --assistant-message-text-color: #F0E6FF; /* Light text for assistant bubbles in dark mode */
+  --foreground: #F0E6FF; /* Text color for messages in dark mode */
+  
   --button-background-base: #00E0C6; /* palette-4: Used for button background base */
   --header-text-color: #FF007C; /* palette-9: Used for header text (chat, settings) */
-  --input-text-color: #D6C3E5; /* palette-15/foreground: Used for text in settings inputs/textareas */
-  --ui-text-primary: #D6C3E5; /* Default UI text color - palette-15/foreground */
+  --input-text-color: #F0E6FF; /* palette-15/foreground: Used for text in settings inputs/textareas, brightened for contrast */
+  --ui-text-primary: #F0E6FF; /* Default UI text color - palette-15/foreground, brightened for contrast */
   --user-message-glow-color: #FF4F4F; /* palette-1 */
   --backend-message-glow-color: #FF007C; /* palette-9 */
   
   /* Chat Message Styling */
-  --user-bubble-bg: rgba(255, 79, 79, 0.25); /* Subtle red tint from user-message-glow */
-  --user-bubble-border: rgba(255, 79, 79, 0.5); /* From user-message-glow */
-  --user-bubble-glow: rgba(255, 79, 79, 0.2); /* Subtle glow effect */
-  --assistant-bubble-bg: rgba(255, 0, 124, 0.15); /* Subtle pink tint from backend-message-glow */
-  --assistant-bubble-border: rgba(255, 0, 124, 0.4); /* From backend-message-glow */
-  --assistant-bubble-glow: rgba(255, 0, 124, 0.15); /* Subtle glow effect */
+  --user-bubble-bg: rgba(255, 79, 79, 0.4); /* Stronger red tint from user-message-glow for higher contrast */
+  --user-bubble-border: rgba(255, 79, 79, 0.7); /* From user-message-glow, bolder for contrast */
+  --user-bubble-glow: rgba(255, 79, 79, 0.3); /* Enhanced glow effect */
+  --assistant-bubble-bg: rgba(255, 0, 124, 0.3); /* Stronger pink tint from backend-message-glow for higher contrast */
+  --assistant-bubble-border: rgba(255, 0, 124, 0.6); /* From backend-message-glow, bolder for contrast */
+  --assistant-bubble-glow: rgba(255, 0, 124, 0.25); /* Enhanced glow effect */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(60, 43, 62, 0.8); /* Darker variant of surface */
@@ -33,13 +38,13 @@
   --panel-bg-dark: #4C3B4E; /* Even lighter for panels */
 
   /* Light Mode Variations (Adjusted for Readability) */
-  --background-light: #f4f6f8; /* Light Grey-Blue (Night Sky) */
-  --surface-light: #f8f7fc; /* Very Light Lavender (Nebula) */
-  --panel-bg-light: #e8eaf6; /* Light Indigo/Lavender */
+  --background-light: #e4e6e8; /* Darker Grey-Blue (Night Sky) - less bright */
+  --surface-light: #e8e7ec; /* Darker Lavender (Nebula) - easier on eyes */
+  --panel-bg-light: #d8dae6; /* Darker Indigo/Lavender - reduced brightness */
 
   /* --- NEW: Input Area Colors --- */
   --input-bg-dark: #3C2B3E; /* Slightly lighter than background */
-  --input-bg-light: #ffffff; /* White */
+  --input-bg-light: #f0f0f5; /* Off-white - less harsh than pure white */
   --disabled-bg-dark: #4C3B4E; /* Lighter shade */
   --disabled-bg-light: #d8dae0; /* Muted Lavender/Grey */
   --disabled-fg-dark: #826C99; /* palette-8 */
@@ -80,7 +85,7 @@
 
   /* --- NEW: Settings Panel & Input Details --- */
   --surface-input-dark: #3C2B3E; /* Slightly darker than input-bg */
-  --surface-input-light: #ffffff; /* White */
+  --surface-input-light: #f0f0f5; /* Off-white - less harsh than pure white */
   --border-input-dark: #826C99; /* palette-8 */
   --border-input-light: #c8cadd; /* Light lavender border */
   --focus-ring-accent-dark: var(--primary-dark); /* Use primary color */
@@ -96,7 +101,7 @@
   --text-disabled-dark: #826C99; /* palette-8 - Same as --disabled-fg-dark */
   --text-disabled-light: var(--disabled-fg-light);
   --surface-hover-dark: #5C4B5E; /* Lighter than panel background */
-  --surface-hover-light: #f0f2f5; /* Slightly darker light grey-blue */
+  --surface-hover-light: #d2d8e0; /* Darker grey-blue for better contrast */
   --border-input-hover-dark: #A688C9; /* Lighter than palette-8 */
   --border-input-hover-light: #b8bacd; /* Darker lavender border */
   /* --- END NEW --- */
@@ -146,27 +151,30 @@
 /* --- Light Mode Overrides --- */
 body.light-mode {
   /* Override root colors for light mode */
-  --ui-text-primary: #4a4a6a; /* Deep Space Purple/Grey */
-  --input-text-color: #4a4a6a;
-  --header-text-color: #6a5acd; /* Slate Blue (Twilight) */
-  --user-message-glow-color: #fffacd; /* Lemon Chiffon Glow */
-  --backend-message-glow-color: #a0e6e0; /* Light Teal/Cyan Glow */
-  --button-background-base: #fffacd; /* Override original mapping */
+  --ui-text-primary: #3a3a5a; /* Darker Deep Space Purple/Grey - better contrast */
+  --input-text-color: #3a3a5a;
+  --header-text-color: #5a4abd; /* Darker Slate Blue (Twilight) - reduced brightness */
+  --user-message-glow-color: #efeabd; /* Darker Lemon Chiffon Glow - less bright */
+  --backend-message-glow-color: #90d6d0; /* Darker Teal/Cyan Glow - reduced brightness */
+  --button-background-base: #efeabd; /* Override original mapping - matching primary-light */
+  --user-message-text-color: #3a3a5a; /* Dark text for user bubbles */
+  --assistant-message-text-color: #3a3a5a; /* Dark text for assistant bubbles */
+  --foreground: #3a3a5a; /* Text color for all messages in light mode */
   
   /* Chat Message Light Mode Overrides */
-  --user-bubble-bg: rgba(255, 250, 205, 0.2); /* Light yellow tint from primary-light */
-  --user-bubble-border: rgba(255, 250, 205, 0.5); /* From primary-light */
-  --user-bubble-glow: rgba(255, 250, 205, 0.15); /* Subtle glow */
-  --assistant-bubble-bg: rgba(160, 230, 224, 0.15); /* Light teal from backend-message-glow */
-  --assistant-bubble-border: rgba(160, 230, 224, 0.4); /* From backend-message-glow */
-  --assistant-bubble-glow: rgba(160, 230, 224, 0.1); /* Subtle glow */
+  --user-bubble-bg: rgba(239, 234, 189, 0.4); /* Higher contrast yellow tint from primary-light */
+  --user-bubble-border: rgba(239, 234, 189, 0.8); /* From primary-light, bolder for higher contrast */
+  --user-bubble-glow: rgba(239, 234, 189, 0.3); /* Enhanced glow */
+  --assistant-bubble-bg: rgba(144, 214, 208, 0.35); /* Higher contrast teal from backend-message-glow */
+  --assistant-bubble-border: rgba(144, 214, 208, 0.7); /* From backend-message-glow, bolder for contrast */
+  --assistant-bubble-glow: rgba(144, 214, 208, 0.25); /* Enhanced glow */
   
   /* Tab Light Mode Overrides */
-  --tab-inactive-bg: rgba(232, 234, 246, 0.8); /* Light variant of panel-bg-light */
+  --tab-inactive-bg: rgba(216, 218, 230, 0.8); /* Darker variant of panel-bg-light */
   --tab-inactive-color: #6a5acd; /* Slate Blue (Twilight) */
-  --tab-hover-bg: rgba(255, 250, 205, 0.3); /* Light yellow from primary-light */
+  --tab-hover-bg: rgba(239, 234, 189, 0.4); /* Darker yellow from primary-light */
   --tab-hover-color: #5a5a9a; /* Darker purple on hover */
-  --tab-active-bg: rgba(160, 230, 224, 0.2); /* Very light teal from backend-message-glow */
+  --tab-active-bg: rgba(144, 214, 208, 0.25); /* Darker teal from backend-message-glow */
   --tab-active-color: #4a4a6a; /* Match ui-text-primary */
   --tab-border-color: rgba(200, 202, 221, 0.8); /* Light border from border-input-light */
   --tab-active-border-color: rgba(106, 90, 205, 0.5); /* Purple border for active tab */
