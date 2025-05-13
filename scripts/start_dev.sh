@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Get the directory where the script is located
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Get the project root (parent directory of the scripts directory)
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+# Change to project root directory
+cd "$PROJECT_ROOT" || exit 1
+
 # Ensure the script is run from the project root
 # Adjusted check: Look for backend/api/main.py
 if [ ! -f "backend/api/main.py" ] || [ ! -d "frontend" ]; then
@@ -9,7 +16,7 @@ fi
 
 # --- Configuration ---
 # --- IMPORTANT: Point to the Python interpreter INSIDE the project's virtual environment (./venv) ---
-PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"  # Absolute path to the directory containing this script
+# PROJECT_ROOT is already set above
 PYTHON_CMD="$PROJECT_ROOT/venv/bin/python"  # Default: use ./venv from project root
 
 # If the venv interpreter is not found/executable, fall back to the first python3 on PATH

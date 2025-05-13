@@ -198,13 +198,25 @@ This interface is ideal for local experimentation, debugging, and integrating li
 
 1.  **Ensure your Python virtual environment is activated.**
 
-2.  **Run the development startup script from the project root:**
+2.  **Run the appropriate development startup script for your platform:**
+    
+    **For macOS/Linux:**
     ```bash
-    ./start_dev.sh
+    ./scripts/start_dev.sh
+    ```
+    
+    **For Windows (PowerShell):**
+    ```powershell
+    .\scripts\start_dev.ps1
+    ```
+    
+    **For Windows (Command Prompt):**
+    ```
+    scripts\start_dev.bat
     ```
 
 3.  **Wait for Startup:**
-    *   The script first starts the backend API server (Uvicorn). You'll see logs in `backend/backend_api.log`. It will indicate if CUDA is detected.
+    *   The script first starts the backend API server (Uvicorn). You'll see logs in `backend_api.log`. It will indicate if CUDA is detected.
     *   Then, it starts the frontend Vite development server (usually accessible at `http://localhost:5173`).
 
 4.  **Load Model & Chat:**
@@ -220,7 +232,10 @@ This interface is ideal for local experimentation, debugging, and integrating li
 
 ## Project Structure
 
-*   `start_dev.sh`: Main development environment startup script. Manages backend/frontend processes.
+*   `scripts/`: Contains development environment startup scripts:
+    *   `start_dev.sh`: Main development script for macOS/Linux. Manages backend/frontend processes.
+    *   `start_dev.ps1`: PowerShell script for Windows users.
+    *   `start_dev.bat`: Batch script for Windows Command Prompt users.
 *   `requirements.txt`: Python dependencies for the backend.
 *   `backend/`: Contains the backend API code.
     *   `api/`: FastAPI application setup and route definitions.
