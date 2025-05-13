@@ -22,7 +22,7 @@ import sys
 
 # Add the backend directory to the path to allow imports
 # This assumes the tests are run from the project root
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../'))
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 sys.path.insert(0, project_root)
 
 # Now import the app
