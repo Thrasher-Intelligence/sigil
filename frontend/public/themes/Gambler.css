@@ -7,65 +7,69 @@
   
   /* --- Vegas Night (Dark Mode) Core Colors --- */
   
-  /* Primary Neon Colors */
-  --vegas-neon-pink: #FF0090;
-  --vegas-neon-blue: #00E1FF;
-  --vegas-neon-purple: #9D00FF;
-  --vegas-neon-gold: #FFD700;
-  --vegas-neon-red: #FF2D55;
-  --vegas-neon-green: #39FF14;
+  /* High-End Casino Colors */
+  --vegas-deep-green: #0A4D2E;     /* Rich felt green */
+  --vegas-mahogany: #4A2410;       /* Dark wood trim */
+  --vegas-gold-accent: #D4AF37;    /* Classic gold */
+  --vegas-bordeaux: #4E0D15;       /* Deep red cloth */
+  --vegas-brass: #B5A642;          /* Metallic accents */
+  --vegas-shadow: #0C2318;         /* Dark green shadow */
+  
+  /* Input field background colors */
+  --input-field-bg-dark: rgba(20, 50, 37, 0.65);   /* Dark green tinted background */
+  --input-field-bg-light: rgba(242, 236, 225, 0.85); /* Light sand background */
   
   /* Chat Message Styling */
-  --user-bubble-bg: rgba(255, 0, 144, 0.35); /* Stronger pink tint from vegas-neon-pink */
-  --user-bubble-border: rgba(255, 0, 144, 0.7); /* From vegas-neon-pink, higher contrast */
-  --user-bubble-glow: rgba(255, 0, 144, 0.3); /* Enhanced glow effect */
+  --user-bubble-bg: rgba(190, 0, 0, 0.35); /* Rich red tint */
+  --user-bubble-border: rgba(190, 0, 0, 0.7); /* Rich red border */
+  --user-bubble-glow: rgba(190, 0, 0, 0.3); /* Rich red glow effect */
   --assistant-bubble-bg: rgba(0, 225, 255, 0.25); /* Stronger blue tint from vegas-neon-blue */
   --assistant-bubble-border: rgba(0, 225, 255, 0.6); /* From vegas-neon-blue, higher contrast */
   --assistant-bubble-glow: rgba(0, 225, 255, 0.25); /* Enhanced glow effect */
   
   /* Tab Styling */
-  --tab-inactive-bg: rgba(26, 17, 42, 0.8); /* Darker variant of vegas-background-surface */
-  --tab-inactive-color: #B099D0; /* Light purplish text */
+  --tab-inactive-bg: rgba(255, 215, 0, 0.15); /* Light gold for inactive */
+  --tab-inactive-color: #D4AF37; /* Gold text */
   --tab-hover-bg: rgba(157, 0, 255, 0.3); /* Light variant of vegas-neon-purple */
   --tab-hover-color: #CCBBEE; /* Lighter text on hover */
-  --tab-active-bg: rgba(255, 215, 0, 0.15); /* Subtle gold background */
-  --tab-active-color: var(--vegas-neon-gold); /* Match gold */
+  --tab-active-bg: rgba(26, 17, 42, 0.8); /* Darker background for active */
+  --tab-active-color: #B099D0; /* Light text on dark background */
   --tab-border-color: rgba(75, 0, 130, 0.4); /* Subtle border from vegas-royal-purple */
   --tab-active-border-color: rgba(255, 215, 0, 0.5); /* Stronger border for active tab */
   --tab-container-border-color: rgba(75, 0, 130, 0.4); /* Border below tabs */
   
   /* Casino/Luxury Elements */
   --vegas-gold: #D4AF37;
-  --vegas-royal-purple: #4B0082;
-  --vegas-deep-red: #8B0000;
-  --vegas-dark-blue: #191970;
+  --vegas-royal-green: #0A4D2E;
+  --vegas-deep-red: #4E0D15;
+  --vegas-dark-wood: #2F1810;
   
   /* Dark Mode Background Gradients */
-  --vegas-background-deep: #0F0718; /* Deep purple-black */
-  --vegas-background-surface: #1A112A; /* Slightly lighter */
-  --vegas-panel-bg: #241535; /* Panels with slight purple tint */
+  --vegas-background-deep: #051D13; /* Deep green-black */
+  --vegas-background-surface: #0A2D1F; /* Rich felt surface */
+  --vegas-panel-bg: rgba(14, 56, 39, 0.85); /* Panels with green tint and transparency */
   
   /* --- Mojave Desert (Light Mode) Core Colors --- */
   
   /* Natural Desert Colors */
-  --mojave-sand: #D5C194; /* Darker sand, less bright */
-  --mojave-terracotta: #B56229; /* Slightly darker terracotta */
-  --mojave-sage: #8C9F78; /* Slightly darker sage */
-  --mojave-sunset-orange: #E06F40; /* Less intense sunset orange */
-  --mojave-canyon-red: #964334; /* Slightly darker canyon red */
-  --mojave-desert-blue: #6C91AF; /* Slightly darker desert sky blue */
+  --mojave-sand: #E8DAC5; /* Lighter sand */
+  --mojave-terracotta: #E8A17C; /* Pastel terracotta */
+  --mojave-sage: #B7C9A9; /* Pastel sage */
+  --mojave-sunset-orange: #FFB299; /* Pastel sunset orange */
+  --mojave-canyon-red: #E8A19B; /* Pastel canyon red */
+  --mojave-desert-blue: #A5C0D9; /* Pastel desert sky blue */
   
   /* Light Mode Background Layers */
-  --mojave-background-sand: #E2D6C0; /* Less bright sandy tone */
-  --mojave-background-surface: #DAC7A7; /* Darker sand surface */
-  --mojave-panel-bg: #CEBC9A; /* Darker panel sand color */
+  --mojave-background-sand: #F5EDE2; /* Lighter sandy tone */
+  --mojave-background-surface: #EBE1D1; /* Lighter sand surface */
+  --mojave-panel-bg: #E1D5C2; /* Lighter panel sand color */
 
   /* --- Original Palette Mappings for Dark Mode (Vegas) --- */
-  --button-background-base: var(--vegas-neon-red);
-  --header-text-color: var(--vegas-neon-gold);
-  --input-text-color: #FFFFFF; /* Pure white for higher contrast */
-  --ui-text-primary: #FFFFFF;
-  --user-message-glow-color: var(--vegas-neon-pink);
+  --button-background-base: var(--vegas-bordeaux);
+  --header-text-color: var(--vegas-gold-accent);
+  --input-text-color: #E8DFC6; /* Warm white for softer contrast */
+  --ui-text-primary: #E8DFC6;
+  --user-message-glow-color: #BE0000; /* Rich red for user messages */
   --backend-message-glow-color: var(--vegas-neon-blue);
 
   /* --- Backgrounds (Dark Mode - Vegas) --- */
@@ -74,16 +78,16 @@
   --panel-bg-dark: var(--vegas-panel-bg);
 
   /* --- Input Area Colors (Dark Mode - Vegas) --- */
-  --input-bg-dark: rgba(26, 17, 42, 0.8); /* Slightly transparent surface */
-  --disabled-bg-dark: #352447; /* Muted purple-gray */
-  --disabled-fg-dark: #7A6B98; /* Lighter muted purple */
+  --input-bg-dark: var(--input-field-bg-dark); /* Use our custom input background */
+  --disabled-bg-dark: #1C432F; /* Muted green */
+  --disabled-fg-dark: #5A8C76; /* Lighter muted green */
 
   /* --- Panel Tab/Container Colors (Dark Mode - Vegas) --- */
-  --panel-tab-bg-dark: var(--vegas-panel-bg);
-  --panel-tab-active-bg-dark: #2E1B41; /* Slightly lighter purple */
-  --panel-tab-text-dark: #B099D0; /* Light purplish text */
-  --panel-tab-active-text-dark: var(--vegas-neon-gold); /* Gold for active tabs */
-  --panel-container-bg-dark: var(--vegas-panel-bg);
+  --panel-tab-bg-dark: rgba(14, 56, 39, 0.85);
+  --panel-tab-active-bg-dark: rgba(14, 82, 53, 0.9); /* Slightly lighter green with transparency */
+  --panel-tab-text-dark: #8CB5A3; /* Light green text */
+  --panel-tab-active-text-dark: var(--vegas-gold-accent); /* Gold for active tabs */
+  --panel-container-bg-dark: rgba(14, 56, 39, 0.85);
 
   /* --- Button Colors (Dark Mode - Vegas) --- */
   --primary-dark: var(--vegas-gold);
@@ -99,11 +103,11 @@
   --primary-focus-dark: rgba(212, 175, 55, 0.5); /* Gold with alpha */
 
   /* --- Settings Panel & Input Details (Dark Mode - Vegas) --- */
-  --surface-input-dark: #221433; /* Slightly darker than vegas surface */
-  --border-input-dark: #432963; /* Purple border */
-  --focus-ring-accent-dark: var(--vegas-neon-gold);
+  --surface-input-dark: #072D1E; /* Slightly darker than vegas surface */
+  --border-input-dark: #0E5235; /* Green border */
+  --focus-ring-accent-dark: var(--vegas-gold-accent);
   --focus-ring-color-dark: var(--primary-focus-dark);
-  --text-secondary-dark: #B099D0; /* Light purplish secondary text */
+  --text-secondary-dark: #8CB5A3; /* Light green secondary text */
   --primary-contrast-dark: var(--button-foreground-dark);
   --surface-disabled-dark: #352447; /* Muted purple background */
   --text-disabled-dark: #7A6B98; /* Muted purple text */
@@ -117,15 +121,15 @@
   --panel-bg-light: var(--mojave-panel-bg);
 
   /* --- Input Area Colors (Light Mode - Mojave) --- */
-  --input-bg-light: #E7E1D3; /* Slightly darker, less harsh */
+  --input-bg-light: var(--input-field-bg-light); /* Use our custom light input background */
   --disabled-bg-light: #C1B393; /* Muted sand, less contrast */
   --disabled-fg-light: #958870; /* Darker muted sand */
 
   /* --- Panel Tab/Container Colors (Light Mode - Mojave) --- */
-  --panel-tab-bg-light: var(--mojave-panel-bg);
-  --panel-tab-active-bg-light: #D7D1C3; /* Less bright, easier on the eyes */
-  --panel-tab-text-light: #775D3C; /* Darker brown text for better contrast */
-  --panel-tab-active-text-light: var(--mojave-canyon-red); /* Canyon red for active tabs */
+  --panel-tab-bg-light: #F5EDE2; /* Very light sand for inactive tabs */
+  --panel-tab-active-bg-light: #E8DAC5; /* Darker sand for active tabs */
+  --panel-tab-text-light: var(--mojave-sunset-orange); /* Sunset orange for inactive */
+  --panel-tab-active-text-light: #B7967A; /* Softer brown text for active */
   --panel-container-bg-light: var(--mojave-panel-bg);
 
   /* --- Button Colors (Light Mode - Mojave) --- */
@@ -160,6 +164,9 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
+  
+  /* Override application input styles for the gambler theme */
+  --settings-input-bg: var(--input-field-bg-dark);
   /* Tab Overrides */
   --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
   --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-dark));
@@ -199,6 +206,7 @@ body.light-mode {
   /* Override core colors for light mode */
   --ui-text-primary: #2E1A05; /* Much darker brown text for higher contrast */
   --input-text-color: #2E1A05; /* Match UI text */
+  --settings-input-bg: var(--input-field-bg-light); /* Override settings input background in light mode */
   --header-text-color: var(--mojave-canyon-red); /* Header text - canyon red */
   --user-message-glow-color: var(--mojave-sunset-orange); /* User message glow */
   --backend-message-glow-color: var(--mojave-desert-blue); /* Backend message glow */
@@ -255,4 +263,52 @@ body.light-mode {
     0 0 5px var(--vegas-neon-gold),
     0 0 10px var(--vegas-neon-gold),
     0 0 20px var(--vegas-neon-gold);
+}
+
+/* Custom styles to override application-specific components */
+.settings-panel input[type="number"],
+.settings-panel textarea,
+.glass-panel input[type="number"],
+.glass-panel textarea,
+.glass-panel input[type="text"],
+.model-load-panel input[type="text"], 
+.model-load-panel input[type="password"],
+.session-edit-input,
+.font-select {
+  background-color: var(--settings-input-bg) !important;
+  color: var(--input-text-color) !important;
+  border-color: var(--vegas-gold-accent, rgba(212, 175, 55, 0.3)) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Style overrides for when inputs are focused */
+.settings-panel input[type="number"]:focus,
+.settings-panel textarea:focus,
+.glass-panel input[type="number"]:focus,
+.glass-panel textarea:focus,
+.glass-panel input[type="text"]:focus,
+.model-load-panel input[type="text"]:focus, 
+.model-load-panel input[type="password"]:focus,
+.session-edit-input:focus,
+.font-select:focus {
+  background-color: var(--settings-input-bg) !important;
+  border-color: var(--vegas-gold-accent) !important;
+  box-shadow: 0 0 10px var(--vegas-gold-accent, rgba(212, 175, 55, 0.4)) !important;
+}
+
+/* Additional button styling for better theme consistency */
+.settings-panel button,
+.glass-panel button:not(.panel-tab-button):not(.edit-session-button):not(.delete-session-button):not(.session-edit-button),
+.clear-chat-button-settings,
+.model-load-button {
+  border-color: var(--vegas-gold-accent, rgba(212, 175, 55, 0.4)) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Hover states for buttons */
+.settings-panel button:hover:not(:disabled),
+.glass-panel button:not(.panel-tab-button):not(.edit-session-button):not(.delete-session-button):not(.session-edit-button):hover:not(:disabled),
+.model-load-button:hover:not(:disabled) {
+  border-color: var(--vegas-gold-accent) !important;
+  box-shadow: 0 0 15px var(--vegas-gold-accent, rgba(212, 175, 55, 0.5)) !important;
 }
