@@ -48,6 +48,7 @@ class Settings(BaseSettings):
         env_file=os.path.join(os.path.dirname(__file__), ".env"),
         env_prefix="SIGIL_",
         extra="ignore",
+        protected_namespaces=("settings_",),
     )
 
     # ------------------------- Helper properties -------------------------
