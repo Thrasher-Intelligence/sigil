@@ -33,6 +33,12 @@
   --code-block-border: var(--vegas-gold-accent, rgba(212, 175, 55, 0.3)); /* Gold border for code blocks */
   --inline-code-bg: rgba(30, 30, 30, 0.7); /* Dark background for inline code */
   --code-text-color: #E8DFC6; /* Light warm text for code */
+  --code-keyword-color: #d4af37; /* Gold for keywords */
+  --code-string-color: #fc8a8a; /* Red for strings */
+  --code-comment-color: #7e7555; /* Muted gold for comments */
+  --code-variable-color: #00c8ff; /* Blue for variables */
+  --code-number-color: #f87979; /* Red for numbers */
+  --code-type-color: #9292e0; /* Purple for types */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(255, 215, 0, 0.15); /* Light gold for inactive */
@@ -130,10 +136,16 @@
   --panel-bg-light: var(--mojave-panel-bg);
   
   /* Code Block Styling - Light Mode */
-  --code-block-bg-light: rgba(60, 45, 35, 0.85); /* Rich dark wood/leather background for code blocks */
+  --code-block-bg-light: rgba(245, 237, 226, 0.85); /* Light sand background for code blocks */
   --code-block-border-light: var(--mojave-terracotta, rgba(181, 98, 41, 0.5)); /* Terracotta border for code blocks */
-  --inline-code-bg-light: rgba(70, 55, 45, 0.75); /* Slightly lighter background for inline code */
-  --code-text-color-light: #F5EDE2; /* Light sand color for code text */
+  --inline-code-bg-light: rgba(240, 230, 215, 0.75); /* Light sand background for inline code */
+  --code-text-color-light: #2E1A05; /* Dark brown text for code */
+  --code-keyword-color-light: #966919; /* Darker gold for keywords */
+  --code-string-color-light: #b84f4f; /* Darker red for strings */
+  --code-comment-color-light: #958871; /* Muted brown for comments */
+  --code-variable-color-light: #0080ab; /* Darker blue for variables */
+  --code-number-color-light: #994242; /* Darker red for numbers */
+  --code-type-color-light: #5a5a8e; /* Darker purple for types */
 
   /* --- Input Area Colors (Light Mode - Mojave) --- */
   --input-bg-light: var(--input-field-bg-light); /* Use our custom light input background */
@@ -303,8 +315,9 @@ body.light-mode {
 
 .bubbleContent pre code {
   color: var(--code-text-color-current) !important;
-  font-family: 'Monaco', 'Consolas', monospace !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
   font-size: 0.9em !important;
+  line-height: 1.5 !important;
 }
 
 .bubbleContent code:not(pre code) {
@@ -314,40 +327,71 @@ body.light-mode {
   border-radius: 3px !important;
   padding: 0.2em 0.4em !important;
   font-size: 0.85em !important;
-  font-family: 'Monaco', 'Consolas', monospace !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
 }
 
 /* Code syntax highlighting for the Gambler theme */
 .bubbleContent .hljs-keyword,
 .bubbleContent .hljs-selector-tag,
 .bubbleContent .hljs-title.function_ {
-  color: var(--vegas-gold-accent, #D4AF37) !important;
+  color: var(--code-keyword-color, var(--vegas-gold-accent)) !important;
 }
 
 .bubbleContent .hljs-string,
 .bubbleContent .hljs-attr {
-  color: #9ACC99 !important;
+  color: var(--code-string-color, #d67272) !important;
 }
 
 .bubbleContent .hljs-comment {
-  color: #777777 !important;
-  font-style: italic !important;
+  color: var(--code-comment-color, #7e7555) !important;
 }
 
 .bubbleContent .hljs-variable,
 .bubbleContent .hljs-template-variable,
 .bubbleContent .hljs-regexp {
-  color: #CC9A9A !important;
+  color: var(--code-variable-color, #43c8fc) !important;
 }
 
 .bubbleContent .hljs-number,
 .bubbleContent .hljs-literal {
-  color: #CC99CC !important;
+  color: var(--code-number-color, #f87979) !important;
 }
 
 .bubbleContent .hljs-type,
 .bubbleContent .hljs-built_in {
-  color: #99BBCC !important;
+  color: var(--code-type-color, #b9b9ff) !important;
+}
+
+/* Light mode syntax highlighting */
+body.light-mode .bubbleContent .hljs-keyword,
+body.light-mode .bubbleContent .hljs-selector-tag,
+body.light-mode .bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color-light, #966919) !important;
+}
+
+body.light-mode .bubbleContent .hljs-string,
+body.light-mode .bubbleContent .hljs-attr {
+  color: var(--code-string-color-light, #b84f4f) !important;
+}
+
+body.light-mode .bubbleContent .hljs-comment {
+  color: var(--code-comment-color-light, #958871) !important;
+}
+
+body.light-mode .bubbleContent .hljs-variable,
+body.light-mode .bubbleContent .hljs-template-variable,
+body.light-mode .bubbleContent .hljs-regexp {
+  color: var(--code-variable-color-light, #0080ab) !important;
+}
+
+body.light-mode .bubbleContent .hljs-number,
+body.light-mode .bubbleContent .hljs-literal {
+  color: var(--code-number-color-light, #994242) !important;
+}
+
+body.light-mode .bubbleContent .hljs-type,
+body.light-mode .bubbleContent .hljs-built_in {
+  color: var(--code-type-color-light, #5a5a8e) !important;
 }
 
 /* Custom styles to override application-specific components */

@@ -20,6 +20,28 @@
   --assistant-bubble-border: rgba(255, 0, 124, 0.6); /* From backend-message-glow, bolder for contrast */
   --assistant-bubble-glow: rgba(255, 0, 124, 0.25); /* Enhanced glow effect */
   
+  /* Code Block Styling - Dark Mode */
+  --code-block-bg: rgba(25, 24, 37, 0.85); /* Dark purple background for code blocks */
+  --code-block-border: rgba(255, 0, 124, 0.5); /* Pink border for code blocks */
+  --inline-code-bg: rgba(30, 29, 42, 0.75); /* Dark purple background for inline code */
+  --code-text-color: #F0E6FF; /* Light purple text for code */
+  --code-block-bg-light: rgba(245, 245, 250, 0.85); /* Soft pastel background for code blocks */
+  --code-block-border-light: rgba(255, 95, 198, 0.5); /* Pink border for light mode code blocks */
+  --inline-code-bg-light: rgba(240, 240, 245, 0.75); /* Soft pastel background for inline code */
+  --code-text-color-light: #3a3a5a; /* Dark purple text for code */
+  --code-keyword-color: #FF5FC6; /* Bright pink for keywords */
+  --code-string-color: #00E0C6; /* Teal for strings */
+  --code-comment-color: #826C99; /* Muted purple for comments */
+  --code-variable-color: #FF9E64; /* Orange for variables */
+  --code-number-color: #FF007C; /* Pink for numbers */
+  --code-type-color: #00E0C6; /* Teal for types */
+  --code-keyword-color-light: #5a4abd; /* Dark purple for keywords */
+  --code-string-color-light: #00a396; /* Dark teal for strings */
+  --code-comment-color-light: #8a8a94; /* Medium gray for comments */
+  --code-variable-color-light: #e86c00; /* Dark orange for variables */
+  --code-number-color-light: #d4006e; /* Dark pink for numbers */
+  --code-type-color-light: #00a396; /* Dark teal for types */
+  
   /* Tab Styling */
   --tab-inactive-bg: rgba(60, 43, 62, 0.8); /* Darker variant of surface */
   --tab-inactive-color: #826C99; /* palette-8 */
@@ -113,6 +135,11 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
+  --code-block-bg-current: var(--code-block-bg);
+  --code-block-border-current: var(--code-block-border);
+  --inline-code-bg-current: var(--inline-code-bg);
+  --code-text-color-current: var(--code-text-color);
+  
   /* Tab Overrides */
   --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
   --panel-tab-active-bg: var(--tab-active-bg, var(--panel-tab-active-bg-dark));
@@ -220,4 +247,99 @@ body.light-mode {
   --text-disabled: var(--text-disabled-light);
   --surface-hover: var(--surface-hover-light);
   --border-input-hover: var(--border-input-hover-light);
+  --code-block-bg-current: var(--code-block-bg-light);
+  --code-block-border-current: var(--code-block-border-light);
+  --inline-code-bg-current: var(--inline-code-bg-light);
+  --code-text-color-current: var(--code-text-color-light);
+}
+
+/* Code block styling for Starshine theme */
+.bubbleContent pre {
+  background: var(--code-block-bg-current) !important;
+  border-left: 2px solid var(--code-block-border-current) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+  padding: 1em !important;
+  margin: 0.8em 0 !important;
+}
+
+.bubbleContent pre code {
+  color: var(--code-text-color-current) !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+  line-height: 1.5 !important;
+}
+
+.bubbleContent code:not(pre code) {
+  background: var(--inline-code-bg-current) !important;
+  color: var(--code-text-color-current) !important;
+  border: 1px solid var(--code-block-border-current) !important;
+  border-radius: 3px !important;
+  padding: 0.2em 0.4em !important;
+  font-size: 0.85em !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+}
+
+/* Syntax highlighting for Starshine theme */
+.bubbleContent .hljs-keyword,
+.bubbleContent .hljs-selector-tag,
+.bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color, #FF5FC6) !important;
+}
+
+.bubbleContent .hljs-string,
+.bubbleContent .hljs-attr {
+  color: var(--code-string-color, #00E0C6) !important;
+}
+
+.bubbleContent .hljs-comment {
+  color: var(--code-comment-color, #826C99) !important;
+}
+
+.bubbleContent .hljs-variable,
+.bubbleContent .hljs-template-variable,
+.bubbleContent .hljs-regexp {
+  color: var(--code-variable-color, #FF9E64) !important;
+}
+
+.bubbleContent .hljs-number,
+.bubbleContent .hljs-literal {
+  color: var(--code-number-color, #FF007C) !important;
+}
+
+.bubbleContent .hljs-type,
+.bubbleContent .hljs-built_in {
+  color: var(--code-type-color, #00E0C6) !important;
+}
+
+/* Light mode syntax highlighting */
+body.light-mode .bubbleContent .hljs-keyword,
+body.light-mode .bubbleContent .hljs-selector-tag,
+body.light-mode .bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color-light, #5a4abd) !important;
+}
+
+body.light-mode .bubbleContent .hljs-string,
+body.light-mode .bubbleContent .hljs-attr {
+  color: var(--code-string-color-light, #00a396) !important;
+}
+
+body.light-mode .bubbleContent .hljs-comment {
+  color: var(--code-comment-color-light, #8a8a94) !important;
+}
+
+body.light-mode .bubbleContent .hljs-variable,
+body.light-mode .bubbleContent .hljs-template-variable,
+body.light-mode .bubbleContent .hljs-regexp {
+  color: var(--code-variable-color-light, #e86c00) !important;
+}
+
+body.light-mode .bubbleContent .hljs-number,
+body.light-mode .bubbleContent .hljs-literal {
+  color: var(--code-number-color-light, #d4006e) !important;
+}
+
+body.light-mode .bubbleContent .hljs-type,
+body.light-mode .bubbleContent .hljs-built_in {
+  color: var(--code-type-color-light, #00a396) !important;
 }

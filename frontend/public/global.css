@@ -1,0 +1,93 @@
+/* Global CSS modifications to ensure consistent code block styling */
+
+/* Generic code block improvements for all themes */
+.bubbleContent pre {
+  padding: 1em !important;
+  margin: 0.8em 0 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+  overflow-x: auto !important;
+}
+
+.bubbleContent pre code {
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+  line-height: 1.5 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  display: block !important;
+}
+
+.bubbleContent code:not(pre code) {
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 0.85em !important;
+}
+
+/* Fallback syntax highlighting for themes that don't specify colors */
+
+/* Default theme syntax highlighting fixes for dark mode */
+.bubbleContent .hljs-keyword,
+.bubbleContent .hljs-selector-tag,
+.bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color, #c792ea) !important; /* Light purple for keywords */
+}
+
+.bubbleContent .hljs-string,
+.bubbleContent .hljs-attr {
+  color: var(--code-string-color, #9ecbbc) !important; /* Light green for strings */
+}
+
+.bubbleContent .hljs-comment {
+  color: var(--code-comment-color, #818c9a) !important; /* Gray for comments */
+}
+
+.bubbleContent .hljs-variable,
+.bubbleContent .hljs-template-variable,
+.bubbleContent .hljs-regexp {
+  color: var(--code-variable-color, #f78c6c) !important; /* Orange for variables */
+}
+
+.bubbleContent .hljs-number,
+.bubbleContent .hljs-literal {
+  color: var(--code-number-color, #82aaff) !important; /* Light blue for numbers */
+}
+
+.bubbleContent .hljs-type,
+.bubbleContent .hljs-built_in {
+  color: var(--code-type-color, #ff8b92) !important; /* Pink for types */
+}
+
+/* Fallback light mode syntax highlighting */
+body.light-mode .bubbleContent .hljs-keyword,
+body.light-mode .bubbleContent .hljs-selector-tag,
+body.light-mode .bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color-light, #7659b6) !important; /* Purple for keywords */
+}
+
+body.light-mode .bubbleContent .hljs-string,
+body.light-mode .bubbleContent .hljs-attr {
+  color: var(--code-string-color-light, #1d6c4f) !important; /* Green for strings */
+}
+
+body.light-mode .bubbleContent .hljs-comment {
+  color: var(--code-comment-color-light, #919191) !important; /* Gray for comments */
+}
+
+body.light-mode .bubbleContent .hljs-variable,
+body.light-mode .bubbleContent .hljs-template-variable,
+body.light-mode .bubbleContent .hljs-regexp {
+  color: var(--code-variable-color-light, #c36a3c) !important; /* Orange for variables */
+}
+
+body.light-mode .bubbleContent .hljs-number,
+body.light-mode .bubbleContent .hljs-literal {
+  color: var(--code-number-color-light, #3c6ec3) !important; /* Blue for numbers */
+}
+
+body.light-mode .bubbleContent .hljs-type,
+body.light-mode .bubbleContent .hljs-built_in {
+  color: var(--code-type-color-light, #a04d94) !important; /* Pink/magenta for types */
+}

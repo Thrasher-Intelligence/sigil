@@ -288,21 +288,23 @@
 
 /* Code blocks and inline code */
 .bubbleContent code {
-  font-family: monospace;
-  background: rgba(30, 30, 30, 0.5);
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--inline-code-bg-current, rgba(30, 30, 30, 0.5));
+  color: var(--code-text-color-current, inherit);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-size: 0.9em;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--code-block-border-current, rgba(255, 255, 255, 0.1));
 }
 
 .bubbleContent pre {
-  background: rgba(20, 20, 20, 0.6);
-  padding: 0.5em;
+  background: var(--code-block-bg-current, rgba(20, 20, 20, 0.6));
+  padding: 0.8em;
   overflow-x: auto;
   border-radius: var(--border-radius-small);
-  margin: 0.3em 0;
-  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 0.5em 0;
+  border-left: 2px solid var(--code-block-border-current, rgba(255, 255, 255, 0.2));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .bubbleContent pre code {
@@ -310,6 +312,10 @@
   padding: 0;
   border: none;
   display: block;
+  color: var(--code-text-color-current, inherit);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
 }
 
 /* Lists */

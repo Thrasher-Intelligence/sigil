@@ -2,6 +2,7 @@ import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import './theme.css'
+import '../public/global.css'
 
 console.log("🚀 Before importing App");
 import App from './App.jsx'

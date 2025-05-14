@@ -22,6 +22,18 @@
   --assistant-bubble-glow: rgba(94, 129, 172, 0.3); /* Enhanced glow effect */
   --bold-text-color: #d8b670; /* Gold accent for bold text */
   
+  /* Code Block Styling - Dark Mode */
+  --code-block-bg: rgba(26, 30, 41, 0.85); /* Dark background for code blocks */
+  --code-block-border: rgba(136, 198, 224, 0.5); /* Blue border for code blocks */
+  --inline-code-bg: rgba(30, 34, 45, 0.75); /* Dark background for inline code */
+  --code-text-color: #dcd7ba; /* Light text for code */
+  --code-keyword-color: #7e9cd8; /* Blue for keywords */
+  --code-string-color: #98bb6c; /* Green for strings */
+  --code-comment-color: #727169; /* Muted gray for comments */
+  --code-variable-color: #ff9e64; /* Orange for variables */
+  --code-number-color: #d27e99; /* Pink/red for numbers */
+  --code-type-color: #e46876; /* Salmon for types */
+  
   /* Tab Styling */
   --tab-inactive-bg: rgba(45, 79, 103, 0.6); /* Lighter variant of surface-dark */
   --tab-inactive-color: #a9a4ac; /* Using disabled fg */
@@ -61,6 +73,18 @@
   --panel-tab-active-text-light: #4a5f70; /* Stone Blue/Grey */
   --panel-container-bg-dark: var(--panel-bg-dark);
   --panel-container-bg-light: #e6f0f5; /* Match panel bg light */
+  
+  /* Code Block Styling - Light Mode */
+  --code-block-bg-light: rgba(240, 240, 236, 0.85); /* Soft sand/ivory background for code blocks */
+  --code-block-border-light: rgba(193, 154, 73, 0.5); /* Gold border for code blocks */
+  --inline-code-bg-light: rgba(230, 228, 220, 0.75); /* Soft beige background for inline code */
+  --code-text-color-light: #364755; /* Dark blue-grey text for code */
+  --code-keyword-color-light: #5971b2; /* Darker blue for keywords */
+  --code-string-color-light: #4d7839; /* Darker green for strings */
+  --code-comment-color-light: #888884; /* Medium gray for comments */
+  --code-variable-color-light: #c36a3c; /* Darker orange for variables */
+  --code-number-color-light: #a1556e; /* Darker pink/red for numbers */
+  --code-type-color-light: #a04d5e; /* Darker salmon for types */
 
   /* Buttons */
   --primary-dark: #7e9cd8; /* Original --button-background-base */
@@ -112,6 +136,10 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
+  --code-block-bg-current: var(--code-block-bg);
+  --code-block-border-current: var(--code-block-border);
+  --inline-code-bg-current: var(--inline-code-bg);
+  --code-text-color-current: var(--code-text-color);
   
   /* Tab Overrides */
   --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-dark));
@@ -145,6 +173,97 @@
   --text-disabled: var(--text-disabled-dark);
   --surface-hover: var(--surface-hover-dark);
   --border-input-hover: var(--border-input-hover-dark);
+}
+
+/* Code block styling for Kanagawa Wave theme */
+.bubbleContent pre {
+  background: var(--code-block-bg-current) !important;
+  border-left: 2px solid var(--code-block-border-current) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+  padding: 1em !important;
+  margin: 0.8em 0 !important;
+}
+
+.bubbleContent pre code {
+  color: var(--code-text-color-current) !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+  line-height: 1.5 !important;
+}
+
+.bubbleContent code:not(pre code) {
+  background: var(--inline-code-bg-current) !important;
+  color: var(--code-text-color-current) !important;
+  border: 1px solid var(--code-block-border-current) !important;
+  border-radius: 3px !important;
+  padding: 0.2em 0.4em !important;
+  font-size: 0.85em !important;
+  font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+}
+
+/* Syntax highlighting for Kanagawa Wave theme */
+.bubbleContent .hljs-keyword,
+.bubbleContent .hljs-selector-tag,
+.bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color, #7e9cd8) !important;
+}
+
+.bubbleContent .hljs-string,
+.bubbleContent .hljs-attr {
+  color: var(--code-string-color, #98bb6c) !important;
+}
+
+.bubbleContent .hljs-comment {
+  color: var(--code-comment-color, #727169) !important;
+}
+
+.bubbleContent .hljs-variable,
+.bubbleContent .hljs-template-variable,
+.bubbleContent .hljs-regexp {
+  color: var(--code-variable-color, #ff9e64) !important;
+}
+
+.bubbleContent .hljs-number,
+.bubbleContent .hljs-literal {
+  color: var(--code-number-color, #d27e99) !important;
+}
+
+.bubbleContent .hljs-type,
+.bubbleContent .hljs-built_in {
+  color: var(--code-type-color, #e46876) !important;
+}
+
+/* Light mode syntax highlighting */
+body.light-mode .bubbleContent .hljs-keyword,
+body.light-mode .bubbleContent .hljs-selector-tag,
+body.light-mode .bubbleContent .hljs-title.function_ {
+  color: var(--code-keyword-color-light, #5971b2) !important;
+}
+
+body.light-mode .bubbleContent .hljs-string,
+body.light-mode .bubbleContent .hljs-attr {
+  color: var(--code-string-color-light, #4d7839) !important;
+}
+
+body.light-mode .bubbleContent .hljs-comment {
+  color: var(--code-comment-color-light, #888884) !important;
+}
+
+body.light-mode .bubbleContent .hljs-variable,
+body.light-mode .bubbleContent .hljs-template-variable,
+body.light-mode .bubbleContent .hljs-regexp {
+  color: var(--code-variable-color-light, #c36a3c) !important;
+}
+
+body.light-mode .bubbleContent .hljs-number,
+body.light-mode .bubbleContent .hljs-literal {
+  color: var(--code-number-color-light, #a1556e) !important;
+}
+
+body.light-mode .bubbleContent .hljs-type,
+body.light-mode .bubbleContent .hljs-built_in {
+  color: var(--code-type-color-light, #a04d5e) !important;
 }
 
 /* --- Light Mode Overrides --- */
@@ -220,4 +339,8 @@ body.light-mode {
   --text-disabled: var(--text-disabled-light);
   --surface-hover: var(--surface-hover-light);
   --border-input-hover: var(--border-input-hover-light);
+  --code-block-bg-current: var(--code-block-bg-light);
+  --code-block-border-current: var(--code-block-border-light);
+  --inline-code-bg-current: var(--inline-code-bg-light);
+  --code-text-color-current: var(--code-text-color-light);
 }
