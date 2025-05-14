@@ -383,8 +383,27 @@ function ModelLoadPanel({
     }
   };
 
+  // Add CSS for pulsing effect and loading state
+  const pulsingStyle = `
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0.1); }
+      50% { box-shadow: 0 0 0 5px rgba(var(--accent-color-rgb), 0.3); }
+      100% { box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0.1); }
+    }
+    
+    .pulsing {
+      animation: pulseGlow 1.5s infinite ease-in-out;
+    }
+    
+    .loading-state {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  `;
+
   return (
     <div className="model-load-panel">
+      <style>{pulsingStyle}</style>
       <h2 className="panel-title">Load Model</h2>
 
       {/* --- Status Information Section --- */}
@@ -447,24 +466,24 @@ function ModelLoadPanel({
       {/* --- Hugging Face Hub Search Section --- */}
       <div className="model-search-section">
         <form onSubmit={handleSearchModels} className="search-form">
-          <div className="search-input-group">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search Hugging Face Hub..."
-              disabled={searchLoading}
-            />
-            <button
-              type="submit"
-              disabled={searchLoading || !searchQuery.trim()}
-              className="search-button"
-              aria-label="Search"
-            >
-              {searchLoading ? '⏳' : '⌖'}
-            </button>
-          </div>
-        </form>
+            <div className="search-input-group">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Hugging Face Hub..."
+                disabled={searchLoading}
+              />
+              <button
+                type="submit"
+                disabled={searchLoading || !searchQuery.trim()}
+                className={`search-button ${searchLoading ? 'loading-state' : ''}`}
+                aria-label="Search"
+              >
+                {'⌖'}
+              </button>
+            </div>
+          </form>
         
         {/* --- Display Download Status Message --- */}
         {downloadMessage.text && (
@@ -473,7 +492,7 @@ function ModelLoadPanel({
           </p>
         )}
 
-        {searchLoading && <p className="search-status">Searching...</p>}
+        {searchLoading && <p className="search-status pulsing">Searching...</p>}
         {searchError && <p className="error-message">Search error: {searchError}</p>}
         
         {searchResults.length > 0 && (
@@ -483,7 +502,7 @@ function ModelLoadPanel({
               {searchResults.map((res) => {
                 const modelInfo = parseModelId(res.id);
                 return (
-                  <div key={res.id} className={`search-result-item ${downloadingModelId === res.id ? 'downloading' : ''}`} onClick={() => {
+                  <div key={res.id} className={`search-result-item ${downloadingModelId === res.id ? 'pulsing' : ''}`} onClick={() => {
                     if (!(downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading)) {
                       handleDownloadModel(res.id);
                     }
@@ -501,10 +520,10 @@ function ModelLoadPanel({
                         handleDownloadModel(res.id);
                       }}
                       disabled={downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading}
-                      className="model-load-button download-button"
+                      className={`model-load-button download-button ${downloadingModelId === res.id ? 'loading-state' : ''}`}
                       title={`Download ${res.id}`}
                     >
-                      {downloadingModelId === res.id ? '⏳' : '📥'}
+                      {'📥'}
                     </button>
                   </div>
                 );
@@ -529,7 +548,7 @@ function ModelLoadPanel({
               return (
                 <div 
                   key={model}
-                  className={`model-load-item ${isModelLoaded && currentModelPath === model ? 'active-model' : ''} ${isLoading && !isModelLoaded ? 'loading' : ''}`}
+                  className={`model-load-item ${isModelLoaded && currentModelPath === model ? 'active-model' : ''} ${isLoading ? 'pulsing' : ''}`}
                   onClick={() => handleLoadModel(model)}
                 >
                   <div className="model-info" title={model}>
@@ -539,7 +558,7 @@ function ModelLoadPanel({
                     {!modelInfo.organization && !modelInfo.modelName && <span className="model-name">{model}</span>}
                   </div>
                   <button
-                    className="load-model-button"
+                    className={`load-model-button ${isLoading ? 'loading-state' : ''}`}
                     disabled={(isModelLoaded && currentModelPath === model) || isLoading}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -547,7 +566,7 @@ function ModelLoadPanel({
                     }}
                     title={`Load ${model}`}
                   >
-                    {isModelLoaded && currentModelPath === model ? '✓' : (isLoading ? '⏳' : '▶')}
+                    {isModelLoaded && currentModelPath === model ? '✓' : '▶'}
                   </button>
                 </div>
               );
