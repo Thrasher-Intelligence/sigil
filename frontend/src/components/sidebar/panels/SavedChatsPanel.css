@@ -7,7 +7,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  max-width: 280px; /* Limit maximum width of panel */
   position: relative; /* For proper layout containment */
 }
 
@@ -68,7 +68,7 @@
   -webkit-backdrop-filter: blur(5px);
   width: 100%;
   box-sizing: border-box;
-  max-width: 100%;
+  max-width: 250px; /* Limit maximum width of each item */
   overflow: hidden;
   min-width: 0;
   position: relative; /* For proper layout containment */
@@ -99,6 +99,8 @@
   transition: color 0.3s ease;
   max-width: 100%; /* Ensure it doesn't exceed container */
   display: block; /* Proper block behavior */
+  white-space: nowrap; /* Keep all content on one line */
+  text-overflow: ellipsis; /* Add ellipsis for all overflowing text */
 }
 
 .session-item strong {
@@ -111,7 +113,7 @@
   text-overflow: ellipsis; /* Add ellipsis if title too long */
   text-shadow: 0 0 5px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
   width: 100%;
-  max-width: 100%; /* Ensure no overflow */
+  max-width: 180px; /* Limit text width */
   box-sizing: border-box;
 }
 
@@ -123,7 +125,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
-  max-width: 100%; /* Ensure no overflow */
+  max-width: 180px; /* Limit text width */
   box-sizing: border-box;
 }
 
@@ -268,6 +270,7 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
   min-width: 0;
   width: calc(100% - 60px);
+  max-width: 170px; /* Limit width to prevent overflow */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -321,6 +324,7 @@
 /* Ensure the editing item fills space correctly */
 .session-item.is-editing {
   padding: 5px; /* Adjust padding slightly for editing */
+  max-width: 250px; /* Match the session-item max-width */
 }
 
 /* Match the panel styling from CombinedPanel */
@@ -328,6 +332,7 @@
 .glass-panel .saved-chats-panel {
   height: 100%;
   width: 100%;
+  max-width: 280px; /* Keep consistent with parent element */
   padding: var(--spacing-large, 1.5rem);
   box-sizing: border-box;
   overflow-x: hidden;

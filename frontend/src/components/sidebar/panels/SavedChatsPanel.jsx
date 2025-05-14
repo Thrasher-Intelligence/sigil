@@ -217,7 +217,16 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
   // --- Format title or ID for display --- 
   const formatSessionDisplay = (session) => {
     if (session.title && session.title.trim() !== '') {
-        return { title: session.title, id: session.thread_id };
+        // Truncate the title to first 25 characters with ellipsis
+        const originalTitle = session.title;
+        const truncatedTitle = originalTitle.length > 25 
+          ? originalTitle.substring(0, 25) + '...' 
+          : originalTitle;
+        return { 
+          title: truncatedTitle, 
+          id: session.thread_id,
+          fullTitle: originalTitle // Store full title for tooltip
+        };
     }
     const parts = session.thread_id.split('_');
     if (parts.length >= 2) {
@@ -225,9 +234,17 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
         const time = parts[1]; // HHMMSS
         const formattedDate = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
         const formattedTime = `${time.slice(0, 2)}:${time.slice(2, 4)}:${time.slice(4, 6)}`;
-        return { title: `${formattedDate} ${formattedTime}`, id: session.thread_id };
+        return { 
+          title: `${formattedDate} ${formattedTime}`, 
+          id: session.thread_id,
+          fullTitle: `${formattedDate} ${formattedTime}` 
+        };
     }
-    return { title: session.thread_id, id: session.thread_id }; // Fallback to raw ID
+    return { 
+      title: session.thread_id, 
+      id: session.thread_id,
+      fullTitle: session.thread_id
+    }; // Fallback to raw ID
   };
 
   return (
@@ -273,7 +290,7 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
                 className={`session-item ${isThisLoading ? 'is-loading' : ''} ${isThisDeleting ? 'is-deleting' : ''} ${isThisEditing ? 'is-editing' : ''}`}
                 // Allow click only if not editing, deleting, or loading this specific item
                 onClick={!isThisDeleting && !isThisEditing && !isThisLoading ? () => handleSessionClick(session.thread_id) : undefined}
-                title={isThisEditing ? `Editing: ${session.thread_id}` : `ID: ${session.thread_id}`}
+                title={isThisEditing ? `Editing: ${session.thread_id}` : `Full text: "${display.fullTitle || ''}"`}
               >
                 {/* --- MODIFIED: Conditional Rendering for Edit State --- */} 
                 {isThisEditing ? (
