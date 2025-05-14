@@ -76,6 +76,14 @@ const ChatBubble = ({ message }) => {
   const toggleThinking = (e) => {
     e.stopPropagation();
     setIsThinkingExpanded(!isThinkingExpanded);
+    
+    // If expanding, scroll to make sure the thinking section is visible
+    if (!isThinkingExpanded) {
+      setTimeout(() => {
+        // Try to scroll the element into view if available
+        e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
   };
   
   return (
@@ -96,7 +104,7 @@ const ChatBubble = ({ message }) => {
                   onClick={toggleThinking}
                   title={isThinkingExpanded ? "Hide thinking" : "Show thinking"}
                 >
-                  <span className={styles.toggleArrow}>{isThinkingExpanded ? "↑" : "↓"}</span>
+                  <span className={`${styles.toggleArrow} ${isThinkingExpanded ? styles.rotated : ''}`}>↓</span>
                   <span className={styles.toggleText}>thinking</span>
                 </div>
                 
