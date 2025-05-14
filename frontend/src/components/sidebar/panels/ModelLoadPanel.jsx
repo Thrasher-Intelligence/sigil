@@ -458,9 +458,10 @@ function ModelLoadPanel({
             <button
               type="submit"
               disabled={searchLoading || !searchQuery.trim()}
-              className="model-load-button search-button"
+              className="search-button"
+              aria-label="Search"
             >
-              Search
+              {searchLoading ? '⏳' : '⌖'}
             </button>
           </div>
         </form>
