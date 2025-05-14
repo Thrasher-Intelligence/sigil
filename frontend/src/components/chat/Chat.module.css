@@ -241,6 +241,39 @@
   transition: transform 0.3s ease;
 }
 
+/* Markdown formatting */
+.bubbleContent strong,
+.bubbleContent b {
+  font-weight: 700;
+  color: inherit;
+}
+
+.bubbleContent em,
+.bubbleContent i {
+  font-style: italic;
+  color: inherit;
+}
+
+.userBubble .bubbleContent strong,
+.userBubble .bubbleContent b {
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
+}
+
+.userBubble .bubbleContent em,
+.userBubble .bubbleContent i {
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.8));
+}
+
+.assistantBubble .bubbleContent strong,
+.assistantBubble .bubbleContent b {
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
+}
+
+.assistantBubble .bubbleContent em,
+.assistantBubble .bubbleContent i {
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.8));
+}
+
 /* Token counter */
 .tokenCounter {
   font-size: 0.7rem;
