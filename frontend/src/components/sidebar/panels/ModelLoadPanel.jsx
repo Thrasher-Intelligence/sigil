@@ -272,123 +272,136 @@ function ModelLoadPanel({
     <div className="model-load-panel">
       <h2 className="panel-title">Load Model</h2>
 
-      {/* --- Display HF Token Status --- (NEW) */}
-      <div className="hf-token-status" style={{ fontSize: '0.9em', marginBottom: '10px', opacity: 0.8 }}>
-        {hfTokenStatus.status === 'checking' && (
-          <span><small>Checking Hugging Face token...</small></span>
-        )}
-        {hfTokenStatus.status === 'valid' && hfTokenStatus.username && (
-          <span style={{ color: 'var(--accent-color-success)' }}>✓ Logged in as: {hfTokenStatus.username}</span>
-        )}
-        {hfTokenStatus.status === 'invalid' && (
-          <span style={{ color: 'var(--accent-color-warning)' }} title={hfTokenStatus.message || 'Token validation failed.'}>
-             ⚠️ Invalid/Expired Token
-          </span>
-        )}
-        {hfTokenStatus.status === 'not_found' && (
-          <form onSubmit={handleSaveToken} style={{ marginTop: '5px', marginBottom: '15px' }}>
-             <label htmlFor="hfTokenInput" style={{ display: 'block', fontSize: '0.9em', marginBottom: '3px' }}>
-               Enter Hugging Face Token (for private models):
-             </label>
-             <p style={{fontSize: '0.8em', opacity: 0.7, margin: '0 0 5px 0'}}>
-               Needed for private/gated models. Get yours from <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noopener noreferrer">HF Settings</a>.
-             </p>
-             <input
-               id="hfTokenInput"
-               type="password" // Use password type for masking
-               value={newTokenInput}
-               onChange={(e) => setNewTokenInput(e.target.value)}
-               placeholder="hf_..."
-               disabled={saveTokenLoading}
-               style={{ width: '70%', marginRight: '4px' }}
-             />
-            <button type="submit" disabled={saveTokenLoading || !newTokenInput.trim()}>
-              {saveTokenLoading ? 'Saving...' : 'Save Token'}
-            </button>
-            {/* Display save status message */}
-            {saveTokenMessage.text && (
-              <p style={{ color: saveTokenMessage.type === 'error' ? 'var(--accent-color-error)' : 'var(--accent-color-success)', fontSize: '0.8em', marginTop: '4px' }}>
-                {saveTokenMessage.text}
+      {/* --- Status Information Section --- */}
+      <div className="model-panel-status-section">
+        {/* --- Display HF Token Status --- */}
+        <div className="hf-token-status">
+          {hfTokenStatus.status === 'checking' && (
+            <span><small>Checking Hugging Face token...</small></span>
+          )}
+          {hfTokenStatus.status === 'valid' && hfTokenStatus.username && (
+            <span style={{ color: 'var(--accent-color-success)' }}>✓ Logged in as: {hfTokenStatus.username}</span>
+          )}
+          {hfTokenStatus.status === 'invalid' && (
+            <span style={{ color: 'var(--accent-color-warning)' }} title={hfTokenStatus.message || 'Token validation failed.'}>
+              ⚠️ Invalid/Expired Token
+            </span>
+          )}
+          {hfTokenStatus.status === 'not_found' && (
+            <form onSubmit={handleSaveToken} className="token-input-form">
+              <label htmlFor="hfTokenInput">
+                Enter Hugging Face Token (for private models):
+              </label>
+              <p className="token-help-text">
+                Needed for private/gated models. Get yours from <a href="https://huggingface.co/settings/tokens" target="_blank" rel="noopener noreferrer">HF Settings</a>.
               </p>
-            )}
-          </form>
-        )}
-        {hfTokenStatus.status === 'error' && (
-          <span style={{ color: 'var(--accent-color-error)' }} title={hfTokenStatus.message || 'Error checking token.'}>
-             ❌ Error Checking Token
-          </span>
-        )}
-      </div>
+              <div className="token-input-group">
+                <input
+                  id="hfTokenInput"
+                  type="password"
+                  value={newTokenInput}
+                  onChange={(e) => setNewTokenInput(e.target.value)}
+                  placeholder="hf_..."
+                  disabled={saveTokenLoading}
+                />
+                <button type="submit" disabled={saveTokenLoading || !newTokenInput.trim()}>
+                  {saveTokenLoading ? 'Saving...' : 'Save Token'}
+                </button>
+              </div>
+              {/* Display save status message */}
+              {saveTokenMessage.text && (
+                <p className={`token-status-message ${saveTokenMessage.type === 'error' ? 'error' : 'success'}`}>
+                  {saveTokenMessage.text}
+                </p>
+              )}
+            </form>
+          )}
+          {hfTokenStatus.status === 'error' && (
+            <span style={{ color: 'var(--accent-color-error)' }} title={hfTokenStatus.message || 'Error checking token.'}>
+              ❌ Error Checking Token
+            </span>
+          )}
+        </div>
 
-      {/* --- Display Device Status --- (NEW) */}
-      <div className="device-status-display" style={{ fontSize: '0.9em', marginBottom: '15px', opacity: 0.8 }}>
-        <span>Device Detected: <strong>{getDeviceDisplay()}</strong></span>
+        {/* --- Display Device Status --- */}
+        <div className="device-status-display">
+          <span>Device Detected: <strong>{getDeviceDisplay()}</strong></span>
+        </div>
       </div>
 
       {/* --- Hugging Face Hub Search Section --- */}
-      <form onSubmit={handleSearchModels} style={{ marginBottom: '10px' }}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search Hugging Face Hub..."
-          disabled={searchLoading}
-          style={{ width: '70%', marginRight: '4px' }}
-        />
-        <button
-          type="submit"
-          disabled={searchLoading || !searchQuery.trim()}
-          className="model-load-button"
-        >
-          Search
-        </button>
-      </form>
-      {/* --- Display Download Status Message --- (NEW) */}
-      {downloadMessage.text && (
-        <p style={{ color: downloadMessage.type === 'error' ? 'var(--accent-color-error)' : 'var(--accent-color-success)', fontSize: '0.9em', marginTop: '-5px', marginBottom: '10px' }}>
-          {downloadMessage.text}
-        </p>
-      )}
-
-      {searchLoading && <p>Searching...</p>}
-      {searchError && <p className="error-message">Search error: {searchError}</p>}\
-      {searchResults.length > 0 && (
-        <div className="search-results" style={{ maxHeight: '200px', overflowY: 'auto', marginBottom: '12px' }}>
-          {searchResults.map((res) => (
-            <div key={res.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-              <span style={{ fontSize: '0.85em' }}>{res.id}</span>
-              <button
-                onClick={() => handleDownloadModel(res.id)}
-                // Disable if this specific model is downloading, OR if any other download is in progress, OR if search is happening
-                disabled={downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading}
-                className="model-load-button"
-              >
-                {downloadingModelId === res.id ? 'Downloading...' : 'Download'}
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Existing local model list UI */}
-      {fetchError && (
-        <p className="error-message">Error fetching models: {fetchError}</p>
-      )}
-      <div className="model-list">
-        {availableModels.length > 0 ? (
-          availableModels.map((model) => (
+      <div className="model-search-section">
+        <form onSubmit={handleSearchModels} className="search-form">
+          <div className="search-input-group">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search Hugging Face Hub..."
+              disabled={searchLoading}
+            />
             <button
-              key={model}
-              onClick={() => handleLoadModel(model)}
-              disabled={(isModelLoaded && currentModelPath === model) || isLoading}
-              className="model-load-button"
+              type="submit"
+              disabled={searchLoading || !searchQuery.trim()}
+              className="model-load-button search-button"
             >
-              Load {model}
+              Search
             </button>
-          ))
-        ) : (
-          !fetchError && <p>{isLoading ? 'Loading model list...' : 'No models found.'}</p>
+          </div>
+        </form>
+        
+        {/* --- Display Download Status Message --- */}
+        {downloadMessage.text && (
+          <p className={`download-status-message ${downloadMessage.type === 'error' ? 'error' : 'success'}`}>
+            {downloadMessage.text}
+          </p>
         )}
+
+        {searchLoading && <p className="search-status">Searching...</p>}
+        {searchError && <p className="error-message">Search error: {searchError}</p>}
+        
+        {searchResults.length > 0 && (
+          <div className="search-results">
+            {searchResults.map((res) => (
+              <div key={res.id} className="search-result-item">
+                <span className="model-id">{res.id}</span>
+                <button
+                  onClick={() => handleDownloadModel(res.id)}
+                  disabled={downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading}
+                  className="model-load-button download-button"
+                >
+                  {downloadingModelId === res.id ? 'Downloading...' : 'Download'}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* --- Local Models Section --- */}
+      <div className="local-models-section">
+        <h3 className="section-title">Available Models</h3>
+        
+        {fetchError && (
+          <p className="error-message">Error fetching models: {fetchError}</p>
+        )}
+        
+        <div className="model-list">
+          {availableModels.length > 0 ? (
+            availableModels.map((model) => (
+              <button
+                key={model}
+                onClick={() => handleLoadModel(model)}
+                disabled={(isModelLoaded && currentModelPath === model) || isLoading}
+                className={`model-load-button ${isModelLoaded && currentModelPath === model ? 'active-model' : ''}`}
+              >
+                Load {model}
+              </button>
+            ))
+          ) : (
+            !fetchError && <p className="model-list-message">{isLoading ? 'Loading model list...' : 'No models found.'}</p>
+          )}
+        </div>
       </div>
     </div>
   );
