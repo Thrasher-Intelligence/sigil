@@ -7,7 +7,7 @@
   
   /* Original Mappings */
   --button-background-base: #7e9cd8; /* Mapped to --primary-dark */
-  --header-text-color: #5e81ac; /* Storm blue for harmony */
+  --header-text-color: #d8b670; /* Golden accent color for headers */
   --input-text-color: #f0edd8; /* Base Text - brightened for higher contrast */
   --ui-text-primary: #f0edd8;  /* Base Text - brightened for higher contrast */
   --user-message-glow-color: #88c6e0; /* Surf blue glow */
@@ -20,6 +20,7 @@
   --assistant-bubble-bg: rgba(94, 129, 172, 0.35); /* Stronger storm blue tint from backend-message-glow */
   --assistant-bubble-border: rgba(94, 129, 172, 0.7); /* From backend-message-glow, bolder for contrast */
   --assistant-bubble-glow: rgba(94, 129, 172, 0.3); /* Enhanced glow effect */
+  --bold-text-color: #d8b670; /* Gold accent for bold text */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(45, 79, 103, 0.6); /* Lighter variant of surface-dark */
@@ -27,9 +28,9 @@
   --tab-hover-bg: rgba(126, 156, 216, 0.2); /* Light variant of primary */
   --tab-hover-color: #dcd7ba; /* Match ui-text-primary */
   --tab-active-bg: rgba(34, 50, 73, 0.9); /* Darker panel-bg-dark */
-  --tab-active-color: #dcd7ba; /* Match ui-text-primary */
+  --tab-active-color: #d8b670; /* Match header-text-color for gold accent */
   --tab-border-color: rgba(126, 156, 216, 0.3); /* Subtle border from primary */
-  --tab-active-border-color: rgba(136, 198, 224, 0.5); /* Stronger border for active tab from user-message-glow */
+  --tab-active-border-color: rgba(216, 182, 112, 0.5); /* Stronger border for active tab from gold accent */
   --tab-container-border-color: rgba(126, 156, 216, 0.3); /* Border below tabs */
 
   /* --- Derived & Default Colors --- */
@@ -151,13 +152,14 @@ body.light-mode {
   /* Override root colors for light mode */
   --ui-text-primary: #364755; /* Darker Stone Blue/Grey for higher contrast */
   --input-text-color: #364755;
-  --header-text-color: #5a8bc4; /* Darker Water Blue */
+  --header-text-color: #c19a49; /* Darker Gold for light mode */
   --user-message-glow-color: #ff8c8c; /* Lighter Red/Orange */
   --backend-message-glow-color: #ffab70; /* Lighter Orange */
   --button-background-base: #6ca0d6; /* Override original mapping */
   --user-message-text-color: #364755; /* Dark text for user bubbles */
   --assistant-message-text-color: #364755; /* Dark text for assistant bubbles */
   --foreground: #364755; /* Text color for all messages in light mode */
+  --bold-text-color: #c19a49; /* Darker gold for bold text in light mode */
   
   /* Chat Message Light Mode Overrides */
   --user-bubble-bg: rgba(255, 140, 140, 0.35); /* Stronger red tint for higher contrast */
@@ -173,9 +175,9 @@ body.light-mode {
   --tab-hover-bg: rgba(108, 160, 214, 0.15); /* Light blue from primary-light */
   --tab-hover-color: #5a8bc4; /* Darker blue on hover */
   --tab-active-bg: rgba(245, 245, 240, 0.9); /* Very light ivory from surface-light */
-  --tab-active-color: #4a5f70; /* Match ui-text-primary */
+  --tab-active-color: #c19a49; /* Match header-text-color for gold accent */
   --tab-border-color: rgba(192, 200, 209, 0.8); /* Light border from border-input-light */
-  --tab-active-border-color: rgba(108, 160, 214, 0.5); /* Blue border for active tab */
+  --tab-active-border-color: rgba(193, 154, 73, 0.5); /* Gold border for active tab */
   --tab-container-border-color: rgba(192, 200, 209, 0.8); /* Light border below tabs */
 
   /* Base */

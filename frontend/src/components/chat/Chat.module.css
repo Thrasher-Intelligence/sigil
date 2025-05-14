@@ -270,7 +270,7 @@
 
 /* User message specific styling */
 .userBubble .bubbleContent strong {
-  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
+  color: var(--bold-text-color, var(--user-bubble-border, rgba(3, 218, 198, 0.9)));
 }
 
 .userBubble .bubbleContent em {
@@ -279,7 +279,7 @@
 
 /* Assistant message specific styling */
 .assistantBubble .bubbleContent strong {
-  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
+  color: var(--bold-text-color, var(--assistant-bubble-border, rgba(187, 134, 252, 0.9)));
 }
 
 .assistantBubble .bubbleContent em {
@@ -365,7 +365,7 @@
 
 .userBubble .bubbleContent strong,
 .userBubble .bubbleContent b {
-  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
+  color: var(--bold-text-color, var(--user-bubble-border, rgba(3, 218, 198, 0.9)));
 }
 
 .userBubble .bubbleContent em,
@@ -375,7 +375,7 @@
 
 .assistantBubble .bubbleContent strong,
 .assistantBubble .bubbleContent b {
-  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
+  color: var(--bold-text-color, var(--assistant-bubble-border, rgba(187, 134, 252, 0.9)));
 }
 
 .assistantBubble .bubbleContent em,

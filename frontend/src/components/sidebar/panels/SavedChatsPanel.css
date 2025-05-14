@@ -107,7 +107,7 @@
   display: block; /* Title on its own line */
   margin-bottom: 3px;
   font-size: 0.9em;
-  color: var(--user-message-text-color, #33b690);
+  color: var(--bold-text-color, var(--user-message-text-color, #33b690));
   white-space: nowrap; /* Prevent title wrap */
   overflow: hidden;
   text-overflow: ellipsis; /* Add ellipsis if title too long */
@@ -171,7 +171,7 @@
 
 .edit-session-button:hover:not(:disabled) {
   background-color: rgba(16, 115, 67, 0.25);
-  color: var(--header-text-color, #e08009);
+  color: var(--bold-text-color, var(--header-text-color, #e08009));
   border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.7));
   box-shadow: 0 4px 12px var(--user-bubble-glow, rgba(16, 115, 67, 0.2));
   transform: translateY(-1px);
@@ -357,7 +357,7 @@
 
 .panel-title button:hover:not(:disabled) {
   background-color: rgba(16, 115, 67, 0.25);
-  color: var(--header-text-color, #e08009);
+  color: var(--bold-text-color, var(--header-text-color, #e08009));
   transform: rotate(180deg);
 }
 

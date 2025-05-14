@@ -126,7 +126,7 @@
 
 .panel-tab-button.active {
   background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
-  color: var(--user-message-text-color, #33b690);
+  color: var(--bold-text-color, var(--user-message-text-color, #33b690));
   border-left: 3px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
   position: relative;
   z-index: 25; /* Even higher z-index to ensure it's above the overlay */
@@ -176,9 +176,10 @@
 
 /* Help content */
 .help-content h4 {
-  color: var(--header-text-color);
+  color: var(--bold-text-color, var(--header-text-color));
   margin-top: 0;
   margin-bottom: 1rem;
+  text-shadow: 0 0 8px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 .help-content ul {

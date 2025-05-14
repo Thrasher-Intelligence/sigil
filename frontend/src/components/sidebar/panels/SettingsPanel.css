@@ -45,7 +45,7 @@
 /* Panel headers styling - applies to all h2 elements inside settings-panel and glass-panel */
 .settings-panel h2,
 .glass-panel h2 {
-  color: var(--header-text-color); /* Use --palette-9 as requested */
+  color: var(--bold-text-color, var(--header-text-color)); /* Use gold accent color */
   margin-top: 0;
   margin-bottom: var(--spacing-large); /* 1.5rem */
   text-align: center;
@@ -53,6 +53,8 @@
   font-weight: 600;
   text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.5)); /* Add glow to heading */
   letter-spacing: 1px;
+  border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  padding-bottom: 8px;
 }
 
 /* Setting group containers */
@@ -166,7 +168,7 @@
 
 .clear-chat-button-settings:hover:not(:disabled) {
   background-color: rgba(224, 128, 9, 0.15); /* Subtle orange background on hover */
-  color: var(--header-text-color); /* Use accent color on hover */
+  color: var(--bold-text-color, var(--header-text-color)); /* Use gold accent color on hover */
   border-color: var(--assistant-bubble-border, rgba(224, 128, 9, 0.6)); /* Brighter border on hover */
   box-shadow: 0 6px 16px var(--assistant-bubble-glow, rgba(224, 128, 9, 0.2));
   transform: translateY(-1px);
@@ -244,7 +246,7 @@
   margin-top: 10px;
   padding: 8px;
   background-color: rgba(224, 128, 9, 0.2);
-  color: var(--header-text-color, #e08009);
+  color: var(--bold-text-color, var(--header-text-color, #e08009));
   border-radius: var(--border-radius-small);
   text-align: center;
   font-size: 0.9rem;
@@ -255,7 +257,7 @@
 /* Shared UI elements that can be used in other panels */
 .panel-title,
 .glass-panel .panel-title {
-  color: var(--header-text-color); 
+  color: var(--bold-text-color, var(--header-text-color)); 
   margin-top: 0;
   margin-bottom: var(--spacing-large);
   text-align: center;
@@ -266,6 +268,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  padding-bottom: 8px;
 }
 
 /* Styling for refresh button in title */
@@ -288,7 +292,8 @@
 .panel-title button:hover:not(:disabled) {
   transform: rotate(180deg) translateY(0) !important;
   background: rgba(16, 115, 67, 0.25) !important;
-  transition: transform 0.5s ease, background-color 0.3s ease !important;
+  color: var(--bold-text-color, var(--header-text-color)) !important;
+  transition: transform 0.5s ease, background-color 0.3s ease, color 0.3s ease !important;
 }
 
 .panel-title button:disabled {

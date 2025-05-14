@@ -66,6 +66,8 @@
   font-weight: 600;
   text-shadow: 0 0 15px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
   letter-spacing: 2px;
+  border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  padding-bottom: 8px;
 }
 
 .model-load-panel input[type="text"],
@@ -331,7 +333,7 @@
 .model-org {
   font-size: 0.85em;
   font-weight: bold;
-  color: var(--header-text-color, #e08009);
+  color: var(--bold-text-color, var(--header-text-color, #e08009));
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -390,7 +392,7 @@
 .section-title {
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--header-text-color);
+  color: var(--bold-text-color, var(--header-text-color));
   margin: 0 0 8px 0;
   text-shadow: 0 0 8px var(--user-bubble-glow, rgba(16, 115, 67, 0.4));
 }

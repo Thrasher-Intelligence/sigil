@@ -8,8 +8,10 @@
   margin-top: 0;
   margin-bottom: 20px;
   font-weight: 600;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   padding-bottom: 8px;
+  color: var(--header-text-color, #e08009);
+  text-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
 }
 
 /* Settings group */
