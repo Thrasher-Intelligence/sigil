@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Chat.module.css';
 
@@ -88,23 +88,26 @@ const ChatBubble = ({ message }) => {
         </div>
       ) : (
         <>
-          {hasThinkingSection && (
-            <div 
-              className={`${styles.thinkingToggle} ${isThinkingExpanded ? styles.expanded : ''}`}
-              onClick={toggleThinking}
-              title={isThinkingExpanded ? "Hide thinking" : "Show thinking"}
-            >
-              <span role="img" aria-label="toggle thinking">💭</span>
-            </div>
-          )}
-          
-          <p className={styles.bubbleContent}>{displayText}</p>
-          
-          {hasThinkingSection && (
-            <div className={`${styles.thinkingSection} ${isThinkingExpanded ? styles.thinkingExpanded : styles.thinkingCollapsed}`}>
-              {thinkingText}
-            </div>
-          )}
+          <div className={styles.messageContent}>
+            {hasThinkingSection && (
+              <>
+                <div 
+                  className={`${styles.thinkingToggle} ${isThinkingExpanded ? styles.expanded : ''}`}
+                  onClick={toggleThinking}
+                  title={isThinkingExpanded ? "Hide thinking" : "Show thinking"}
+                >
+                  <span className={styles.toggleArrow}>{isThinkingExpanded ? "↑" : "↓"}</span>
+                  <span className={styles.toggleText}>thinking</span>
+                </div>
+                
+                <div className={`${styles.thinkingSection} ${isThinkingExpanded ? styles.thinkingExpanded : styles.thinkingCollapsed}`}>
+                  {thinkingText}
+                </div>
+              </>
+            )}
+            
+            <p className={styles.bubbleContent}>{displayText}</p>
+          </div>
           
           {(sender === 'user' || sender === 'backend') && (
             <div className={styles.tokenCounter}>
