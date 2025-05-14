@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import ReactMarkdown from 'react-markdown';
 import styles from './Chat.module.css';
 
 const ChatBubble = ({ message }) => {
@@ -39,31 +40,7 @@ const ChatBubble = ({ message }) => {
     }
   }, [text]);
   
-  // Function to apply Markdown formatting with sanitization
-  const formatMarkdown = (text) => {
-    if (!text) return '';
-    
-    // Create a temporary div to sanitize HTML content
-    const sanitize = (html) => {
-      const temp = document.createElement('div');
-      temp.textContent = html;
-      return temp.innerHTML;
-    };
-    
-    // Process bold markdown (**text** or __text__)
-    const boldPattern = /(\*\*|__)(.*?)\1/g;
-    const withBold = text.replace(boldPattern, (match, wrapper, content) => {
-      return `<strong>${sanitize(content)}</strong>`;
-    });
-    
-    // Process italic markdown (*text* or _text_)
-    const italicPattern = /(\*|_)([^\*_]+?)\1/g;
-    const withBoldAndItalic = withBold.replace(italicPattern, (match, wrapper, content) => {
-      return `<em>${sanitize(content)}</em>`;
-    });
-    
-    return withBoldAndItalic;
-  };
+
   
   // Estimate tokens if not provided (~ 4 chars per token)
   const estimateTokens = (text) => {
@@ -140,10 +117,9 @@ const ChatBubble = ({ message }) => {
               </>
             )}
             
-            <p 
-              className={styles.bubbleContent} 
-              dangerouslySetInnerHTML={{ __html: formatMarkdown(displayText) }}
-            />
+            <div className={styles.bubbleContent}>
+              <ReactMarkdown>{displayText}</ReactMarkdown>
+            </div>
           </div>
           
           {(sender === 'user' || sender === 'backend') && (

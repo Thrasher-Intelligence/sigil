@@ -242,6 +242,108 @@
 }
 
 /* Markdown formatting */
+.bubbleContent p {
+  margin: 0.5em 0;
+}
+
+.bubbleContent p:first-child {
+  margin-top: 0;
+}
+
+.bubbleContent p:last-child {
+  margin-bottom: 0;
+}
+
+/* Bold text */
+.bubbleContent strong {
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Italic text */
+.bubbleContent em {
+  font-style: italic;
+  color: inherit;
+}
+
+/* User message specific styling */
+.userBubble .bubbleContent strong {
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
+}
+
+.userBubble .bubbleContent em {
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.8));
+}
+
+/* Assistant message specific styling */
+.assistantBubble .bubbleContent strong {
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
+}
+
+.assistantBubble .bubbleContent em {
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.8));
+}
+
+/* Code blocks and inline code */
+.bubbleContent code {
+  font-family: monospace;
+  background: rgba(30, 30, 30, 0.5);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bubbleContent pre {
+  background: rgba(20, 20, 20, 0.6);
+  padding: 1em;
+  overflow-x: auto;
+  border-radius: var(--border-radius-small);
+  margin: 0.7em 0;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.bubbleContent pre code {
+  background: transparent;
+  padding: 0;
+  border: none;
+  display: block;
+}
+
+/* Lists */
+.bubbleContent ul,
+.bubbleContent ol {
+  margin: 0.5em 0;
+  padding-left: 2em;
+}
+
+/* Links */
+.bubbleContent a {
+  color: var(--link-color, #03dac6);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-bottom: 1px dashed rgba(3, 218, 198, 0.3);
+}
+
+.bubbleContent a:hover {
+  color: var(--link-hover-color, #03dac6);
+  border-bottom: 1px solid rgba(3, 218, 198, 0.7);
+}
+
+.userBubble .bubbleContent a {
+  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
+}
+
+.assistantBubble .bubbleContent a {
+  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
+  border-bottom: 1px dashed rgba(187, 134, 252, 0.3);
+}
+
+.assistantBubble .bubbleContent a:hover {
+  border-bottom: 1px solid rgba(187, 134, 252, 0.7);
+}
+
+/* Markdown formatting */
 .bubbleContent strong,
 .bubbleContent b {
   font-weight: 700;
