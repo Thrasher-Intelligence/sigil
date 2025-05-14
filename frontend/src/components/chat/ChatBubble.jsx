@@ -1,15 +1,57 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Chat.module.css';
 
 const ChatBubble = ({ message }) => {
   const { id, sender, text, tokens } = message;
   const isLoading = id.startsWith('loading-');
+  const [isThinkingExpanded, setIsThinkingExpanded] = useState(false);
+  const [hasThinkingSection, setHasThinkingSection] = useState(false);
+  const [displayText, setDisplayText] = useState('');
+  const [thinkingText, setThinkingText] = useState('');
+  
+  // Process text to extract thinking section if present
+  useEffect(() => {
+    if (!text) {
+      setDisplayText('');
+      setThinkingText('');
+      setHasThinkingSection(false);
+      return;
+    }
+
+    const thinkRegex = /<think>([\s\S]*?)<\/think>/;
+    const match = text.match(thinkRegex);
+    
+    if (match) {
+      // Extract thinking content and regular text
+      const thinking = match[1].trim();
+      const cleanedText = text.replace(thinkRegex, '').trim();
+      
+      // If there's no content outside the thinking tags, show at least the first line
+      const finalDisplayText = cleanedText || thinking.split('\n')[0] + '...';
+      
+      setDisplayText(finalDisplayText);
+      setThinkingText(thinking);
+      setHasThinkingSection(true);
+    } else {
+      setDisplayText(text);
+      setHasThinkingSection(false);
+    }
+  }, [text]);
   
   // Estimate tokens if not provided (~ 4 chars per token)
   const estimateTokens = (text) => {
     if (!text) return 0;
     return Math.max(1, Math.ceil(text.length / 4));
+  };
+  
+  // Calculate tokens for display text only (excluding thinking section)
+  const getDisplayTokens = () => {
+    if (tokens) return tokens;
+    if (hasThinkingSection) {
+      return estimateTokens(displayText);
+    }
+    return estimateTokens(text);
   };
 
   // Determine the bubble style based on sender
@@ -26,6 +68,16 @@ const ChatBubble = ({ message }) => {
     bubbleClass = styles.chatBubble; // Fallback
   }
   
+  // Add a special CSS class if this message has thinking content
+  if (hasThinkingSection) {
+    bubbleClass = `${bubbleClass} ${styles.hasThinking}`;
+  }
+  
+  const toggleThinking = (e) => {
+    e.stopPropagation();
+    setIsThinkingExpanded(!isThinkingExpanded);
+  };
+  
   return (
     <div className={bubbleClass}>
       {isLoading ? (
@@ -36,10 +88,32 @@ const ChatBubble = ({ message }) => {
         </div>
       ) : (
         <>
-          <p className={styles.bubbleContent}>{text}</p>
+          {hasThinkingSection && (
+            <div 
+              className={`${styles.thinkingToggle} ${isThinkingExpanded ? styles.expanded : ''}`}
+              onClick={toggleThinking}
+              title={isThinkingExpanded ? "Hide thinking" : "Show thinking"}
+            >
+              <span role="img" aria-label="toggle thinking">💭</span>
+            </div>
+          )}
+          
+          <p className={styles.bubbleContent}>{displayText}</p>
+          
+          {hasThinkingSection && (
+            <div className={`${styles.thinkingSection} ${isThinkingExpanded ? styles.thinkingExpanded : styles.thinkingCollapsed}`}>
+              {thinkingText}
+            </div>
+          )}
+          
           {(sender === 'user' || sender === 'backend') && (
             <div className={styles.tokenCounter}>
-              {tokens || estimateTokens(text)} tokens
+              {getDisplayTokens()} tokens
+              {hasThinkingSection && (
+                <span className={styles.thinkingIndicator}>
+                  {isThinkingExpanded ? "(thinking visible)" : "(thinking hidden)"}
+                </span>
+              )}
             </div>
           )}
         </>
