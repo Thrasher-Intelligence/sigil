@@ -237,13 +237,15 @@
   margin: 0;
   white-space: pre-wrap;
   order: 2;
-  padding-top: 0.25rem;
+  padding-top: 0.15rem;
   transition: transform 0.3s ease;
+  font-size: 0.95rem;
 }
 
 /* Markdown formatting */
 .bubbleContent p {
-  margin: 0.5em 0;
+  margin: 0.1em 0;
+  line-height: 1.25;
 }
 
 .bubbleContent p:first-child {
@@ -296,10 +298,10 @@
 
 .bubbleContent pre {
   background: rgba(20, 20, 20, 0.6);
-  padding: 1em;
+  padding: 0.5em;
   overflow-x: auto;
   border-radius: var(--border-radius-small);
-  margin: 0.7em 0;
+  margin: 0.3em 0;
   border-left: 2px solid rgba(255, 255, 255, 0.2);
 }
 
@@ -313,8 +315,13 @@
 /* Lists */
 .bubbleContent ul,
 .bubbleContent ol {
-  margin: 0.5em 0;
-  padding-left: 2em;
+  margin: 0.1em 0;
+  padding-left: 1.2em;
+}
+
+.bubbleContent li {
+  margin: 0.05em 0;
+  line-height: 1.25;
 }
 
 /* Links */
