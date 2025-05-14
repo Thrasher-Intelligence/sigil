@@ -14,6 +14,7 @@
   --vegas-bordeaux: #4E0D15;       /* Deep red cloth */
   --vegas-brass: #B5A642;          /* Metallic accents */
   --vegas-shadow: #0C2318;         /* Dark green shadow */
+
   
   /* Input field background colors */
   --input-field-bg-dark: rgba(20, 50, 37, 0.65);   /* Dark green tinted background */
@@ -21,11 +22,17 @@
   
   /* Chat Message Styling */
   --user-bubble-bg: rgba(190, 0, 0, 0.35); /* Rich red tint */
-  --user-bubble-border: rgba(190, 0, 0, 0.7); /* Rich red border */
+  --user-bubble-border: var(--vegas-gold-accent, rgba(212, 175, 55, 0.7)); /* Gold border for user messages and bold text */
   --user-bubble-glow: rgba(190, 0, 0, 0.3); /* Rich red glow effect */
   --assistant-bubble-bg: rgba(0, 200, 255, 0.3); /* Enhanced neon blue tint for Vegas feel */
-  --assistant-bubble-border: rgba(0, 200, 255, 0.6); /* Stronger neon blue border */
+  --assistant-bubble-border: var(--vegas-gold-accent, rgba(212, 175, 55, 0.7)); /* Gold border for assistant messages and bold text */
   --assistant-bubble-glow: rgba(0, 200, 255, 0.35); /* Enhanced neon glow effect */
+  
+  /* Code Block Styling - Dark Mode */
+  --code-block-bg: rgba(20, 20, 20, 0.8); /* Dark background for code blocks */
+  --code-block-border: var(--vegas-gold-accent, rgba(212, 175, 55, 0.3)); /* Gold border for code blocks */
+  --inline-code-bg: rgba(30, 30, 30, 0.7); /* Dark background for inline code */
+  --code-text-color: #E8DFC6; /* Light warm text for code */
   
   /* Tab Styling */
   --tab-inactive-bg: rgba(255, 215, 0, 0.15); /* Light gold for inactive */
@@ -59,6 +66,7 @@
   --mojave-sunset-orange: #FFB299; /* Pastel sunset orange */
   --mojave-canyon-red: #E8A19B; /* Pastel canyon red */
   --mojave-desert-blue: #A5C0D9; /* Pastel desert sky blue */
+
   
   /* Light Mode Background Layers */
   --mojave-background-sand: #F5EDE2; /* Lighter sandy tone */
@@ -120,6 +128,12 @@
   --background-light: var(--mojave-background-sand);
   --surface-light: var(--mojave-background-surface);
   --panel-bg-light: var(--mojave-panel-bg);
+  
+  /* Code Block Styling - Light Mode */
+  --code-block-bg-light: rgba(60, 45, 35, 0.85); /* Rich dark wood/leather background for code blocks */
+  --code-block-border-light: var(--mojave-terracotta, rgba(181, 98, 41, 0.5)); /* Terracotta border for code blocks */
+  --inline-code-bg-light: rgba(70, 55, 45, 0.75); /* Slightly lighter background for inline code */
+  --code-text-color-light: #F5EDE2; /* Light sand color for code text */
 
   /* --- Input Area Colors (Light Mode - Mojave) --- */
   --input-bg-light: var(--input-field-bg-light); /* Use our custom light input background */
@@ -165,6 +179,10 @@
   --input-bg: var(--input-bg-dark);
   --disabled-bg: var(--disabled-bg-dark);
   --disabled-fg: var(--disabled-fg-dark);
+  --code-block-bg-current: var(--code-block-bg);
+  --code-block-border-current: var(--code-block-border);
+  --inline-code-bg-current: var(--inline-code-bg);
+  --code-text-color-current: var(--code-text-color);
   
   /* Override application input styles for the gambler theme */
   --settings-input-bg: var(--input-field-bg-dark);
@@ -215,6 +233,8 @@ body.light-mode {
   --user-message-text-color: #2E1A05; /* Dark text for user bubbles */
   --assistant-message-text-color: #2E1A05; /* Dark text for assistant bubbles */
   --foreground: #2E1A05; /* Text color for all messages in light mode */
+  --user-bubble-border: var(--mojave-terracotta, rgba(181, 98, 41, 0.8)); /* Terracotta border and bold text in light mode */
+  --assistant-bubble-border: var(--mojave-terracotta, rgba(181, 98, 41, 0.8)); /* Terracotta border and bold text in light mode */
   background-color: rgba(245, 237, 226, 0.9) !important; /* Lighter, slightly transparent background */
 
   /* Base */
@@ -224,6 +244,10 @@ body.light-mode {
   --input-bg: var(--input-bg-light);
   --disabled-bg: var(--disabled-bg-light);
   --disabled-fg: var(--disabled-fg-light);
+  --code-block-bg-current: var(--code-block-bg-light);
+  --code-block-border-current: var(--code-block-border-light);
+  --inline-code-bg-current: var(--inline-code-bg-light);
+  --code-text-color-current: var(--code-text-color-light);
 
   /* Panel Tabs */
   --panel-tab-bg: var(--tab-inactive-bg, var(--panel-tab-bg-light));
@@ -265,6 +289,65 @@ body.light-mode {
     0 0 5px var(--vegas-neon-gold),
     0 0 10px var(--vegas-neon-gold),
     0 0 20px var(--vegas-neon-gold);
+}
+
+/* Code block styling for the Gambler theme */
+.bubbleContent pre {
+  background: var(--code-block-bg-current) !important;
+  border-left: 2px solid var(--code-block-border-current) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15) !important;
+  padding: 1em !important;
+  margin: 0.8em 0 !important;
+}
+
+.bubbleContent pre code {
+  color: var(--code-text-color-current) !important;
+  font-family: 'Monaco', 'Consolas', monospace !important;
+  font-size: 0.9em !important;
+}
+
+.bubbleContent code:not(pre code) {
+  background: var(--inline-code-bg-current) !important;
+  color: var(--code-text-color-current) !important;
+  border: 1px solid var(--code-block-border-current) !important;
+  border-radius: 3px !important;
+  padding: 0.2em 0.4em !important;
+  font-size: 0.85em !important;
+  font-family: 'Monaco', 'Consolas', monospace !important;
+}
+
+/* Code syntax highlighting for the Gambler theme */
+.bubbleContent .hljs-keyword,
+.bubbleContent .hljs-selector-tag,
+.bubbleContent .hljs-title.function_ {
+  color: var(--vegas-gold-accent, #D4AF37) !important;
+}
+
+.bubbleContent .hljs-string,
+.bubbleContent .hljs-attr {
+  color: #9ACC99 !important;
+}
+
+.bubbleContent .hljs-comment {
+  color: #777777 !important;
+  font-style: italic !important;
+}
+
+.bubbleContent .hljs-variable,
+.bubbleContent .hljs-template-variable,
+.bubbleContent .hljs-regexp {
+  color: #CC9A9A !important;
+}
+
+.bubbleContent .hljs-number,
+.bubbleContent .hljs-literal {
+  color: #CC99CC !important;
+}
+
+.bubbleContent .hljs-type,
+.bubbleContent .hljs-built_in {
+  color: #99BBCC !important;
 }
 
 /* Custom styles to override application-specific components */
