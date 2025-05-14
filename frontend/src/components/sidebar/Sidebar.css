@@ -1,6 +1,7 @@
 /* Sidebar container */
 .sidebar {
   width: 350px; /* Default width when open */
+  max-width: 350px; /* Enforce maximum width */
   height: 100vh; /* Full viewport height */
   background-color: var(--panel-bg-color, #2a2a2a); /* Use theme variable or default */
   border-right: none; /* Removed the border */
@@ -10,6 +11,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  contain: strict; /* Improve performance and enforce containment */
 }
 
 /* Styles when the sidebar is closed */
@@ -24,6 +26,7 @@
 /* Styles when the sidebar is open */
 .sidebar.open {
   width: 350px; /* Or your desired width */
+  max-width: 350px; /* Enforce maximum width */
   flex-shrink: 0; /* Add this to prevent shrinking when open */
   /* transform: translateX(0); */
 }
@@ -33,6 +36,7 @@
 .sidebar-content {
   flex-grow: 1; /* Allows the content to fill the sidebar */
   overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+  overflow-x: hidden; /* Explicitly prevent horizontal overflow */
   padding: 0; /* Removed padding */
   box-sizing: border-box;
   color: var(--ui-text-primary, #eee);
@@ -41,6 +45,8 @@
   transition: opacity 0.1s linear;
   min-height: 0; /* Needed for flex-grow in flex column */
   position: relative; /* To properly position fixed elements within */
+  max-width: 100%; /* Ensure content doesn't exceed sidebar width */
+  width: 100%; /* Use full width of sidebar */
 }
 
 .sidebar.closed .sidebar-content {

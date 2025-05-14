@@ -4,13 +4,17 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  max-width: 280px; /* Match the parent container width */
+  width: 100%; /* Use all available width */
+  box-sizing: border-box; /* Include padding in width calculation */
+  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 /* Style the container for the local model load buttons */
 .model-list {
   display: flex;
   flex-direction: column; /* Stack buttons vertically for consistency */
-  gap: 12px; /* Add space between buttons vertically */
+  gap: 8px; /* Add space between buttons vertically */
   width: 100%;
 }
 
@@ -30,6 +34,9 @@
   text-align: center;
   font-weight: 500;
   letter-spacing: 0.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .model-load-button:hover:not(:disabled) {
@@ -162,10 +169,50 @@
 
 .search-result-item {
   display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping to new line */
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 8px;
   border-bottom: 1px solid rgba(43, 156, 124, 0.2);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Hide overflow */
+  gap: 6px;
+  background-color: rgba(30, 30, 30, 0.4);
+  margin-bottom: 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.search-result-item:hover {
+  background-color: rgba(16, 115, 67, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.search-result-item.downloading {
+  background-color: rgba(16, 115, 67, 0.25);
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 115, 67, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(16, 115, 67, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 115, 67, 0);
+  }
+}
+
+.search-result-item:active {
+  background-color: rgba(16, 115, 67, 0.3);
+  transform: translateY(0);
+  transition: all 0.1s ease;
 }
 
 .search-result-item:last-child {
@@ -173,20 +220,96 @@
 }
 
 .search-results {
-  max-height: 200px;
+  max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  margin-top: 5px;
+  border: 1px solid rgba(43, 156, 124, 0.2);
 }
 
-.model-id {
-  font-size: 0.9em;
+.search-count {
+  margin: 8px 0 5px 0;
+  font-size: 0.85em;
+  color: var(--user-message-text-color, #33b690);
+  text-align: center;
+  padding: 4px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.model-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0; /* Critical for text truncation in flex containers */
+  max-width: 220px; /* Wider to show more information */
+  overflow: hidden;
+  text-align: left;
+  background-color: rgba(16, 115, 67, 0.1);
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.model-org {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: var(--header-text-color, #e08009);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding-right: 8px;
+  margin-bottom: 3px;
+  line-height: 1.2;
+  text-shadow: 0 0 2px rgba(224, 128, 9, 0.3);
+}
+
+.model-name {
+  font-size: 0.8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--user-message-text-color, #33b690);
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+
+.model-size {
+  font-size: 0.75em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-secondary, #aaa);
+  line-height: 1.2;
 }
 
 .download-button {
-  min-width: 100px;
+  flex: 0 0 auto; /* Don't grow or shrink */
+  min-width: 30px; /* Minimal width for the icon */
+  max-width: 30px; /* Fixed width */
+  white-space: nowrap;
+  align-self: center;
+  padding: 4px;
+  height: 30px;
+  font-size: 1em;
+  background-color: rgba(16, 115, 67, 0.4);
+  color: #fff;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.download-button:hover:not(:disabled) {
+  background-color: rgba(16, 115, 67, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.3);
 }
 
 .section-title {
@@ -213,4 +336,85 @@
 .active-model {
   background-color: rgba(16, 115, 67, 0.3);
   border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.8));
+  box-shadow: 0 0 15px var(--user-bubble-glow, rgba(16, 115, 67, 0.5));
+}
+
+.model-load-item.loading {
+  animation: pulse 1.5s infinite;
+}
+
+/* Styling for the model button content */
+/* Model load item styling */
+.model-load-item {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  border-radius: var(--border-radius-small, 4px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: rgba(30, 30, 30, 0.75);
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.model-load-item:hover {
+  background-color: rgba(16, 115, 67, 0.30);
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.8));
+  box-shadow: 0 6px 12px var(--user-bubble-glow, rgba(16, 115, 67, 0.4));
+  transform: translateY(-2px);
+}
+
+.model-load-item:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 6px var(--user-bubble-glow, rgba(16, 115, 67, 0.2));
+  transition: all 0.1s ease;
+}
+
+.load-model-button {
+  flex: 0 0 auto;
+  min-width: 30px;
+  max-width: 30px;
+  height: 30px;
+  padding: 4px;
+  border-radius: 50%;
+  background-color: rgba(16, 115, 67, 0.4);
+  color: #fff;
+  border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+}
+
+.load-model-button:hover:not(:disabled) {
+  background-color: rgba(16, 115, 67, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.3);
+}
+
+.load-model-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Extra loading state indicator */
+.download-button:disabled,
+.load-model-button:disabled {
+  background-color: rgba(30, 30, 30, 0.6);
+}
+
+/* Active indicator */
+.active-model .model-org {
+  color: #ffb74d;
+  text-shadow: 0 0 5px rgba(255, 183, 77, 0.5);
+}
+
+.active-model .load-model-button {
+  background-color: rgba(76, 175, 80, 0.6);
 }

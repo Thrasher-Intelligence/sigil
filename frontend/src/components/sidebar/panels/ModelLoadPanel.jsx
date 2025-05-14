@@ -223,6 +223,121 @@ function ModelLoadPanel({
     }
   };
 
+  // Function to parse model ID into organization, model name, and size
+  const parseModelId = (modelId) => {
+    if (!modelId) return { organization: '', modelName: '', modelSize: '' };
+    
+    try {
+      // Check for patterns like "organization/model-name-7B" or "model--version-125m"
+      let organization = '';
+      let modelName = '';
+      let modelSize = '';
+      
+      // First, check if we have an organization/model format
+      const parts = modelId.split('/');
+      
+      if (parts.length >= 2) {
+        // We have an organization
+        organization = parts[0];
+        const remainingPart = parts.slice(1).join('/');
+        
+        // Look for size pattern in the remaining part
+        const modelParts = extractModelNameAndSize(remainingPart);
+        modelName = modelParts.modelName;
+        modelSize = modelParts.modelSize;
+      } else {
+        // Special handling for known formats
+        if (modelId.includes('--')) {
+          // Format like EleutherAI--gpt-neo-125m
+          const orgModelParts = modelId.split('--');
+          if (orgModelParts.length >= 2) {
+            organization = orgModelParts[0];
+            const remainingPart = orgModelParts.slice(1).join('--');
+            const modelParts = extractModelNameAndSize(remainingPart);
+            modelName = modelParts.modelName;
+            modelSize = modelParts.modelSize;
+          }
+        } else {
+          // No organization separator, work with the full ID
+          const modelParts = extractModelNameAndSize(modelId);
+          modelName = modelParts.modelName;
+          modelSize = modelParts.modelSize;
+        }
+      }
+      
+      return {
+        organization,
+        modelName,
+        modelSize
+      };
+    } catch (error) {
+      console.error("Error parsing model ID:", error);
+      // Return empty strings to trigger the fallback display of the full ID
+      return { organization: '', modelName: '', modelSize: '' };
+    }
+  };
+  
+  // Helper function to extract model name and size from a string
+  const extractModelNameAndSize = (str) => {
+    // Common size patterns for language models
+    const sizePatterns = [
+      // Match patterns like 7B, 13B, 3.2B, etc.
+      /-(\d+(\.\d+)?[Bb])(?:-|$)/,
+      // Match patterns like 125m, 250M, etc.
+      /-(\d+[Mm])(?:-|$)/,
+      // Match other parameter notations like -3B-v2, -7b-Chat
+      /-(\d+(\.\d+)?[Bb])-/,
+      // Match standalone size in the string (for cases like phi-2)
+      /(\d+(\.\d+)?[Bb])(?:-|$)/,
+      /(\d+[Mm])(?:-|$)/
+    ];
+    
+    let modelName = str;
+    let modelSize = '';
+    
+    // Try each pattern to find a size
+    for (const pattern of sizePatterns) {
+      const match = str.match(pattern);
+      if (match && match[1]) {
+        modelSize = match[1];
+        // Try to clean up the model name - remove the size part
+        const nameParts = str.split(match[0]);
+        modelName = nameParts.join('-').replace(/--/g, '-').replace(/-$/g, '');
+        break;
+      }
+    }
+    
+    // If no size found with patterns, try a more generic approach for numbers
+    if (!modelSize) {
+      // Look for numbers followed by B, b, M, m
+      const genericPattern = /(\d+(\.\d+)?[BbMm])/;
+      const match = str.match(genericPattern);
+      if (match && match[1]) {
+        modelSize = match[1];
+      }
+    }
+    
+    // Special case handling for known model families
+    if (str.includes('phi-2')) {
+      modelName = 'phi';
+      modelSize = '2.7B';
+    } else if (str.includes('llama') && !modelSize) {
+      // For Llama models that don't have explicit size in the name
+      if (str.includes('3')) {
+        modelSize = 'Llama3';
+      } else if (str.includes('2')) {
+        modelSize = 'Llama2';
+      } else {
+        modelSize = 'Llama';
+      }
+    }
+    
+    // Clean up model name - remove leading/trailing hyphens and double hyphens
+    modelName = modelName.replace(/^-+|-+$/g, '').replace(/--+/g, '-');
+    
+    return { modelName, modelSize };
+  };
+
   // --- NEW: Handler to save token ---
   const handleSaveToken = async (e) => {
     e.preventDefault();
@@ -361,20 +476,40 @@ function ModelLoadPanel({
         {searchError && <p className="error-message">Search error: {searchError}</p>}
         
         {searchResults.length > 0 && (
-          <div className="search-results">
-            {searchResults.map((res) => (
-              <div key={res.id} className="search-result-item">
-                <span className="model-id">{res.id}</span>
-                <button
-                  onClick={() => handleDownloadModel(res.id)}
-                  disabled={downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading}
-                  className="model-load-button download-button"
-                >
-                  {downloadingModelId === res.id ? 'Downloading...' : 'Download'}
-                </button>
-              </div>
-            ))}
-          </div>
+          <>
+            <p className="search-count">{searchResults.length} models found</p>
+            <div className="search-results">
+              {searchResults.map((res) => {
+                const modelInfo = parseModelId(res.id);
+                return (
+                  <div key={res.id} className={`search-result-item ${downloadingModelId === res.id ? 'downloading' : ''}`} onClick={() => {
+                    if (!(downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading)) {
+                      handleDownloadModel(res.id);
+                    }
+                  }}>
+                    <div className="model-info" title={res.id}>
+                      {modelInfo.organization && <span className="model-org">{modelInfo.organization}</span>}
+                      {modelInfo.modelName && <span className="model-name">{modelInfo.modelName}</span>}
+                      {modelInfo.modelSize && <span className="model-size">{modelInfo.modelSize}</span>}
+                      {/* Show full ID as fallback if parsing didn't yield good results */}
+                      {!modelInfo.organization && !modelInfo.modelName && <span className="model-org">{res.id}</span>}
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDownloadModel(res.id);
+                      }}
+                      disabled={downloadingModelId === res.id || (downloadingModelId !== null && downloadingModelId !== res.id) || searchLoading}
+                      className="model-load-button download-button"
+                      title={`Download ${res.id}`}
+                    >
+                      {downloadingModelId === res.id ? '⏳' : '⬇'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 
@@ -388,16 +523,34 @@ function ModelLoadPanel({
         
         <div className="model-list">
           {availableModels.length > 0 ? (
-            availableModels.map((model) => (
-              <button
-                key={model}
-                onClick={() => handleLoadModel(model)}
-                disabled={(isModelLoaded && currentModelPath === model) || isLoading}
-                className={`model-load-button ${isModelLoaded && currentModelPath === model ? 'active-model' : ''}`}
-              >
-                Load {model}
-              </button>
-            ))
+            availableModels.map((model) => {
+              const modelInfo = parseModelId(model);
+              return (
+                <div 
+                  key={model}
+                  className={`model-load-item ${isModelLoaded && currentModelPath === model ? 'active-model' : ''} ${isLoading && !isModelLoaded ? 'loading' : ''}`}
+                  onClick={() => handleLoadModel(model)}
+                >
+                  <div className="model-info" title={model}>
+                    {modelInfo.organization && <span className="model-org">{modelInfo.organization}</span>}
+                    {modelInfo.modelName && <span className="model-name">{modelInfo.modelName}</span>}
+                    {modelInfo.modelSize && <span className="model-size">{modelInfo.modelSize}</span>}
+                    {!modelInfo.organization && !modelInfo.modelName && <span className="model-name">{model}</span>}
+                  </div>
+                  <button
+                    className="load-model-button"
+                    disabled={(isModelLoaded && currentModelPath === model) || isLoading}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLoadModel(model);
+                    }}
+                    title={`Load ${model}`}
+                  >
+                    {isModelLoaded && currentModelPath === model ? '✓' : (isLoading ? '⏳' : '▶')}
+                  </button>
+                </div>
+              );
+            })
           ) : (
             !fetchError && <p className="model-list-message">{isLoading ? 'Loading model list...' : 'No models found.'}</p>
           )}

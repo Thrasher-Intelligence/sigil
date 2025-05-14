@@ -12,6 +12,8 @@
   justify-content: flex-start;
   align-items: stretch;
   pointer-events: none; /* Allow clicks to pass through to elements below */
+  max-width: calc(100% - 40px); /* Ensure it doesn't exceed available width */
+  overflow: hidden; /* Prevent overflow */
 }
 
 /* Container for the panel content */
@@ -21,6 +23,9 @@
   height: 100%;
   pointer-events: auto;
   position: relative;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden; /* Prevent content from overflowing */
 }
 
 /* Glass panel base style - used by all panels */
@@ -28,8 +33,10 @@
   pointer-events: auto;
   height: 100%;
   width: 100%;
+  max-width: 100%;
   margin: 0;
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal overflow */
   border-radius: 0;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(12px);
@@ -46,6 +53,7 @@
   border-bottom-right-radius: var(--border-radius-large, 8px);
   display: flex;
   flex-direction: column;
+  box-sizing: border-box; /* Include padding and border in the width */
 }
 
 /* Panel animation */
@@ -151,6 +159,10 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .panel-button-text {
