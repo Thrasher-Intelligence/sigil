@@ -503,7 +503,7 @@ function ModelLoadPanel({
                       className="model-load-button download-button"
                       title={`Download ${res.id}`}
                     >
-                      {downloadingModelId === res.id ? '⏳' : '⬇'}
+                      {downloadingModelId === res.id ? '⏳' : '📥'}
                     </button>
                   </div>
                 );
