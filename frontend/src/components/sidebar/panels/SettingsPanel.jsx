@@ -254,7 +254,6 @@ function SettingsPanel({
         />
       </div>
 
-
       {/* --- RESTORED: Apply Settings Button --- */}
       {/* This button updates the backend's global/default settings */}
       {/* Enabled only when model is loaded */}
@@ -263,7 +262,7 @@ function SettingsPanel({
         onClick={handleApplySettings}
         disabled={!modelLoaded || applyStatus === "loading"}
       >
-        {applyStatus === "loading" ? "Applying..." : "Apply Defaults"}
+        {applyStatus === "loading" ? "Applying..." : "Apply Settings"}
         {/* Changed label slightly */}
       </button>
       {applyStatus === "success" && (
