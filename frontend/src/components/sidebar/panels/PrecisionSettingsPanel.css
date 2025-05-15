@@ -1,0 +1,120 @@
+/* PrecisionSettingsPanel.css */
+.precision-settings-panel {
+  padding: var(--spacing-large, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--text-primary, #e0e0e0);
+}
+
+.precision-settings-content {
+  background-color: var(--panel-bg, rgba(30, 30, 30, 0.6));
+  border: 1px solid var(--panel-border-color, rgba(43, 156, 124, 0.3));
+  border-radius: var(--border-radius-medium, 6px);
+  padding: var(--spacing-medium, 1rem);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 4px 12px var(--shadow-color, rgba(0, 0, 0, 0.2));
+  margin-bottom: var(--spacing-medium, 1rem);
+}
+
+.precision-settings-panel h3 {
+  color: var(--bold-text-color, var(--header-text-color));
+  margin-top: 0;
+  margin-bottom: var(--spacing-small, 0.5rem);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-shadow: 0 0 8px var(--user-bubble-glow, rgba(16, 115, 67, 0.4));
+  letter-spacing: 0.5px;
+}
+
+.precision-settings-description {
+  font-size: 0.9em;
+  color: var(--text-secondary, #ccc);
+  margin-bottom: var(--spacing-medium, 1rem);
+  line-height: 1.4;
+}
+
+.precision-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: var(--spacing-medium, 1rem);
+}
+
+.precision-option-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: var(--border-radius-small, 4px);
+  background-color: var(--item-bg, rgba(30, 30, 30, 0.4));
+  border: 1px solid var(--panel-border-color, rgba(43, 156, 124, 0.3));
+  transition: all 0.3s ease;
+}
+
+.precision-option-label:hover:not(.disabled) {
+  background-color: var(--item-hover-bg, rgba(16, 115, 67, 0.2));
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.5));
+  box-shadow: 0 2px 8px var(--shadow-color, rgba(0, 0, 0, 0.3));
+  transform: translateY(-1px);
+}
+
+.precision-option-label.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.precision-option-label.selected {
+  background-color: var(--item-active-bg, rgba(16, 115, 67, 0.3));
+  border-color: var(--user-bubble-border, rgba(43, 156, 124, 0.8));
+  box-shadow: 0 0 10px var(--user-bubble-glow, rgba(16, 115, 67, 0.3));
+}
+
+.precision-option-input {
+  margin-right: 10px;
+  accent-color: var(--accent-color-primary, #33b690);
+}
+
+.precision-option-name {
+  font-weight: 500;
+  color: var(--input-text-color, #33b690);
+}
+
+.precision-error {
+  color: var(--accent-color-error, #cf6679);
+  background-color: var(--error-background, rgba(207, 102, 121, 0.1));
+  padding: var(--spacing-small, 0.5rem);
+  border-radius: var(--border-radius-small, 4px);
+  font-size: 0.9em;
+  text-align: center;
+  margin-top: var(--spacing-small, 0.5rem);
+}
+
+.precision-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-medium, 1rem);
+  font-style: italic;
+  color: var(--text-placeholder, #aaa);
+}
+
+.precision-loading-spinner {
+  border: 3px solid var(--panel-border-color, rgba(43, 156, 124, 0.3));
+  border-radius: 50%;
+  border-top: 3px solid var(--accent-color-primary, #33b690);
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Light mode specific overrides are handled by CSS variables in theme.css */

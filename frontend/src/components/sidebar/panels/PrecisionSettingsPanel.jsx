@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './PrecisionSettingsPanel.css';
 
 // Placeholder for a real API client or fetch wrapper
 const apiClient = {
@@ -96,48 +97,63 @@ function PrecisionSettingsPanel() {
   };
 
   if (selectedPrecision === 'loading') {
-    return <div>Loading precision settings...</div>;
+    return (
+      <div className="precision-settings-panel">
+        <div className="precision-loading">
+          <div className="precision-loading-spinner"></div>
+          Loading precision settings...
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', margin: '10px 0', borderRadius: '5px' }}>
-      <h3>Precision Settings</h3>
-      <p style={{ fontSize: '0.9em', color: '#555' }}>
-        Choose your preferred inference precision. Half precision (fp16) is faster but slightly less accurate. Changes apply on next model load.
-      </p>
-      <form>
-        <div>
-          <label style={{ display: 'block', marginBottom: '5px' }}>
-            <input
-              type="radio"
-              name="precision"
-              value="gpu-fp32"
-              checked={selectedPrecision === 'gpu-fp32'}
-              onChange={handlePrecisionChange}
-              disabled={isUpdating || selectedPrecision === 'error'}
-            />
-            GPU (Standard Precision - fp32)
-          </label>
-          <label style={{ display: 'block', marginBottom: '5px' }}>
-            <input
-              type="radio"
-              name="precision"
-              value="gpu-fp16"
-              checked={selectedPrecision === 'gpu-fp16'}
-              onChange={handlePrecisionChange}
-              disabled={isUpdating || selectedPrecision === 'error'}
-            />
-            GPU (Half Precision - fp16)
-          </label>
-          {/*
-            Note: The "CPU Only" option is removed as it's implicitly handled.
-            Selecting 'GPU (Standard Precision - fp32)' sets the backend to 'fp32',
-            which is compatible with both CPU and GPU. The actual device used
-            depends on availability detected by the backend during model load.
-          */}
-        </div>
-        {selectedPrecision === 'error' && <p style={{color: 'red'}}>Failed to load or update precision.</p>}
-      </form>
+    <div className="precision-settings-panel">
+      <div className="precision-settings-content">
+        <h3>Precision Settings</h3>
+        <p className="precision-settings-description">
+          Choose your preferred inference precision. Half precision (fp16) is faster but slightly less accurate. Changes apply on next model load.
+        </p>
+        <form>
+          <div className="precision-options">
+            <label 
+              className={`precision-option-label ${selectedPrecision === 'gpu-fp32' ? 'selected' : ''} ${(isUpdating || selectedPrecision === 'error') ? 'disabled' : ''}`}
+            >
+              <input
+                className="precision-option-input"
+                type="radio"
+                name="precision"
+                value="gpu-fp32"
+                checked={selectedPrecision === 'gpu-fp32'}
+                onChange={handlePrecisionChange}
+                disabled={isUpdating || selectedPrecision === 'error'}
+              />
+              <span className="precision-option-name">GPU (Standard Precision - fp32)</span>
+            </label>
+            <label 
+              className={`precision-option-label ${selectedPrecision === 'gpu-fp16' ? 'selected' : ''} ${(isUpdating || selectedPrecision === 'error') ? 'disabled' : ''}`}
+            >
+              <input
+                className="precision-option-input"
+                type="radio"
+                name="precision"
+                value="gpu-fp16"
+                checked={selectedPrecision === 'gpu-fp16'}
+                onChange={handlePrecisionChange}
+                disabled={isUpdating || selectedPrecision === 'error'}
+              />
+              <span className="precision-option-name">GPU (Half Precision - fp16)</span>
+            </label>
+            {/*
+              Note: The "CPU Only" option is removed as it's implicitly handled.
+              Selecting 'GPU (Standard Precision - fp32)' sets the backend to 'fp32',
+              which is compatible with both CPU and GPU. The actual device used
+              depends on availability detected by the backend during model load.
+            */}
+          </div>
+          {selectedPrecision === 'error' && <div className="precision-error">Failed to load or update precision.</div>}
+        </form>
+      </div>
     </div>
   );
 }
