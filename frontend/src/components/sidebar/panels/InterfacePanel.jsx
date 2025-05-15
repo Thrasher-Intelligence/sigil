@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ModeToggleSwitch from '../../ui/ModeToggleSwitch';
+import ColorModeToggle from '../../ui/ColorModeToggle';
 import './InterfacePanel.css';
 
 function InterfacePanel({
@@ -32,9 +32,9 @@ function InterfacePanel({
         <div className="mode-toggle-container">
           <label htmlFor="mode-toggle" className="mode-toggle-label ui-settings-label">Mode:</label>
           <div className="mode-toggle-wrapper">
-            <ModeToggleSwitch
+            <ColorModeToggle
               id="mode-toggle"
-              isDarkMode={colorMode === 'dark'}
+              colorMode={colorMode}
               onToggle={() => setColorMode(prevMode => prevMode === 'dark' ? 'light' : 'dark')}
             />
             <span className="mode-toggle-value">
