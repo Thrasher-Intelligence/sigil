@@ -13,6 +13,17 @@
   --border: #333333; /* Base border color */
   --border-medium: #444444; /* Medium border (e.g., scrollbar) */
   --border-input: #555555; /* Input border */
+  
+  /* Panel Colors */
+  --panel-bg: rgba(30, 30, 30, 0.6); /* Background for panels */
+  --panel-bg-darker: rgba(0, 0, 0, 0.2); /* Darker background for panel elements */
+  --panel-border-color: rgba(43, 156, 124, 0.3); /* Border color for panels */
+  
+  /* Item Colors */
+  --item-bg: rgba(30, 30, 30, 0.4); /* Background for items in lists */
+  --item-bg-alt: rgba(16, 115, 67, 0.1); /* Alternative background for items */
+  --item-hover-bg: rgba(16, 115, 67, 0.2); /* Background for items on hover */
+  --item-active-bg: rgba(16, 115, 67, 0.3); /* Background for active items */
 
   /* Primary/Accent Colors */
   --primary: #03dac6; /* Teal accent */
@@ -21,6 +32,12 @@
   --accent: #bb86fc; /* Purple accent (used for focus rings, etc.) */
   --palette-9: #bb86fc; /* Specific purple for headers (per user request) */
   --accent-focus-shadow: rgba(187, 134, 252, 0.3); /* Focus shadow for accent */
+  --accent-color-primary: #33b690; /* Primary accent color */
+  --accent-color-secondary: rgba(255, 152, 0, 0.8); /* Secondary accent color */
+  --accent-color-secondary-border: rgba(255, 152, 0, 1); /* Border for secondary accent */
+  --accent-color-secondary-glow: rgba(255, 183, 77, 0.5); /* Glow effect for secondary accent */
+  --accent-color-success: rgba(76, 175, 80, 0.6); /* Success accent color */
+  --accent-color-error: #cf6679; /* Error accent color */
 
   /* Semantic Colors */
   --error: #cf6679; /* Red for errors */
@@ -34,6 +51,25 @@
   --text-disabled: #888888; /* Text on disabled elements */
   --scrollbar-thumb: var(--border-medium);
   --scrollbar-track: var(--surface);
+  --text-primary: #e0e0e0; /* Primary text color */
+  --label-text-color: #33b690; /* Text color for labels */
+
+  /* Input & Button Styling */
+  --input-bg: rgba(30, 30, 30, 0.7); /* Background for input fields */
+  --input-hover-bg: rgba(16, 115, 67, 0.30); /* Background for input fields on hover */
+  --button-primary-bg: rgba(0, 120, 210, 0.7); /* Background for primary buttons */
+  --button-primary-hover-bg: rgba(0, 150, 255, 0.9); /* Background for primary buttons on hover */
+  --button-primary-border: rgba(0, 120, 210, 0.9); /* Border for primary buttons */
+  --button-primary-hover-border: rgba(255, 255, 255, 0.5); /* Border for primary buttons on hover */
+  --button-primary-glow: rgba(0, 120, 210, 0.3); /* Glow effect for primary buttons */
+  --button-secondary-bg: rgba(16, 115, 67, 0.4); /* Background for secondary buttons */
+  --button-secondary-hover-bg: rgba(16, 115, 67, 0.6); /* Background for secondary buttons on hover */
+  --button-text: #fff; /* Text color for buttons */
+  --button-text-hover: #ffffff; /* Text color for buttons on hover */
+  --button-disabled-bg: rgba(30, 30, 30, 0.7); /* Background for disabled buttons */
+  --button-disabled-border: rgba(100, 100, 100, 0.4); /* Border for disabled buttons */
+  --button-disabled-text: rgba(200, 200, 200, 0.6); /* Text color for disabled buttons */
+  --shadow-color: rgba(0, 0, 0, 0.3); /* Color for shadows */
 
   /* Typography */
   --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -73,4 +109,72 @@
   /* --spacing-example: 16px; */
   /* --shadow-example: 0 2px 8px rgba(0,0,0,0.25); */
   /* --focus-ring-example: #0f7ddb; */
-} 
+}
+
+/* Light Mode Overrides */
+.light-mode {
+  /* Core Colors */
+  --background: #f5f5f5; 
+  --foreground: #333333;
+  --surface: #ffffff;
+  --surface-light: #f9f9f9;
+  --surface-input: #ffffff;
+  --surface-user-msg: #e6f7ff;
+  --surface-backend-msg: #f0f0f0;
+  --surface-disabled: #e0e0e0;
+  --border: #d0d0d0;
+  --border-medium: #c0c0c0;
+  --border-input: #a0a0a0;
+
+  /* Panel Colors */
+  --panel-bg: rgba(255, 255, 255, 0.8);
+  --panel-bg-darker: rgba(240, 240, 240, 0.5);
+  --panel-border-color: rgba(43, 156, 124, 0.2);
+
+  /* Item Colors */
+  --item-bg: rgba(250, 250, 250, 0.9);
+  --item-bg-alt: rgba(16, 115, 67, 0.05);
+  --item-hover-bg: rgba(16, 115, 67, 0.1);
+  --item-active-bg: rgba(16, 115, 67, 0.15);
+
+  /* Text Colors */
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-placeholder: #888888;
+  --text-disabled: #999999;
+  --label-text-color: #107343;
+
+  /* Input & Button Styling */
+  --input-bg: rgba(255, 255, 255, 0.9);
+  --input-hover-bg: rgba(240, 240, 240, 0.9);
+  --input-text-color: #107343;
+  --button-primary-bg: rgba(0, 120, 210, 0.9);
+  --button-primary-hover-bg: rgba(0, 150, 255, 1);
+  --button-primary-border: rgba(0, 120, 210, 1);
+  --button-primary-hover-border: rgba(0, 150, 255, 1);
+  --button-primary-glow: rgba(0, 120, 210, 0.2);
+  --button-secondary-bg: rgba(16, 115, 67, 0.3);
+  --button-secondary-hover-bg: rgba(16, 115, 67, 0.5);
+  --button-text: #ffffff;
+  --button-text-hover: #ffffff;
+  --button-disabled-bg: rgba(220, 220, 220, 0.9);
+  --button-disabled-border: rgba(190, 190, 190, 0.7);
+  --button-disabled-text: rgba(150, 150, 150, 0.8);
+
+  /* Shadow */
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Selection and Focus */
+  --selection-background: #e6f7ff;
+  --selection-foreground: #333333;
+  --focus-ring-color: rgba(0, 120, 210, 0.4);
+  --focus-ring-accent: var(--primary);
+  
+  /* Accent Colors */
+  --accent-color-primary: #107343;
+  --accent-color-secondary: rgba(255, 120, 0, 0.9);
+  --accent-color-secondary-border: rgba(255, 120, 0, 1);
+  --accent-color-secondary-glow: rgba(255, 150, 50, 0.3);
+  --accent-color-success: rgba(60, 160, 65, 0.8);
+  --accent-color-error: #d32f2f;
+}
