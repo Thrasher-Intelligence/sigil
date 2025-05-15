@@ -82,7 +82,7 @@
 .glass-panel input[type="text"] {
   width: 100%;
   padding: 0.6rem 0.8rem; /* Specific padding */
-  background-color: rgba(30, 30, 30, 0.65); /* Darker with transparency */
+  background-color: var(--input-bg, rgba(30, 30, 30, 0.65)); /* Darker with transparency */
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   color: var(--input-text-color);
   font-family: inherit;
@@ -92,7 +92,7 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   backdrop-filter: blur(5px); /* Input glass effect */
   -webkit-backdrop-filter: blur(5px);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 2px 4px var(--shadow-color, rgba(0, 0, 0, 0.2));
 }
 
 .settings-panel textarea {
@@ -152,7 +152,7 @@
   width: 100%;
   padding: 0.7rem 1rem; /* Match apply button padding */
   margin-top: 1.5rem; /* Add some space above */
-  background-color: rgba(30, 30, 30, 0.45); /* Semi-transparent background */
+  background-color: var(--input-bg, rgba(30, 30, 30, 0.45)); /* Semi-transparent background */
   color: var(--text-secondary); /* Use secondary text color */
   border: 1px solid var(--assistant-bubble-border, rgba(224, 128, 9, 0.4)); /* Use theme color */
   border-radius: var(--border-radius-medium);
@@ -167,10 +167,10 @@
 }
 
 .clear-chat-button-settings:hover:not(:disabled) {
-  background-color: rgba(224, 128, 9, 0.15); /* Subtle orange background on hover */
+  background-color: var(--button-secondary-hover-bg, rgba(224, 128, 9, 0.15)); /* Subtle orange background on hover */
   color: var(--bold-text-color, var(--header-text-color)); /* Use gold accent color on hover */
   border-color: var(--assistant-bubble-border, rgba(224, 128, 9, 0.6)); /* Brighter border on hover */
-  box-shadow: 0 6px 16px var(--assistant-bubble-glow, rgba(224, 128, 9, 0.2));
+  box-shadow: 0 6px 16px var(--button-secondary-glow, rgba(224, 128, 9, 0.2));
   transform: translateY(-1px);
 }
 
@@ -205,7 +205,7 @@
 .font-select {
   width: 100%;
   padding: 0.6rem 0.8rem;
-  background-color: rgba(30, 30, 30, 0.65); /* Darker with transparency */
+  background-color: var(--input-bg, rgba(30, 30, 30, 0.65)); /* Darker with transparency */
   border: 1px solid var(--user-bubble-border, rgba(43, 156, 124, 0.5));
   color: var(--input-text-color);
   font-family: inherit;
@@ -233,8 +233,8 @@
 .success-message {
   margin-top: 10px;
   padding: 8px;
-  background-color: rgba(43, 156, 124, 0.2);
-  color: var(--user-message-text-color, #33b690);
+  background-color: var(--success-background, rgba(3, 218, 198, 0.15));
+  color: var(--success, #03dac6);
   border-radius: var(--border-radius-small);
   text-align: center;
   font-size: 0.9rem;
@@ -245,8 +245,8 @@
 .error-message {
   margin-top: 10px;
   padding: 8px;
-  background-color: rgba(224, 128, 9, 0.2);
-  color: var(--bold-text-color, var(--header-text-color, #e08009));
+  background-color: var(--error-background, rgba(207, 102, 121, 0.1));
+  color: var(--error, #cf6679);
   border-radius: var(--border-radius-small);
   text-align: center;
   font-size: 0.9rem;
@@ -277,7 +277,7 @@
   width: auto !important;
   padding: 0.3rem !important;
   margin: 0 0 0 0.5rem !important;
-  background: rgba(30, 30, 30, 0.45) !important;
+  background: var(--input-bg, rgba(30, 30, 30, 0.45)) !important;
   color: var(--user-message-text-color, #33b690) !important;
   border-radius: 50% !important;
   font-size: 1rem !important;
@@ -286,12 +286,12 @@
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(16, 115, 67, 0.15) !important;
+  box-shadow: 0 2px 8px var(--user-bubble-glow, rgba(16, 115, 67, 0.15)) !important;
 }
 
 .panel-title button:hover:not(:disabled) {
   transform: rotate(180deg) translateY(0) !important;
-  background: rgba(16, 115, 67, 0.25) !important;
+  background: var(--button-secondary-hover-bg, rgba(16, 115, 67, 0.25)) !important;
   color: var(--bold-text-color, var(--header-text-color)) !important;
   transition: transform 0.5s ease, background-color 0.3s ease, color 0.3s ease !important;
 }

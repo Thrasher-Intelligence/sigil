@@ -69,6 +69,18 @@
   --button-disabled-bg: rgba(30, 30, 30, 0.7); /* Background for disabled buttons */
   --button-disabled-border: rgba(100, 100, 100, 0.4); /* Border for disabled buttons */
   --button-disabled-text: rgba(200, 200, 200, 0.6); /* Text color for disabled buttons */
+  --button-danger-bg: rgba(127, 29, 29, 0.7); /* Background for danger buttons */
+  --button-danger-hover-bg: rgba(185, 28, 28, 0.8); /* Background for danger buttons on hover */
+  --button-danger-border: rgba(185, 28, 28, 0.7); /* Border for danger buttons */
+  --button-danger-hover-border: rgba(207, 102, 121, 0.8); /* Border for danger buttons on hover */
+  --button-danger-text: #fecaca; /* Text color for danger buttons */
+  --button-danger-hover-text: #fee2e2; /* Text color for danger buttons on hover */
+  --button-danger-glow: rgba(185, 28, 28, 0.3); /* Glow effect for danger buttons */
+  --button-success-bg: rgba(22, 101, 52, 0.8); /* Background for success buttons */
+  --button-success-border: rgba(34, 197, 94, 0.8); /* Border for success buttons */
+  --button-success-text: #dcfce7; /* Text color for success buttons */
+  --button-success-glow: rgba(34, 197, 94, 0.3); /* Glow effect for success buttons */
+  --button-secondary-glow: rgba(224, 128, 9, 0.2); /* Glow effect for secondary buttons */
   --shadow-color: rgba(0, 0, 0, 0.3); /* Color for shadows */
 
   /* Typography */
@@ -163,6 +175,20 @@
 
   /* Shadow */
   --shadow-color: rgba(0, 0, 0, 0.1);
+  
+  /* Button Styles */
+  --button-danger-bg: rgba(220, 53, 69, 0.8);
+  --button-danger-hover-bg: rgba(220, 53, 69, 0.9);
+  --button-danger-border: rgba(220, 53, 69, 0.8);
+  --button-danger-hover-border: rgba(220, 53, 69, 1);
+  --button-danger-text: #ffffff;
+  --button-danger-hover-text: #ffffff;
+  --button-danger-glow: rgba(220, 53, 69, 0.2);
+  --button-success-bg: rgba(40, 167, 69, 0.8);
+  --button-success-border: rgba(40, 167, 69, 0.8);
+  --button-success-text: #ffffff;
+  --button-success-glow: rgba(40, 167, 69, 0.2);
+  --button-secondary-glow: rgba(108, 117, 125, 0.2);
 
   /* Selection and Focus */
   --selection-background: #e6f7ff;
