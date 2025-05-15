@@ -199,17 +199,17 @@ This interface is ideal for local experimentation, debugging, and integrating li
 1.  **Ensure your Python virtual environment is activated.**
 
 2.  **Run the appropriate development startup script for your platform:**
-    
+
     **For macOS/Linux:**
     ```bash
     ./scripts/start_dev.sh
     ```
-    
+
     **For Windows (PowerShell):**
     ```powershell
     .\scripts\start_dev.ps1
     ```
-    
+
     **For Windows (Command Prompt):**
     ```
     scripts\start_dev.bat
@@ -243,7 +243,6 @@ This interface is ideal for local experimentation, debugging, and integrating li
         *   `routes/`: Contains API route definitions for different endpoints.
         *   `schemas/`: Pydantic schemas for request/response validation.
         *   `core/`: Core backend functionality and utilities.
-        *   `.model_path.cfg`: Configuration file for model paths.
         *   `model-cli.py`: Command-line interface for model management.
     *   `models/`: Default location for storing model directories to be loaded by name.
     *   `utils/`: Utility functions for the backend.
