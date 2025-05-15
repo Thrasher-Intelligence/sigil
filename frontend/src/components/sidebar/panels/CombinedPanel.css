@@ -101,10 +101,10 @@
   width: 40px;
   z-index: 20; /* Higher z-index to stay above the overlay */
   padding: 10px 0;
-  background: rgba(30, 30, 30, 0.8);
+  background: var(--panel-bg, rgba(30, 30, 30, 0.8));
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: -2px 0 10px var(--shadow-color, rgba(0, 0, 0, 0.2));
 }
 
 .panel-tab-button {
@@ -122,12 +122,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-weight: 500;
 }
 
 .panel-tab-button.active {
-  background: var(--user-bubble-bg, rgba(16, 115, 67, 0.35));
-  color: var(--bold-text-color, var(--user-message-text-color, #33b690));
-  border-left: 3px solid var(--user-bubble-border, rgba(43, 156, 124, 0.7));
+  background: var(--tab-active-bg, var(--user-bubble-bg, rgba(16, 115, 67, 0.35)));
+  color: var(--tab-active-color, var(--bold-text-color, var(--user-message-text-color, #33b690)));
+  border-left: 3px solid var(--tab-active-border-color, var(--user-bubble-border, rgba(43, 156, 124, 0.7)));
   position: relative;
   z-index: 25; /* Even higher z-index to ensure it's above the overlay */
   font-weight: 600;
@@ -135,8 +136,9 @@
 }
 
 .panel-tab-button:hover:not(.active) {
-  background: var(--panel-tab-hover-bg, rgba(255, 255, 255, 0.05));
-  border-left: 3px solid var(--border-medium, #444444);
+  background: var(--tab-hover-bg, var(--panel-tab-hover-bg, rgba(255, 255, 255, 0.05)));
+  border-left: 3px solid var(--tab-border-color, var(--border-medium, #444444));
+  color: var(--tab-hover-color, var(--text-primary, #e0e0e0));
 }
 
 /* Tab content container - only shown when no glass panel is active */
@@ -170,6 +172,7 @@
   font-size: 0.7rem;
   letter-spacing: -0.5px;
   white-space: nowrap;
+  font-family: var(--font-family);
 }
 
 /* These UI-specific styles have been moved to InterfacePanel.css */

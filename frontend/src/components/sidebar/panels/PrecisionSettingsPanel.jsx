@@ -45,7 +45,7 @@ function PrecisionSettingsPanel() {
           try {
              const errorData = JSON.parse(responseText); // Try parsing the text we got
              errorDetail = errorData.detail || errorDetail;
-          } catch (parseError) {
+          } catch {
              // Ignore if parsing fails, use original error detail
           }
           throw new Error(errorDetail);

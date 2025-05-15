@@ -19,6 +19,16 @@
   --panel-bg-darker: rgba(0, 0, 0, 0.2); /* Darker background for panel elements */
   --panel-border-color: rgba(43, 156, 124, 0.3); /* Border color for panels */
   
+  /* Tab Colors */
+  --tab-inactive-bg: rgba(30, 30, 30, 0.8); /* Background for inactive tabs */
+  --tab-hover-bg: rgba(255, 255, 255, 0.05); /* Background for hovered tabs */
+  --tab-active-bg: rgba(16, 115, 67, 0.35); /* Background for active tab */
+  --tab-inactive-color: #ccc; /* Text color for inactive tabs */
+  --tab-hover-color: #e0e0e0; /* Text color for hovered tabs */
+  --tab-active-color: #33b690; /* Text color for active tab */
+  --tab-border-color: #444444; /* Border color for tabs */
+  --tab-active-border-color: rgba(43, 156, 124, 0.7); /* Border color for active tab */
+  
   /* Item Colors */
   --item-bg: rgba(30, 30, 30, 0.4); /* Background for items in lists */
   --item-bg-alt: rgba(16, 115, 67, 0.1); /* Alternative background for items */
@@ -142,6 +152,16 @@
   --panel-bg: rgba(255, 255, 255, 0.8);
   --panel-bg-darker: rgba(240, 240, 240, 0.5);
   --panel-border-color: rgba(43, 156, 124, 0.2);
+
+  /* Tab Colors */
+  --tab-inactive-bg: rgba(240, 240, 240, 0.9);
+  --tab-hover-bg: rgba(220, 220, 220, 0.9);
+  --tab-active-bg: rgba(16, 115, 67, 0.15);
+  --tab-inactive-color: #666666;
+  --tab-hover-color: #333333;
+  --tab-active-color: #107343;
+  --tab-border-color: #cccccc;
+  --tab-active-border-color: rgba(16, 115, 67, 0.7);
 
   /* Item Colors */
   --item-bg: rgba(250, 250, 250, 0.9);
