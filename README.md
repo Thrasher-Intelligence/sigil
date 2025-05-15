@@ -1,5 +1,8 @@
 # Sigil – Local LLM Runner with Web UI
 
+![Tideglass](assets/Tideglass.png)
+
+
 Sigil is a local-first application for running Hugging Face transformer models directly on your machine. Built with a FastAPI backend and a React/Vite web interface, Sigil provides a streamlined environment for loading, interacting with, and customizing transformer models through a modern UI and flexible API.
 
 Designed for developers and researchers, Sigil offers a modular and transparent alternative to hosted inference platforms. Whether you're experimenting with small models, adjusting generation settings, or building a custom interface, Sigil gives you the tools to work with local models efficiently, no external dependencies required.
@@ -100,6 +103,19 @@ After startup, the frontend will prompt you to select a model. Options may inclu
 
 ![Application Launch and Model Loading](assets/demo.gif)
 
+#### Visual Aids for the Interface
+
+Here are some screenshots to help familiarize you with the UI and the core workflows:
+
+- Model Loading View:
+  ![Models](assets/models.png)
+
+- Code Interaction View:
+  ![Code](assets/code.png)
+
+- Thinking / Processing View:
+  ![Thinking](assets/thinking.png)
+
 ### Chat Interface
 
 After loading a model, the frontend presents a clean interface to interact with it:
@@ -119,22 +135,6 @@ Sigil supports both light and dark variants of each theme. The theme system is d
 - Themes automatically support both light and dark modes
 - Custom themes can be added by creating new CSS files in the `frontend/public/themes` directory
 - **Update:** An AI Assistant plugin for automated theme creation is currently in development.
-
-### Examples of a few themes
-
-Gambler - Dark Theme
-![Gambler - Dark Theme](assets/gambler.png)
-
-AlienBlood - Dark Theme
-![AlienBlood - Dark Theme](assets/alienblood.png)
-
-Gambler - Light Theme
-![Gambler - Light Theme](assets/gambler_light.png)
-
-Starshine - Light Theme
-![Starshine - Light Theme](assets/starshine.png)
-
-
 
 ### Developer Tools and Feedback
 
