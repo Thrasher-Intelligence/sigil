@@ -13,6 +13,7 @@ function ChatInterface({
   globalIsLoading,
   globalError,
   messagesEndRef,
+  onEditMessage,
 }) {
   // Keep track of previous chat history for comparison
   const prevChatHistoryRef = useRef([]);
@@ -71,7 +72,8 @@ function ChatInterface({
         {chatHistory.map((msg, index) => (
           <ChatBubble 
             key={`${msg.id}-${index}`} 
-            message={msg} 
+            message={msg}
+            onEditMessage={onEditMessage}
           />
         ))}
         

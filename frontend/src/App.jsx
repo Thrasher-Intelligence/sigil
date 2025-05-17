@@ -9,6 +9,7 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts.js'; // <-- I
 import { useChat } from './hooks/useChat.js'; // <-- IMPORT useChat
 import AppHeader from './components/AppHeader.jsx';
 import ChatInterface from './components/chat/ChatInterface.jsx';
+import { editMessage } from './api/editMessage.js'; // Import editMessage API utility
 
 // Base API URL - Moved to constants.js
 // const API_BASE_URL = 'http://localhost:8000';
@@ -105,7 +106,68 @@ function App() {
     // Add current session settings updater to allow chat hook to update settings when needed
     onUpdateCurrentSessionSettings: setCurrentSessionSettings,
   });
-  const { chatHistory, userInput, setUserInput, isSendingMessage, sendError, sendMessage, loadChatState, clearChatStateAndSettings: clearChatHookState } = chatHook;
+  const { chatHistory, userInput, setUserInput, isSendingMessage, sendError, sendMessage, loadChatState, clearChatStateAndSettings: clearChatHookState, setChatHistory } = chatHook;
+
+  // Handle editing a message
+  const handleEditMessage = useCallback((messageId, newContent) => {
+    return new Promise((resolve, reject) => {
+      if (!appCurrentThreadId) {
+        console.error('Cannot edit message: No thread ID available');
+        setError('Cannot edit message: No active chat session');
+        reject(new Error('No active chat session'));
+        return;
+      }
+
+      // Find the message's index in the current chat history
+      const messageIndex = chatHistory.findIndex(msg => msg.id === messageId);
+      if (messageIndex === -1) {
+        console.error(`Message with ID ${messageId} not found in chat history`);
+        setError('Failed to edit message: Message not found');
+        reject(new Error('Message not found'));
+        return;
+      }
+
+      // Only allow editing user messages
+      const message = chatHistory[messageIndex];
+      if (message.sender !== 'user') {
+        console.error(`Cannot edit non-user message with ID ${messageId}`);
+        setError('Only user messages can be edited');
+        reject(new Error('Only user messages can be edited'));
+        return;
+      }
+
+      setIsLoading(true);
+
+      // Call the API to edit the message
+      editMessage(appCurrentThreadId, messageIndex, newContent)
+        .then(result => {
+          if (result && result.success) {
+            // Update the local chat history with the edited message
+            const updatedHistory = [...chatHistory];
+            updatedHistory[messageIndex] = {
+              ...updatedHistory[messageIndex],
+              text: newContent,
+              content: newContent,
+              edited: true
+            };
+            
+            setChatHistory(updatedHistory);
+            console.log(`Successfully edited message at index ${messageIndex} in thread ${appCurrentThreadId}`);
+            resolve(true);
+          } else {
+            throw new Error('Edit operation failed');
+          }
+        })
+        .catch(error => {
+          console.error('Error editing message:', error);
+          setError(`Failed to edit message: ${error.message || 'Unknown error'}`);
+          reject(error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    });
+  }, [chatHistory, appCurrentThreadId, setChatHistory, setError, setIsLoading]);
 
   // --- Define callbacks now that chatHook exists, and assign to refs ---
   const appLevelClearChatActions = useCallback(() => {
@@ -387,6 +449,7 @@ function App() {
             globalIsLoading={isLoading}
             globalError={error}
             messagesEndRef={messagesEndRef}
+            onEditMessage={handleEditMessage}
           />
       </div>
     </div>

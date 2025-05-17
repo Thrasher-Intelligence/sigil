@@ -1,0 +1,1 @@
+# Empty __init__.py file to make the tests/api/core directory a Python package

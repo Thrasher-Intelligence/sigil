@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import styles from './Chat.module.css';
 
-const ChatBubble = ({ message }) => {
-  const { id, sender, text, tokens } = message;
+const ChatBubble = ({ message, onEditMessage }) => {
+  const { id, sender, text, tokens, edited } = message;
   const isLoading = id.startsWith('loading-');
   const [isThinkingExpanded, setIsThinkingExpanded] = useState(false);
   const [hasThinkingSection, setHasThinkingSection] = useState(false);
   const [displayText, setDisplayText] = useState('');
   const [thinkingText, setThinkingText] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const textareaRef = useRef(null);
   
   // Process text to extract thinking section if present and apply Markdown formatting
   useEffect(() => {
@@ -38,7 +42,26 @@ const ChatBubble = ({ message }) => {
       setDisplayText(text);
       setHasThinkingSection(false);
     }
+    
+    // Reset edit text when the message changes
+    setEditedText(text);
+    setIsSaving(false);
   }, [text]);
+  
+  // Auto-resize the textarea when editing
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      // Set a small timeout to ensure DOM has updated
+      setTimeout(() => {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+        textareaRef.current.focus();
+        // Place cursor at the end of text
+        textareaRef.current.selectionStart = textareaRef.current.value.length;
+        textareaRef.current.selectionEnd = textareaRef.current.value.length;
+      }, 10);
+    }
+  }, [isEditing, editedText]);
   
 
   
@@ -89,6 +112,53 @@ const ChatBubble = ({ message }) => {
     }
   };
   
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    setEditedText(text); // Ensure we're starting with the current text
+    setIsEditing(true);
+    // Focus is handled in the useEffect that runs when isEditing changes
+  };
+  
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedText(text); // Reset to original text
+  };
+  
+  const handleSaveEdit = () => {
+    if (onEditMessage && editedText !== text) {
+      setIsSaving(true);
+      onEditMessage(id, editedText)
+        .then(() => {
+          setIsEditing(false);
+          setIsSaving(false);
+        })
+        .catch(() => {
+          setIsSaving(false);
+        });
+    } else {
+      setIsEditing(false);
+    }
+  };
+  
+  const handleKeyDown = (e) => {
+    // Don't process shortcuts if we're in the middle of saving
+    if (isSaving) {
+      e.preventDefault();
+      return;
+    }
+    
+    // Submit on Ctrl+Enter or Cmd+Enter
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      handleSaveEdit();
+    }
+    // Cancel on Escape
+    else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancelEdit();
+    }
+  };
+  
   return (
     <div className={bubbleClass}>
       {isLoading ? (
@@ -118,20 +188,68 @@ const ChatBubble = ({ message }) => {
             )}
             
             <div className={styles.bubbleContent}>
-              <ReactMarkdown>{displayText}</ReactMarkdown>
+              {isEditing ? (
+                <div className={styles.editContainer}>
+                  <textarea 
+                    ref={textareaRef}
+                    className={styles.editTextarea}
+                    value={editedText}
+                    onChange={(e) => setEditedText(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                  />
+                  <div className={styles.editButtons}>
+                    <button 
+                      className={styles.editCancel} 
+                      onClick={handleCancelEdit}
+                      title="Cancel (Esc)"
+                      disabled={isSaving}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      className={styles.editSave} 
+                      onClick={handleSaveEdit}
+                      title="Save (Ctrl+Enter)"
+                      disabled={isSaving}
+                    >
+                      {isSaving ? 'Saving...' : 'Save'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <ReactMarkdown>{displayText}</ReactMarkdown>
+              )}
             </div>
           </div>
           
-          {(sender === 'user' || sender === 'backend') && (
-            <div className={styles.tokenCounter}>
-              {getDisplayTokens()} tokens
-              {hasThinkingSection && (
-                <span className={styles.thinkingIndicator}>
-                  {isThinkingExpanded ? "(thinking visible)" : "(thinking hidden)"}
-                </span>
-              )}
-            </div>
-          )}
+          <div className={styles.messageActions}>
+            {(sender === 'user' || sender === 'backend') && (
+              <div className={styles.tokenCounter}>
+                {getDisplayTokens()} tokens
+                {hasThinkingSection && (
+                  <span className={styles.thinkingIndicator}>
+                    {isThinkingExpanded ? "(thinking visible)" : "(thinking hidden)"}
+                  </span>
+                )}
+                {edited && (
+                  <span className={styles.editedIndicator}>(edited)</span>
+                )}
+              </div>
+            )}
+            
+            {(sender === 'user') && !isEditing && (
+              <button 
+                className={styles.editButton} 
+                onClick={handleEditClick}
+                title="Edit message"
+                aria-label="Edit message"
+              >
+                <svg className={styles.editIcon} viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+              </button>
+            )}
+          </div>
         </>
       )}
     </div>
@@ -143,8 +261,14 @@ ChatBubble.propTypes = {
     id: PropTypes.string.isRequired,
     sender: PropTypes.string.isRequired,
     text: PropTypes.string,
-    tokens: PropTypes.number
-  }).isRequired
+    tokens: PropTypes.number,
+    edited: PropTypes.bool
+  }).isRequired,
+  onEditMessage: PropTypes.func
+};
+
+ChatBubble.defaultProps = {
+  onEditMessage: () => {}
 };
 
 export default ChatBubble;
