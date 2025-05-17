@@ -118,7 +118,7 @@ function App() {
         return;
       }
 
-      // Find the message's index in the current chat history
+      // Find the message in the current chat history
       const messageIndex = chatHistory.findIndex(msg => msg.id === messageId);
       if (messageIndex === -1) {
         console.error(`Message with ID ${messageId} not found in chat history`);
@@ -127,19 +127,35 @@ function App() {
         return;
       }
 
-      // Only allow editing user messages
+      // Get the message to edit
       const message = chatHistory[messageIndex];
-      if (message.sender !== 'user') {
-        console.error(`Cannot edit non-user message with ID ${messageId}`);
-        setError('Only user messages can be edited');
-        reject(new Error('Only user messages can be edited'));
+      // We now allow editing both user and assistant messages
+      if (message.sender !== 'user' && message.sender !== 'backend') {
+        console.error(`Cannot edit message with role ${message.sender} and ID ${messageId}`);
+        setError('Only user and assistant messages can be edited');
+        reject(new Error('Only user and assistant messages can be edited'));
         return;
       }
+      
+      // Determine if this is a user message for logging
+      const isUserMessage = message.sender === 'user';
+      
+      // This function is unnecessary because our frontend indices should match the backend
+      // The message index in our UI should directly correspond to the index in the backend storage
+      // System messages and thinking sections are not separate messages in the backend
+      const getBackendIndex = () => {
+        // Just return the message index directly
+        console.log(`Using message index ${messageIndex} directly for backend`);
+        return messageIndex;
+      };
+      
+      const backendIndex = getBackendIndex();
+      console.log(`Mapping frontend index ${messageIndex} to backend index ${backendIndex}`);
 
       setIsLoading(true);
 
-      // Call the API to edit the message
-      editMessage(appCurrentThreadId, messageIndex, newContent)
+      // Call the API to edit the message using the backend index
+      editMessage(appCurrentThreadId, backendIndex, newContent, { isUserMessage })
         .then(result => {
           if (result && result.success) {
             // Update the local chat history with the edited message
@@ -152,7 +168,7 @@ function App() {
             };
             
             setChatHistory(updatedHistory);
-            console.log(`Successfully edited message at index ${messageIndex} in thread ${appCurrentThreadId}`);
+            console.log(`Successfully edited message at frontend index ${messageIndex} (backend index ${backendIndex}) in thread ${appCurrentThreadId}`);
             resolve(true);
           } else {
             throw new Error('Edit operation failed');

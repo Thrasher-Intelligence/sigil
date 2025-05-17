@@ -44,6 +44,7 @@ const ChatBubble = ({ message, onEditMessage }) => {
     }
     
     // Reset edit text when the message changes
+    // For assistant messages with thinking sections, we need to preserve them in the edit
     setEditedText(text);
     setIsSaving(false);
   }, [text]);
@@ -114,6 +115,7 @@ const ChatBubble = ({ message, onEditMessage }) => {
   
   const handleEditClick = (e) => {
     e.stopPropagation();
+    // For assistant messages, we want to preserve the thinking section if present
     setEditedText(text); // Ensure we're starting with the current text
     setIsEditing(true);
     // Focus is handled in the useEffect that runs when isEditing changes
@@ -127,7 +129,17 @@ const ChatBubble = ({ message, onEditMessage }) => {
   const handleSaveEdit = () => {
     if (onEditMessage && editedText !== text) {
       setIsSaving(true);
-      onEditMessage(id, editedText)
+      
+      // If this is an assistant message with a thinking section, we need to preserve it
+      let finalContent = editedText;
+      if (sender === 'backend' && hasThinkingSection) {
+        // Preserve the original thinking section if present
+        if (thinkingText && !editedText.includes('<think>')) {
+          finalContent = `<think>${thinkingText}</think>\n\n${editedText}`;
+        }
+      }
+      
+      onEditMessage(id, finalContent)
         .then(() => {
           setIsEditing(false);
           setIsSaving(false);
@@ -190,12 +202,20 @@ const ChatBubble = ({ message, onEditMessage }) => {
             <div className={styles.bubbleContent}>
               {isEditing ? (
                 <div className={styles.editContainer}>
+                  {sender === 'backend' && hasThinkingSection && (
+                    <div className={styles.thinkingEditNote}>
+                      Note: The thinking section will be preserved when you save.
+                    </div>
+                  )}
                   <textarea 
                     ref={textareaRef}
                     className={styles.editTextarea}
                     value={editedText}
                     onChange={(e) => setEditedText(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    placeholder={sender === 'backend' && hasThinkingSection ? 
+                      "Edit the visible content. The thinking section will be preserved." : 
+                      "Edit message..."}
                   />
                   <div className={styles.editButtons}>
                     <button 
@@ -237,7 +257,7 @@ const ChatBubble = ({ message, onEditMessage }) => {
               </div>
             )}
             
-            {(sender === 'user') && !isEditing && (
+            {(sender === 'user' || sender === 'backend') && !isEditing && (
               <button 
                 className={styles.editButton} 
                 onClick={handleEditClick}

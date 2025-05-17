@@ -257,18 +257,36 @@ def edit_message_in_session(thread_id: str, message_index: int, req: EditMessage
     try:
         # Convert string path parameter to integer
         message_index = int(message_index)
+        
+        print(f"API: Received edit request for message {message_index} in thread {thread_id}")
+        print(f"API: New content: {req.new_content[:50]}{'...' if len(req.new_content) > 50 else ''}")
+
+        # Try to get session data to debug message indices
+        try:
+            session_data = get_session(thread_id)
+            if session_data and "messages" in session_data:
+                print(f"API: Thread has {len(session_data['messages'])} messages")
+                if 0 <= message_index < len(session_data["messages"]):
+                    msg_role = session_data["messages"][message_index].get("role", "unknown")
+                    print(f"API: Message {message_index} has role '{msg_role}'")
+                else:
+                    print(f"API: Message index {message_index} is out of range (0-{len(session_data['messages'])-1})")
+        except Exception as debug_e:
+            print(f"API: Debug info error: {debug_e}", file=sys.stderr)
 
         # Call the history manager function to edit the message
         success = edit_chat_message(thread_id, message_index, req.new_content)
 
         if not success:
             # edit_chat_message returns False if file not found or edit fails
+            print(f"API: Failed to edit message {message_index} in thread {thread_id}")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Session with ID '{thread_id}' not found or message could not be edited."
             )
         
         # If success is True, return a success response
+        print(f"API: Successfully edited message {message_index} in thread {thread_id}")
         return {
             "success": True,
             "thread_id": thread_id,
@@ -277,13 +295,14 @@ def edit_message_in_session(thread_id: str, message_index: int, req: EditMessage
 
     except ValueError as e:
         # Raised for invalid thread_id format or if message_index is out of range
+        print(f"API: Value error when editing message {message_index} in thread {thread_id}: {e}", file=sys.stderr)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Invalid request: {str(e)}"
         )
     except Exception as e:
         # Catch any other unexpected errors
-        print(f"Unexpected error editing message {message_index} in session {thread_id}: {e}", file=sys.stderr)
+        print(f"API: Unexpected error editing message {message_index} in session {thread_id}: {e}", file=sys.stderr)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"An unexpected server error occurred while editing the message"
