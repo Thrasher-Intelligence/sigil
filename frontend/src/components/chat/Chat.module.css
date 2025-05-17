@@ -579,71 +579,118 @@
 .editButtons {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .editCancel, .editSave {
-  padding: 4px 12px;
+  padding: 6px 14px;
   border-radius: var(--border-radius-small);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+  min-width: 80px;
+  text-align: center;
+  user-select: none;
 }
 
 .editCancel {
-  background: transparent;
+  background: rgba(60, 60, 60, 0.4);
   color: var(--foreground, #e0e0e0);
-  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  font-weight: 500;
 }
 
 .editCancel:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background: rgba(60, 60, 60, 0.2);
 }
 
 .userBubble .editSave {
-  background: var(--user-bubble-border, rgba(3, 218, 198, 0.2));
-  color: var(--user-bubble-border, rgba(3, 218, 198, 0.9));
-  border: 1px solid var(--user-bubble-border, rgba(3, 218, 198, 0.3));
-  font-weight: 500;
+  background: var(--user-bubble-border, rgba(3, 218, 198, 0.35));
+  color: #000;
+  border: 1px solid var(--user-bubble-border, rgba(3, 218, 198, 0.4));
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 5px 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .assistantBubble .editSave {
-  background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.2));
-  color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.9));
-  border: 1px solid var(--assistant-bubble-border, rgba(187, 134, 252, 0.3));
-  font-weight: 500;
+  background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.35));
+  color: #000;
+  border: 1px solid var(--assistant-bubble-border, rgba(187, 134, 252, 0.4));
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 5px 14px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
 }
 
 .userBubble .editSave:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   background: var(--user-bubble-border, rgba(3, 218, 198, 0.1));
+  color: rgba(0, 0, 0, 0.5);
+  border-color: var(--user-bubble-border, rgba(3, 218, 198, 0.2));
+  box-shadow: none;
 }
 
 .assistantBubble .editSave:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.1));
+  color: rgba(0, 0, 0, 0.5);
+  border-color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.2));
+  box-shadow: none;
 }
 
 .editCancel:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(80, 80, 80, 0.4);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.editCancel:active:not(:disabled) {
+  background: rgba(90, 90, 90, 0.5);
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: all 0.1s ease;
 }
 
 .userBubble .editSave:hover:not(:disabled) {
-  background: var(--user-bubble-border, rgba(3, 218, 198, 0.3));
-  border-color: var(--user-bubble-border, rgba(3, 218, 198, 0.5));
+  background: var(--user-bubble-border, rgba(3, 218, 198, 0.5));
+  border-color: var(--user-bubble-border, rgba(3, 218, 198, 0.6));
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(3, 218, 198, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  color: #000;
+}
+
+.userBubble .editSave:active:not(:disabled) {
+  background: var(--user-bubble-border, rgba(3, 218, 198, 0.6));
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(3, 218, 198, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.1s ease;
+  color: #000;
 }
 
 .assistantBubble .editSave:hover:not(:disabled) {
-  background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.3));
-  border-color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.5));
+  background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.5));
+  border-color: var(--assistant-bubble-border, rgba(187, 134, 252, 0.6));
   transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(187, 134, 252, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  color: #000;
+}
+
+.assistantBubble .editSave:active:not(:disabled) {
+  background: var(--assistant-bubble-border, rgba(187, 134, 252, 0.6));
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(187, 134, 252, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.1s ease;
+  color: #000;
 }
 
 .assistantBubble.hasThinking:hover {
