@@ -151,7 +151,7 @@ This interface is ideal for local experimentation, debugging, and integrating li
 
 ## Prerequisites
 
-*   Python 3.8+ (tested with 3.9)
+*   Python 3.11+
 *   `pip` (Python package installer)
 *   Node.js and `npm` (for the frontend development server and building)
 *   A compatible Hugging Face transformer model downloaded locally (e.g., TinyLlama). The model directory should contain files like `*.safetensors` or `pytorch_model.bin`, `config.json`, `tokenizer.json`, etc.
