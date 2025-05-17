@@ -41,7 +41,9 @@ function ChatInterface({
             <p>Chat Error: {sendError}</p>
           </div>
         )}
-        {chatHistory.map((msg) => (
+        {chatHistory
+          .filter(msg => msg.sender !== 'system' && msg.role !== 'system')
+          .map((msg) => (
           <div
             key={msg.id}
             className={`message ${msg.sender}-message ${msg.id.startsWith('loading-') ? 'loading-message' : ''}`}

@@ -20,15 +20,17 @@ function ChatHistory({
          </div>
       )}
 
-      {chatHistory.map((msg) => (
-        <div key={msg.id} className={`message ${msg.sender}-message ${msg.id.startsWith('loading-') ? 'loading-message' : ''}`}>
-          {msg.id.startsWith('loading-') ? (
-            <div className="dots-container"><span>.</span><span>.</span><span>.</span></div>
-          ) : (
-            <p>{msg.text}</p>
-          )}
-        </div>
-      ))}
+      {chatHistory
+        .filter(msg => msg.sender !== 'system' && msg.role !== 'system')
+        .map((msg) => (
+          <div key={msg.id} className={`message ${msg.sender}-message ${msg.id.startsWith('loading-') ? 'loading-message' : ''}`}>
+            {msg.id.startsWith('loading-') ? (
+              <div className="dots-container"><span>.</span><span>.</span><span>.</span></div>
+            ) : (
+              <p>{msg.text}</p>
+            )}
+          </div>
+        ))}
       <div ref={messagesEndRef} />
     </div>
   );

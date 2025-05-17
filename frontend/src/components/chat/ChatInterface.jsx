@@ -69,13 +69,16 @@ function ChatInterface({
         )}
 
         {/* Chat messages - with explicit key including index to force rerenders */}
-        {chatHistory.map((msg, index) => (
-          <ChatBubble 
-            key={`${msg.id}-${index}`} 
-            message={msg}
-            onEditMessage={onEditMessage}
-          />
-        ))}
+        {/* Filter out system messages from display */}
+        {chatHistory
+          .filter(msg => msg.sender !== 'system' && msg.role !== 'system')
+          .map((msg, index) => (
+            <ChatBubble 
+              key={`${msg.id}-${index}`} 
+              message={msg}
+              onEditMessage={onEditMessage}
+            />
+          ))}
         
         {/* Ref for auto-scrolling */}
         <div ref={messagesEndRef} className="messages-end-ref" />
