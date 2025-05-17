@@ -42,7 +42,23 @@ def chat(req: ChatRequest, request: Request): # Add request: Request
         )
     
     # Use the core module to generate a prompt
-    prompt = generate_prompt(req.system_prompt, req.messages, req.temperature)
+    messages = []
+    if req.system_prompt:
+        messages.append({"role": "system", "content": req.system_prompt})
+    
+    # If we have messages array, use those
+    if req.messages and len(req.messages) > 0:
+        messages.extend([{"role": msg.role, "content": msg.content} for msg in req.messages])
+    # Otherwise, add the single message from req.message
+    else:
+        messages.append({"role": "user", "content": req.message})
+    
+    prompt = generate_prompt(
+        mode="chat",
+        system_prompt=req.system_prompt,
+        tokenizer=app_state.tokenizer,
+        messages=messages
+    )
     
     # Call inference with the generated prompt
     raw_response = generate_response(
@@ -53,11 +69,14 @@ def chat(req: ChatRequest, request: Request): # Add request: Request
         req.temperature,
         req.top_p,
         req.max_tokens,
-        getattr(app_state, 'repetition_penalty', 1.0)
+        req.repetition_penalty
     )
     
-    # Clean up the response
-    content = truncate_at_stop_token(raw_response, req.stop) if req.stop else raw_response
+    # First truncate at stop tokens if provided
+    truncated_response = truncate_at_stop_token(raw_response, req.stop) if req.stop else raw_response
+    
+    # Then clean the response (remove speaker tags)
+    content = clean_response(truncated_response)
     
     # If a thread_id is provided in the request, save the chat history
     thread_id = req.thread_id
@@ -69,8 +88,12 @@ def chat(req: ChatRequest, request: Request): # Add request: Request
         # Add the system message first
         saved_messages.append({"role": "system", "content": req.system_prompt})
         
-        # Add the existing context messages
-        saved_messages.extend([{"role": msg.role, "content": msg.content} for msg in req.messages])
+        # Add the existing context messages if they exist
+        if req.messages and len(req.messages) > 0:
+            saved_messages.extend([{"role": msg.role, "content": msg.content} for msg in req.messages])
+        # Otherwise add the single message
+        else:
+            saved_messages.append({"role": "user", "content": req.message})
         
         # Add the assistant's response to be saved
         saved_messages.append({"role": "assistant", "content": content})
@@ -98,80 +121,154 @@ def chat(req: ChatRequest, request: Request): # Add request: Request
 @router.post("/chat/v2", response_model=ChatResponseV2)
 async def chat_v2(req: ChatRequestV2, request: Request):
     """Enhanced chat endpoint with additional features for narrative generation."""
-    app_state = request.app.state
+    try:
+        app_state = request.app.state
+        
+        # Check if model is loaded
+        if not app_state.model or not app_state.tokenizer:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Model is not loaded. Please use the /model/load endpoint first."
+            )
+        
+        # Debug info before generating prompt
+        print(f"DEBUG: Generating prompt with mode={req.mode}", file=sys.stderr)
+        print(f"DEBUG: message={req.message}", file=sys.stderr)
+        print(f"DEBUG: system_prompt={req.system_prompt}", file=sys.stderr)
+        print(f"DEBUG: messages={req.messages}", file=sys.stderr)
+        
+        # Validate the messages list before passing to generate_prompt
+        validated_messages = []
+        if req.messages:
+            try:
+                validated_messages = [
+                    {"role": msg.role, "content": msg.content}
+                    for msg in req.messages
+                    if msg and hasattr(msg, 'role') and hasattr(msg, 'content')
+                ]
+            except Exception as msg_error:
+                print(f"WARNING: Error validating messages: {msg_error}", file=sys.stderr)
+            
+        # Use the core module to generate a prompt
+        try:
+            prompt = generate_prompt(
+                mode=req.mode,
+                system_prompt=req.system_prompt or "You are a helpful assistant.", 
+                tokenizer=app_state.tokenizer,
+                message=req.message,
+                messages=validated_messages
+            )
+            print(f"DEBUG: Prompt generated successfully, length={len(prompt)}", file=sys.stderr)
+        except Exception as prompt_error:
+            print(f"ERROR: Failed to generate prompt: {prompt_error}", file=sys.stderr)
+            raise
     
-    # Check if model is loaded
-    if not app_state.model or not app_state.tokenizer:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Model is not loaded. Please use the /model/load endpoint first."
+        # Get max length
+        max_tokens = req.max_tokens if req.max_tokens > 0 else 4096  # Default if not set
+        
+        # Call inference with the generated prompt
+        raw_response = generate_response(
+            app_state.model, 
+            app_state.tokenizer, 
+            app_state.device,
+            prompt,
+            req.temperature,
+            req.top_p,
+            max_tokens,
+            req.repetition_penalty
         )
-    
-    # Use the core module to generate a prompt
-    prompt = generate_prompt(req.system_prompt, req.messages, req.temperature)
-    
-    # Get max length
-    max_tokens = req.max_tokens if req.max_tokens > 0 else 4096  # Default if not set
-    
-    # Call inference with the generated prompt
-    raw_response = generate_response(
-        app_state.model, 
-        app_state.tokenizer, 
-        app_state.device,
-        prompt,
-        req.temperature,
-        req.top_p,
-        max_tokens,
-        getattr(app_state, 'repetition_penalty', 1.0)
-    )
-    
-    # Clean up the response
-    content = clean_response(raw_response, req.stop)
-    
-    # Check token length of the response to see if it's a narrative
-    # This is a simple heuristic, could be replaced with more sophisticated detection
-    is_narrative = len(content.split()) >= MIN_NARRATIVE_TOKENS
-    # If a thread_id is provided in the request, save the chat history
-    thread_id = req.thread_id
-    
-    if thread_id or req.save_chat:
-        # Prepare new messages to be saved (context + request + response)
-        saved_messages = []
         
-        # Add the system message first (if not empty)
-        if req.system_prompt and req.system_prompt.strip():
-            saved_messages.append({"role": "system", "content": req.system_prompt})
+        # First truncate at stop tokens if provided
+        truncated_response = truncate_at_stop_token(raw_response, req.stop) if req.stop else raw_response
         
-        # Add the existing context messages
-        saved_messages.extend([{"role": msg.role, "content": msg.content} for msg in req.messages])
+        # Then clean the response (remove speaker tags)
+        content = clean_response(truncated_response)
         
-        # Add the assistant's response to be saved
-        saved_messages.append({"role": "assistant", "content": content})
+        # Check token length of the response to see if it's a narrative
+        # This is a simple heuristic, could be replaced with more sophisticated detection
+        is_narrative = len(content.split()) >= MIN_NARRATIVE_TOKENS
+        # If a thread_id is provided in the request, save the chat history
+        thread_id = req.thread_id
         
-        # Save all messages with the provided or new thread_id
-        thread_id = save_chat_messages(
-            thread_id, 
-            saved_messages,
-            sampling_settings={
-                "temperature": req.temperature,
-                "max_tokens": max_tokens,
-                "top_p": req.top_p,
-                "stop": req.stop
-            },
-            system_prompt=req.system_prompt
-        )
+        if thread_id or req.save_chat:
+            # Prepare new messages to be saved (context + request + response)
+            saved_messages = []
+            
+            # Add the system message first (if not empty)
+            if req.system_prompt and req.system_prompt.strip():
+                saved_messages.append({"role": "system", "content": req.system_prompt})
+            
+            # Add the existing context messages if req.messages is not None
+            if req.messages:
+                try:
+                    saved_messages.extend([{"role": msg.role, "content": msg.content} for msg in req.messages if msg and hasattr(msg, 'role') and hasattr(msg, 'content')])
+                except Exception as msg_error:
+                    print(f"WARNING: Error processing messages: {msg_error}", file=sys.stderr)
+            
+            # Add the assistant's response to be saved
+            saved_messages.append({"role": "assistant", "content": content})
+            
+            # Save all messages with the provided or new thread_id
+            thread_id = save_chat_messages(
+                thread_id, 
+                saved_messages,
+                sampling_settings={
+                    "temperature": req.temperature,
+                    "max_tokens": max_tokens,
+                    "top_p": req.top_p,
+                    "stop": req.stop
+                },
+                system_prompt=req.system_prompt
+            )
     
     # Return properly formatted response to the user
-    return ChatResponseV2(
-        content=content, 
-        thread_id=thread_id,
-        is_narrative=is_narrative,
-        metadata={
-            "total_tokens": len(content.split()),  # Simple approximation, replace with actual token count
-            "elapsed_time": 0,  # Placeholder, replace with actual timing if available
-            "model_used": "local",  # Placeholder
+        return ChatResponseV2(
+            content=content, 
+            thread_id=thread_id,
+            is_narrative=is_narrative,
+            metadata={
+                "total_tokens": len(content.split()),  # Simple approximation, replace with actual token count
+                "elapsed_time": 0,  # Placeholder, replace with actual timing if available
+                "model_used": "local",  # Placeholder
+            }
+        )
+    except Exception as e:
+        print(f"❌ CRITICAL ERROR in chat_v2: {str(e)}", file=sys.stderr)
+        print(f"Request details: mode={req.mode}, has_message={req.message is not None}, messages_provided={req.messages is not None}", file=sys.stderr)
+        
+        if req.messages:
+            try:
+                print(f"Message count: {len(req.messages)}", file=sys.stderr)
+                if req.messages and len(req.messages) > 0:
+                    msg = req.messages[0]
+                    if hasattr(msg, 'role'):
+                        print(f"First message role: {msg.role}", file=sys.stderr)
+                    else:
+                        print("First message has no 'role' attribute", file=sys.stderr)
+                        print(f"First message type: {type(msg)}", file=sys.stderr)
+                        print(f"First message content: {str(msg)[:100]}", file=sys.stderr)
+            except Exception as debug_error:
+                print(f"Error during debug logging: {debug_error}", file=sys.stderr)
+        
+        print(f"All request fields: temperature={req.temperature}, top_p={req.top_p}, max_tokens={req.max_tokens}, repetition_penalty={req.repetition_penalty}", file=sys.stderr)
+        import traceback
+        traceback.print_exc()
+        
+        # Return a more informative error message
+        error_message = f"An error occurred during chat generation: {str(e)}"
+        
+        # Add CORS headers to error response
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
         }
-    )
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=error_message,
+            headers=headers
+        )
 
 # --- NEW: Endpoint to List Sessions ---
 @router.get("/sessions", response_model=List[Dict[str, Any]])

@@ -4,13 +4,24 @@ from typing import Optional, List, Dict
 # --- Helper Function for Prompt Generation ---
 def generate_prompt(
     mode: str,
-    system_prompt: str,
-    tokenizer: AutoTokenizer,
+    system_prompt: Optional[str] = "You are a helpful assistant.",
+    tokenizer: AutoTokenizer = None,
     message: Optional[str] = None,
     messages: Optional[List[Dict[str, str]]] = None,
 ) -> str:
     """Generates the appropriate prompt string based on the mode."""
     # Detect prompt handling mode attached to tokenizer by model_loader
+    if tokenizer is None:
+        raise ValueError("Tokenizer is required to generate a prompt")
+    
+    # Ensure system_prompt has a default value
+    if system_prompt is None:
+        system_prompt = "You are a helpful assistant."
+        
+    # Ensure messages is never None
+    if messages is None:
+        messages = []
+    
     prompt_mode = getattr(tokenizer, "prompt_mode", "template")
     custom_cfg = getattr(tokenizer, "custom_prompt_config", None)
 
@@ -72,8 +83,10 @@ def generate_prompt(
                 {"role": "user", "content": message},
             ]
         else:  # chat
+            # Instead of raising an error for empty messages, simply use an empty list
+            # This allows the chat endpoint to be more resilient
             if not messages:
-                 raise ValueError("Messages list is required for 'chat' mode with template.")
+                 messages = []
                  
             # --- REMOVED: Rolling Window Logic ---
             # history_window_size = 5 # Keep the last 5 messages
@@ -87,8 +100,9 @@ def generate_prompt(
             else:
                  # If the history *already* starts with a system message, use it
                  # but replace its content with the *current* system prompt
-                 messages[0]["content"] = system_prompt # Ensure current system prompt is used
-                 template_messages = messages
+                 # Create a copy to avoid modifying the original list
+                 template_messages = messages.copy()
+                 template_messages[0]["content"] = system_prompt # Ensure current system prompt is used
             # --- End Modification ---
                  
         # Debugging: Print messages being sent to template
@@ -106,11 +120,13 @@ def generate_prompt(
     # Finally, fallback mode (simple prompt)
     if mode == "instruction":
         if not message:
-            raise ValueError("Message is required for 'instruction' mode.")
+            # Default to empty message instead of raising an error
+            message = ""
         return build_fallback(message)
     else:
         if not messages:
-            raise ValueError("Messages list is required for 'chat' mode.")
+            # Default to empty messages list instead of raising an error
+            messages = []
         prompt_lines = [system_prompt, ""]
         for m in messages:
             if m["role"] == "user":

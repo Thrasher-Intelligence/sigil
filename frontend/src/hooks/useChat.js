@@ -274,38 +274,31 @@ export const useChat = ({
     setChatHistory(prev => [...prev, { sender: 'backend', text: '', id: loadingId }]);
 
     try {
+      // Use the mode (instruction or chat) to format the payload correctly
       const payload = {
         mode: appChatMode,
         thread_id: currentThreadId, // Use hook's currentThreadId
       };
 
-      let settingsToSend;
-      let systemPromptToSend;
-
       if (activeTabId === NEW_CHAT_TAB_ID || currentThreadId === null) {
         // Capture these settings to preserve them for the new tab that will be created
         // They will be stored temporarily when the response comes back
-        settingsToSend = {
-          temperature: newChatSettings.temperature,
-          top_p: newChatSettings.topP,
-          max_new_tokens: newChatSettings.maxTokens,
-          repetition_penalty: newChatSettings.repetitionPenalty,
-        };
-        systemPromptToSend = newChatSettings.systemPrompt;
+        payload.temperature = newChatSettings.temperature;
+        payload.top_p = newChatSettings.topP;
+        payload.max_tokens = newChatSettings.maxTokens;
+        payload.repetition_penalty = newChatSettings.repetitionPenalty;
+        payload.system_prompt = newChatSettings.systemPrompt;
       } else {
         // If currentSessionSettings are not available (e.g., just after a new chat message created a session but before App re-renders with them)
         // fall back to newChatSettings as a sensible default.
         const cur = currentSessionSettings || newChatSettings; 
-        settingsToSend = {
-          temperature: cur.temperature,
-          top_p: cur.topP,
-          max_new_tokens: cur.maxTokens,
-          repetition_penalty: cur.repetitionPenalty,
-        };
-        systemPromptToSend = cur.systemPrompt;
+        payload.temperature = cur.temperature;
+        payload.top_p = cur.topP;
+        payload.max_tokens = cur.maxTokens;
+        payload.repetition_penalty = cur.repetitionPenalty;
+        payload.system_prompt = cur.systemPrompt;
       }
-      payload.sampling_settings = settingsToSend;
-      payload.system_prompt = systemPromptToSend;
+      payload.save_chat = true;
 
       if (appChatMode === 'instruction') {
         payload.message = currentUserInput;
@@ -313,7 +306,7 @@ export const useChat = ({
         payload.messages = formatChatHistoryForBackend(updatedChatHistory);
       }
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/chat/chat-v2`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/chat/chat/v2`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -330,11 +323,12 @@ export const useChat = ({
 
       const data = await response.json();
       // Extract essential data from response
-      const backendResponse = data.response;
+      const backendResponse = data.content;
       const newThreadId = data.thread_id; // This is the thread_id returned by the backend
       
       // Try to find token count in any of the common fields
       const tokenCount = data.token_count || data.tokens || 
+                         (data.metadata && data.metadata.total_tokens) || 
                          (data.usage && data.usage.total_tokens) || 
                          null;
 

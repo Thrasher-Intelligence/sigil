@@ -37,7 +37,7 @@ class Settings(BaseSettings):
 
     # --- API / Frontend ---
     cors_allowed_origins: str = (
-        "http://localhost:5173,http://127.0.0.1:5173"  # Comma-separated list
+        "http://localhost:5173,http://127.0.0.1:5173,*"  # Comma-separated list
     )
     frontend_themes_path: str = "frontend/public/themes"
 
