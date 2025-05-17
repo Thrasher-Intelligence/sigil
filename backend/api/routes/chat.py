@@ -48,11 +48,12 @@ def chat(req: ChatRequest, request: Request): # Add request: Request
     raw_response = generate_response(
         app_state.model, 
         app_state.tokenizer, 
+        app_state.device,
         prompt,
         req.temperature,
-        req.max_tokens,
         req.top_p,
-        req.stop
+        req.max_tokens,
+        getattr(app_state, 'repetition_penalty', 1.0)
     )
     
     # Clean up the response
@@ -116,11 +117,12 @@ async def chat_v2(req: ChatRequestV2, request: Request):
     raw_response = generate_response(
         app_state.model, 
         app_state.tokenizer, 
+        app_state.device,
         prompt,
         req.temperature,
-        max_tokens,
         req.top_p,
-        req.stop
+        max_tokens,
+        getattr(app_state, 'repetition_penalty', 1.0)
     )
     
     # Clean up the response

@@ -5,6 +5,7 @@ import {
   DEFAULT_TEMPERATURE,
   DEFAULT_TOP_P,
   DEFAULT_MAX_TOKENS,
+  DEFAULT_REPETITION_PENALTY,
 } from "../../../constants"; // Import shared constants
 import PropTypes from "prop-types";
 import "./SettingsPanel.css"; // Import component styles
@@ -15,6 +16,7 @@ const DEFAULTS = {
   TEMPERATURE: DEFAULT_TEMPERATURE,
   TOP_P: DEFAULT_TOP_P,
   MAX_TOKENS: DEFAULT_MAX_TOKENS,
+  REPETITION_PENALTY: DEFAULT_REPETITION_PENALTY,
 };
 
 // Settings Panel Component
@@ -40,6 +42,9 @@ function SettingsPanel({
   const [temperature, setTemperature] = useState(DEFAULTS.TEMPERATURE);
   const [topP, setTopP] = useState(DEFAULTS.TOP_P);
   const [maxTokens, setMaxTokens] = useState(DEFAULTS.MAX_TOKENS);
+  const [repetitionPenalty, setRepetitionPenalty] = useState(
+    DEFAULTS.REPETITION_PENALTY,
+  );
 
   // --- RESTORED: Apply button state ---
   const [applyStatus, setApplyStatus] = useState(null); // null | 'loading' | 'success' | 'error'
@@ -66,6 +71,9 @@ function SettingsPanel({
       setTemperature(newChatSettings.temperature ?? DEFAULTS.TEMPERATURE);
       setTopP(newChatSettings.topP ?? DEFAULTS.TOP_P);
       setMaxTokens(newChatSettings.maxTokens ?? DEFAULTS.MAX_TOKENS);
+      setRepetitionPenalty(
+        newChatSettings.repetitionPenalty ?? DEFAULTS.REPETITION_PENALTY,
+      );
     } else if (loadedSessionSettings) {
       // An existing session tab is active, apply its loaded settings
       // Inputs are now enabled if model is loaded
@@ -79,6 +87,9 @@ function SettingsPanel({
       setTemperature(loadedSessionSettings.temperature ?? DEFAULTS.TEMPERATURE);
       setTopP(loadedSessionSettings.topP ?? DEFAULTS.TOP_P);
       setMaxTokens(loadedSessionSettings.maxTokens ?? DEFAULTS.MAX_TOKENS);
+      setRepetitionPenalty(
+        loadedSessionSettings.repetitionPenalty ?? DEFAULTS.REPETITION_PENALTY,
+      );
     } else {
       // Existing session tab active, but settings failed to load? Revert to defaults.
       // This case might indicate an error elsewhere. Still editable if model loaded.
@@ -89,6 +100,7 @@ function SettingsPanel({
       setTemperature(DEFAULTS.TEMPERATURE);
       setTopP(DEFAULTS.TOP_P);
       setMaxTokens(DEFAULTS.MAX_TOKENS);
+      setRepetitionPenalty(DEFAULTS.REPETITION_PENALTY);
     }
     // Depend on the relevant props that determine the displayed settings
   }, [activeTabId, newChatSettings, loadedSessionSettings]);
@@ -117,6 +129,9 @@ function SettingsPanel({
     } else if (field === "maxTokens") {
       currentVal = parseInt(value, 10) || 1; // Ensure numeric conversion
       setMaxTokens(currentVal);
+    } else if (field === "repetitionPenalty") {
+      currentVal = parseFloat(value) || 1.0; // Ensure numeric conversion, minimum 1.0
+      setRepetitionPenalty(currentVal);
     }
 
     const isNewChat = activeTabId === "__NEW_CHAT__";
@@ -159,6 +174,7 @@ function SettingsPanel({
           temperature: temperature,
           top_p: topP,
           max_new_tokens: maxTokens,
+          repetition_penalty: repetitionPenalty,
         }),
       });
       const data = await response.json();
@@ -253,6 +269,24 @@ function SettingsPanel({
           disabled={isDisabled}
         />
       </div>
+      <div className="settings-group">
+        <label htmlFor="repetition-penalty">Repetition Penalty:</label>
+        <input
+          type="number"
+          id="repetition-penalty"
+          value={repetitionPenalty}
+          onChange={(e) =>
+            handleSettingChange(
+              "repetitionPenalty",
+              parseFloat(e.target.value) || 1.0,
+            )
+          }
+          min="1.0"
+          max="2.0"
+          step="0.05"
+          disabled={isDisabled}
+        />
+      </div>
 
       {/* --- RESTORED: Apply Settings Button --- */}
       {/* This button updates the backend's global/default settings */}
@@ -266,7 +300,7 @@ function SettingsPanel({
         {/* Changed label slightly */}
       </button>
       {applyStatus === "success" && (
-        <p className="success-message">Backend default settings applied!</p>
+        <p className="success-message">Backend settings applied!</p>
       )}
       {applyStatus === "error" && (
         <p className="error-message">
@@ -300,6 +334,7 @@ SettingsPanel.propTypes = {
     temperature: PropTypes.number,
     topP: PropTypes.number,
     maxTokens: PropTypes.number,
+    repetitionPenalty: PropTypes.number,
   }), // Can be null
   // --- ADDED: PropTypes for new chat settings logic ---
   activeTabId: PropTypes.string.isRequired,
@@ -308,6 +343,7 @@ SettingsPanel.propTypes = {
     temperature: PropTypes.number.isRequired,
     topP: PropTypes.number.isRequired,
     maxTokens: PropTypes.number.isRequired,
+    repetitionPenalty: PropTypes.number.isRequired,
   }).isRequired,
   onNewChatSettingsChange: PropTypes.func.isRequired,
   // --- ADDED: PropType for session settings change handler ---

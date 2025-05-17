@@ -31,6 +31,12 @@ def update_generation_settings(settings: ModelSettings, request: Request):
         app_state.max_new_tokens = settings.max_new_tokens
         updated_settings["max_new_tokens"] = app_state.max_new_tokens
         print(f"🔄 Max new tokens updated to: {app_state.max_new_tokens}")
+    if settings.repetition_penalty is not None:
+        if settings.repetition_penalty < 1.0:
+            raise HTTPException(status_code=400, detail="Repetition penalty must be greater than or equal to 1.0.")
+        app_state.repetition_penalty = settings.repetition_penalty
+        updated_settings["repetition_penalty"] = app_state.repetition_penalty
+        print(f"🔄 Repetition penalty updated to: {app_state.repetition_penalty}")
 
     if not updated_settings:
         # Use 400 Bad Request if no valid settings were provided
@@ -48,4 +54,5 @@ def get_current_settings(request: Request):
         temperature=getattr(app_state, 'temperature', None),
         top_p=getattr(app_state, 'top_p', None),
         max_new_tokens=getattr(app_state, 'max_new_tokens', None),
+        repetition_penalty=getattr(app_state, 'repetition_penalty', None),
     ) 

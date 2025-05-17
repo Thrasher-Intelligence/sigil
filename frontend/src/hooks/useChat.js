@@ -3,7 +3,7 @@ import { formatChatHistoryForBackend } from '../utils/chatUtils.js';
 import { API_BASE_URL } from '../constants.js';
 
 // For tracking settings during tab transitions
-const SETTINGS_FIELDS = ['systemPrompt', 'temperature', 'topP', 'maxTokens'];
+const SETTINGS_FIELDS = ['systemPrompt', 'temperature', 'topP', 'maxTokens', 'repetitionPenalty'];
 
 // Default settings can be managed by App.jsx or passed in if needed by the hook directly.
 // For now, assume App.jsx manages defaults and provides necessary settings.
@@ -289,6 +289,7 @@ export const useChat = ({
           temperature: newChatSettings.temperature,
           top_p: newChatSettings.topP,
           max_new_tokens: newChatSettings.maxTokens,
+          repetition_penalty: newChatSettings.repetitionPenalty,
         };
         systemPromptToSend = newChatSettings.systemPrompt;
       } else {
@@ -299,6 +300,7 @@ export const useChat = ({
           temperature: cur.temperature,
           top_p: cur.topP,
           max_new_tokens: cur.maxTokens,
+          repetition_penalty: cur.repetitionPenalty,
         };
         systemPromptToSend = cur.systemPrompt;
       }

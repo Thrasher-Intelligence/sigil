@@ -21,6 +21,7 @@ class ModelSettings(BaseModel):
     temperature: Optional[float] = None
     top_p: Optional[float] = None
     max_new_tokens: Optional[int] = None
+    repetition_penalty: Optional[float] = None
 
 class SettingsUpdateResponse(BaseModel):
     message: str

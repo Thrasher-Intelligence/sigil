@@ -43,6 +43,7 @@ async def lifespan(app: FastAPI):
     app.state.temperature = settings.default_temperature
     app.state.top_p = settings.default_top_p
     app.state.max_new_tokens = settings.default_max_new_tokens
+    app.state.repetition_penalty = settings.default_repetition_penalty
     yield
     # Shutdown logic (if any) can go here
     print("Shutting down API.") # Optional shutdown message

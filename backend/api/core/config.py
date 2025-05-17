@@ -33,6 +33,7 @@ class Settings(BaseSettings):
     default_temperature: float = 0.7
     default_top_p: float = 0.95
     default_max_new_tokens: int = 1000
+    default_repetition_penalty: float = 1.0
 
     # --- API / Frontend ---
     cors_allowed_origins: str = (

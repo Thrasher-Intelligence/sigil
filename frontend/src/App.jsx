@@ -23,7 +23,8 @@ const DEFAULTS = {
   TEMPERATURE: 0.7,
   // TEMPERATURE_CHAT: 0.7, // This seems unused now? Keep TEMPERTURE consistent.
   TOP_P: 0.95,
-  MAX_TOKENS: 1000
+  MAX_TOKENS: 1000,
+  REPETITION_PENALTY: 1.0
 };
 
 // Message structure (implied):
@@ -47,6 +48,7 @@ function App() {
       temperature: DEFAULTS.TEMPERATURE,
       topP: DEFAULTS.TOP_P,
       maxTokens: DEFAULTS.MAX_TOKENS,
+      repetitionPenalty: DEFAULTS.REPETITION_PENALTY,
   });
 
   const initialChatMode = localStorage.getItem('chatMode') || 'instruction';
@@ -194,6 +196,7 @@ function App() {
       temperature: DEFAULTS.TEMPERATURE,
       topP: DEFAULTS.TOP_P,
       maxTokens: DEFAULTS.MAX_TOKENS,
+      repetitionPenalty: DEFAULTS.REPETITION_PENALTY,
     });
     console.log("App: Cleared chat state for New Chat tab or reset.");
   }, [clearChatHookState]);

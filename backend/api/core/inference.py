@@ -9,6 +9,7 @@ def generate_response(
     temperature: float,
     top_p: float,
     max_new_tokens: int,
+    repetition_penalty: float = 1.0,
 ) -> str:
     """Generates a response string using the provided model and parameters.
     
@@ -41,6 +42,7 @@ def generate_response(
         print(f"   Prompt (first 100 chars): {prompt[:100]}...")
         print(f"   Temperature: {temperature}")
         print(f"   Top P: {top_p}")
+        print(f"   Repetition Penalty: {repetition_penalty}")
         print(f"   Max New Tokens: {max_new_tokens}")
         print(f"   Inference Device: {inference_device}")
         print("------------------------------------")
@@ -54,6 +56,7 @@ def generate_response(
                 temperature=temperature,
                 top_k=50, # Keep default top_k
                 top_p=top_p,
+                repetition_penalty=repetition_penalty,
                 pad_token_id=tokenizer.pad_token_id
             )
 
@@ -97,6 +100,7 @@ def generate_response(
                     temperature=temperature,
                     top_k=50,
                     top_p=top_p,
+                    repetition_penalty=repetition_penalty,
                     pad_token_id=tokenizer.pad_token_id
                 )
             
