@@ -22,7 +22,7 @@ function ModelLoadPanel({
   const [fetchError, setFetchError] = useState(null); // State for fetch errors
 
   // NEW State for Hugging Face Token Status
-  const [hfTokenStatus, setHfTokenStatus] = useState({ status: 'checking', username: null, message: null });
+  const [hfTokenStatus, setHfTokenStatus] = useState({ status: 'unknown', username: null, message: null, migrated: false });
 
   // --- NEW: Search state for Hugging Face Hub ---
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,7 +41,7 @@ function ModelLoadPanel({
 
   // --- Fetch Hugging Face Token Status (modified to be callable) ---
   const fetchHfStatus = useCallback(async () => {
-    setHfTokenStatus({ status: 'checking', username: null, message: null }); // Reset status on fetch
+    setHfTokenStatus({ status: 'checking', username: null, message: null, migrated: false }); // Reset status on fetch
     onHfUsernameUpdate(null); // Clear username in parent on fetch start
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/models/token/status`);
@@ -49,7 +49,12 @@ function ModelLoadPanel({
       if (!response.ok) {
         throw new Error(data.message || data.detail || `HTTP error ${response.status}`);
       }
-      setHfTokenStatus({ status: data.status, username: data.username, message: data.message });
+      setHfTokenStatus({ 
+        status: data.status, 
+        username: data.username, 
+        message: data.message,
+        migrated: data.migrated || false 
+      });
       // Pass username up if valid
       if (data.status === 'valid') {
         onHfUsernameUpdate(data.username);
@@ -358,7 +363,9 @@ function ModelLoadPanel({
       if (!resp.ok) {
         throw new Error(data.detail || `Failed to save token (status ${resp.status})`);
       }
-      setSaveTokenMessage({ type: 'success', text: data.message || 'Token saved!' });
+      // Add migration notice if token was migrated
+      const migrationNote = data.migrated ? " Your previous token has been migrated from your home directory." : "";
+      setSaveTokenMessage({ type: 'success', text: (data.message || 'Token saved!') + migrationNote });
       setNewTokenInput(''); // Clear input on success
       // Re-fetch token status to update UI
       await fetchHfStatus();
@@ -446,6 +453,11 @@ function ModelLoadPanel({
               {saveTokenMessage.text && (
                 <p className={`token-status-message ${saveTokenMessage.type === 'error' ? 'error' : 'success'}`}>
                   {saveTokenMessage.text}
+                </p>
+              )}
+              {hfTokenStatus.migrated && (
+                <p className="token-status-message success">
+                  Note: Your token has been automatically migrated from your home directory to the project directory.
                 </p>
               )}
             </form>

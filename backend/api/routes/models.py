@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel
 from typing import List, Optional
+from pathlib import Path
 
 # Import the utility functions and exceptions
 from backend.utils.huggingface_utils import (
@@ -43,9 +44,10 @@ class ModelDownloadResponse(BaseModel):
     download_path: Optional[str] = None
 
 class HFTokenStatusResponse(BaseModel):
-    status: str  # 'valid', 'invalid', 'not_found'
+    status: str  # 'valid', 'invalid', 'not_found', 'migrated'
     username: Optional[str] = None
     message: Optional[str] = None
+    migrated: Optional[bool] = False  # Indicates if token was migrated from home directory
 
 class SaveTokenRequest(BaseModel):
     token: str
@@ -53,6 +55,7 @@ class SaveTokenRequest(BaseModel):
 class SaveTokenResponse(BaseModel):
     status: str # 'success' or 'error'
     message: str
+    migrated: Optional[bool] = False  # Indicates if a previous token was migrated
 
 # ---------------------------------------------------------------------------
 # Endpoints
@@ -60,17 +63,41 @@ class SaveTokenResponse(BaseModel):
 @router.get("/token/status", response_model=HFTokenStatusResponse)
 async def get_huggingface_token_status():
     """Return token status and username if token is valid."""
+    # Check if we need to migrate from home directory first
+    # DEPRECATION NOTICE: This migration code will be removed in approximately six months (around Q3 2025)
+    home_env_path = Path.home() / ".env"
+    project_env_path = Path(__file__).parent.parent.parent.parent / ".env"  # Go up to project root
+    migrated = False
+    
+    # Simple check if migration happened by looking for files
+    if (not project_env_path.exists() or 
+        "HUGGINGFACE_TOKEN" not in project_env_path.read_text() if project_env_path.exists() else False):
+        # We might need to migrate
+        if home_env_path.exists() and "HUGGINGFACE_TOKEN" in home_env_path.read_text():
+            migrated = True
+    
+    # This will trigger migration if needed
     token = get_hf_token()
+    
     if not token:
-        return HFTokenStatusResponse(status="not_found", message="Hugging Face token not found in ~/.env")
+        return HFTokenStatusResponse(
+            status="not_found", 
+            message="Hugging Face token not found in project .env file",
+            migrated=migrated
+        )
 
     try:
         username = validate_token_and_get_username(token)
         if username:
-            return HFTokenStatusResponse(status="valid", username=username)
-        return HFTokenStatusResponse(status="invalid", message="Token validation failed (no username returned)")
+            return HFTokenStatusResponse(
+                status="valid", 
+                username=username,
+                migrated=migrated,
+                message="Token has been migrated from home directory to project root" if migrated else None
+            )
+        return HFTokenStatusResponse(status="invalid", message="Token validation failed (no username returned)", migrated=migrated)
     except TokenValidationError as e:
-        return HFTokenStatusResponse(status="invalid", message=str(e))
+        return HFTokenStatusResponse(status="invalid", message=str(e), migrated=migrated)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error during token validation: {e}")
 
@@ -107,11 +134,24 @@ async def search_huggingface_models(
 @router.post("/token/save", response_model=SaveTokenResponse)
 async def save_huggingface_token(request: SaveTokenRequest):
     """
-    Saves the provided Hugging Face token to the ~/.env file.
+    Saves the provided Hugging Face token to the project root .env file.
+    Will also migrate any existing token from the home directory.
     """
+    # Check if we need to migrate from home directory first
+    # DEPRECATION NOTICE: This migration code will be removed in approximately six months (around Q3 2025)
+    home_env_path = Path.home() / ".env"
+    migrated = False
+    
+    # Check if there's a token in the home directory that might be migrated
+    if home_env_path.exists() and "HUGGINGFACE_TOKEN" in home_env_path.read_text():
+        migrated = True
+    
     try:
         save_hf_token(request.token)
-        return SaveTokenResponse(status="success", message="Token saved successfully to ~/.env and loaded.")
+        message = "Token saved successfully to project .env file and loaded."
+        if migrated:
+            message += " Any previous token has been migrated from your home directory."
+        return SaveTokenResponse(status="success", message=message, migrated=migrated)
     except TokenSaveError as e:
         # Log the error e
         print(f"API: Failed to save token: {e}") # Replace with logging

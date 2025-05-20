@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from huggingface_hub import snapshot_download, HfApi
@@ -9,9 +10,33 @@ import requests
 from typing import List, Optional, Dict # Added Dict for type hinting
 import shutil
 
-# Define the target download directory relative to the script's execution context (adjust as needed)
-# Consider making this configurable or passed in
-DEFAULT_DOWNLOAD_ROOT = Path(__file__).parent.parent / "models" # Relative to backend/
+def get_project_root() -> Path:
+    """
+    Returns the path to the project root directory.
+    This is the directory containing the .env file.
+    """
+    # Start from the current file's directory and go up until we find the project root
+    current_dir = Path(__file__).parent
+    
+    # Go up to three parent directories looking for a recognized project root indicator
+    # such as .env, requirements.txt, or other project-specific files
+    for _ in range(4):  # Limit the search to avoid infinite loops
+        # Check for common files/directories that might indicate we're at the project root
+        if (current_dir / "requirements.txt").exists() or (current_dir / "README.md").exists():
+            return current_dir
+        
+        # Move up one directory
+        parent_dir = current_dir.parent
+        if parent_dir == current_dir:  # We've reached the filesystem root
+            break
+        current_dir = parent_dir
+    
+    # If we couldn't find a clear project root, return the directory three levels up from utils
+    # This should be the project root in most standard layouts
+    return Path(__file__).parent.parent.parent
+
+# Define the target download directory relative to the project root
+DEFAULT_DOWNLOAD_ROOT = get_project_root() / "backend" / "models"
 
 class HuggingFaceError(Exception):
     """Base exception for Hugging Face utility errors."""
@@ -34,26 +59,117 @@ class TokenSaveError(HuggingFaceError):
     pass
 
 
+def _migrate_token_from_home_to_project_root() -> bool:
+    """
+    Migrates the HUGGINGFACE_TOKEN from ~/.env to the project root .env file.
+    Returns True if migration was performed, False otherwise.
+    
+    This is a one-time migration to support the transition from storing tokens in the
+    user's home directory to storing them in the project root directory.
+    
+    DEPRECATION NOTICE: This function will be removed in approximately six months (around Q3 2025)
+    after users have had time to migrate their tokens.
+    """
+    home_env_path = Path.home() / ".env"
+    project_env_path = get_project_root() / ".env"
+    
+    # Check if home .env exists and project .env doesn't have the token yet
+    if not home_env_path.exists():
+        return False
+    
+    # Load from home directory first to see if token exists there
+    load_dotenv(dotenv_path=home_env_path)
+    token = os.getenv("HUGGINGFACE_TOKEN")
+    
+    if not token:
+        return False  # No token in home .env to migrate
+    
+    # Token exists in home .env, now save it to project .env
+    try:
+        # Ensure project root directory exists
+        project_env_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Read existing project .env lines or initialize empty list
+        lines = []
+        token_line = f"HUGGINGFACE_TOKEN={token}"
+        token_found = False
+        
+        if project_env_path.exists():
+            with open(project_env_path, 'r') as f:
+                lines = f.readlines()
+            
+            # Check if token already exists in project .env and update it
+            for i, line in enumerate(lines):
+                if line.strip().startswith("HUGGINGFACE_TOKEN="):
+                    lines[i] = token_line + "\n"
+                    token_found = True
+                    break
+        
+        # If token line wasn't found, append it
+        if not token_found:
+            # Add a newline before appending if the file exists and doesn't end with one
+            if lines and not lines[-1].endswith('\n'):
+                lines.append('\n')
+            lines.append(token_line + "\n")
+        
+        # Write the token to project .env
+        with open(project_env_path, 'w') as f:
+            f.writelines(lines)
+        
+        # Now remove the token line from home .env
+        home_lines = []
+        with open(home_env_path, 'r') as f:
+            home_lines = f.readlines()
+        
+        # Remove the HUGGINGFACE_TOKEN line
+        home_lines = [line for line in home_lines if not line.strip().startswith("HUGGINGFACE_TOKEN=")]
+        
+        # Write back the modified home .env without the token
+        with open(home_env_path, 'w') as f:
+            f.writelines(home_lines)
+        
+        print(f"NOTICE: Migrated HUGGINGFACE_TOKEN from {home_env_path} to {project_env_path}")
+        print("This is a one-time migration. Your token is now stored in the project directory instead of your home directory.")
+        return True
+    
+    except Exception as e:
+        print(f"Error during token migration: {e}")  # Replace with proper logging
+        return False
+
 def get_hf_token() -> Optional[str]:
-    """Loads the Hugging Face token from the ~/.env file."""
-    env_path = Path.home() / ".env"
+    """
+    Loads the Hugging Face token from the project root .env file.
+    Automatically migrates token from ~/.env if needed.
+    """
+    # First try migrating from home .env if needed
+    migration_performed = _migrate_token_from_home_to_project_root()
+    
+    # If we migrated the token, print a notice about the change
+    if migration_performed:
+        print("\nIMPORTANT: Your Hugging Face token has been automatically migrated from your home directory")
+        print("to the project directory. This change helps make the project more portable and self-contained.")
+    
+    # Now load from project root .env
+    env_path = get_project_root() / ".env"
     if env_path.exists():
         load_dotenv(dotenv_path=env_path, override=True) # Override allows reloading if called again
     else:
         # Log this or handle appropriately if the file MUST exist
         print(f"Info: Environment file not found at {env_path}") # Keep print for now, replace with logging
+    
+    # If we've migrated the token, it should now be available in the environment
     return os.getenv("HUGGINGFACE_TOKEN")
 
 def save_hf_token(token: str) -> None:
     """
-    Saves or updates the HUGGINGFACE_TOKEN in the ~/.env file.
+    Saves or updates the HUGGINGFACE_TOKEN in the project root .env file.
     Raises TokenSaveError on failure.
     """
     if not isinstance(token, str) or not token.strip():
         raise TokenSaveError("Token cannot be empty.")
     token = token.strip()
 
-    env_path = Path.home() / ".env"
+    env_path = get_project_root() / ".env"
     lines = []
     token_found = False
     token_line = f"HUGGINGFACE_TOKEN={token}"
@@ -264,6 +380,13 @@ def _cleanup_incomplete_download(model_path: Path):
 # Example usage (optional, for testing the module directly)
 if __name__ == '__main__':
     print("Testing Hugging Face Utilities...")
+    
+    # Print project root for debugging
+    project_root = get_project_root()
+    print(f"Project root: {project_root}")
+    env_path = project_root / ".env"
+    print(f"Environment file path: {env_path}")
+    print(f"Environment file exists: {env_path.exists()}")
 
     # Test getting token
     token = get_hf_token()
@@ -279,7 +402,7 @@ if __name__ == '__main__':
         except TokenValidationError as e:
             print(f"Token validation failed: {e}")
     else:
-        print("No token found in ~/.env")
+        print(f"No token found in {env_path}")
 
     # Test search (use a common model)
     print("Testing model search (flan-t5-small):")
