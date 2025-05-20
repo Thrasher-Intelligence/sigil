@@ -225,9 +225,22 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
         return { 
           title: truncatedTitle, 
           id: session.thread_id,
-          fullTitle: originalTitle // Store full title for tooltip
+          fullTitle: originalTitle, // Store full title for tooltip
+          hideId: true // Hide ID for custom titled chats
         };
     }
+    
+    // Check if this is a new format ID (chat_NNNNNN)
+    if (session.thread_id.startsWith('chat_')) {
+        return {
+          title: "Untitled Chat", 
+          id: session.thread_id,
+          fullTitle: "Untitled Chat",
+          hideId: true // Hide numeric IDs from users
+        };
+    }
+    
+    // Legacy format - handle timestamp IDs
     const parts = session.thread_id.split('_');
     if (parts.length >= 2) {
         const date = parts[0]; // YYYYMMDD
@@ -237,14 +250,18 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
         return { 
           title: `${formattedDate} ${formattedTime}`, 
           id: session.thread_id,
-          fullTitle: `${formattedDate} ${formattedTime}` 
+          fullTitle: `${formattedDate} ${formattedTime}`,
+          hideId: false // Still show legacy IDs in timestamp format
         };
     }
+    
+    // Fallback to raw ID for any other formats
     return { 
       title: session.thread_id, 
       id: session.thread_id,
-      fullTitle: session.thread_id
-    }; // Fallback to raw ID
+      fullTitle: session.thread_id,
+      hideId: false
+    };
   };
 
   return (
@@ -332,8 +349,8 @@ function SavedChatsPanel({ onSelectSession, onRenameSession }) {
                       {isThisDeleting && <strong>Deleting...</strong>}
                       {!isThisLoading && !isThisDeleting && <strong>{display.title}</strong>}
 
-                      {/* Optionally show ID if title is different and not loading/deleting */}
-                      {!isThisLoading && !isThisDeleting && display.title !== display.id && <span>{display.id}</span>}
+                      {/* Optionally show ID if title is different, not loading/deleting, and not hidden */}
+                      {!isThisLoading && !isThisDeleting && display.title !== display.id && !display.hideId && <span>{display.id}</span>}
                     </div>
                     <div className="session-actions">
                       <button

@@ -4,6 +4,8 @@ import datetime
 from datetime import UTC
 import logging
 from typing import Optional, List, Dict, Any
+import re
+import threading
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -16,18 +18,67 @@ HISTORY_DIR = os.path.join(PROJECT_ROOT, "saved_chats")
 # HISTORY_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "chat_history") # Old path
 # --- END MODIFICATION ---
 
+# Define the file to store the next thread ID counter
+THREAD_COUNTER_FILE = os.path.join(HISTORY_DIR, ".thread_counter")
+
+# Create a lock for thread-safe ID generation
+thread_id_lock = threading.Lock()
+
 os.makedirs(HISTORY_DIR, exist_ok=True)
 
 def generate_thread_id() -> str:
-    """Generates a unique thread ID based on timestamp."""
-    now = datetime.datetime.now()
-    return now.strftime("%Y%m%d_%H%M%S_%f")
+    """Generates a unique sequential thread ID."""
+    with thread_id_lock:
+        # Get the next available ID
+        next_id = get_next_thread_id()
+        
+        # Format as "chat_000001", "chat_000002", etc.
+        return f"chat_{next_id:06d}"
+
+def get_next_thread_id() -> int:
+    """
+    Retrieves and increments the thread ID counter from the counter file.
+    Returns the next available ID number.
+    """
+    current_id = 1  # Default starting ID
+    
+    # Try to read the current counter value
+    if os.path.exists(THREAD_COUNTER_FILE):
+        try:
+            with open(THREAD_COUNTER_FILE, 'r') as f:
+                content = f.read().strip()
+                if content and content.isdigit():
+                    current_id = int(content)
+        except (IOError, ValueError) as e:
+            logging.warning(f"Error reading thread counter file: {e}. Starting from ID 1.")
+    
+    # Write the next ID back to the file
+    try:
+        with open(THREAD_COUNTER_FILE, 'w') as f:
+            f.write(str(current_id + 1))
+    except IOError as e:
+        logging.error(f"Error writing to thread counter file: {e}")
+    
+    return current_id
+
+def is_legacy_thread_id(thread_id: str) -> bool:
+    """
+    Determines if a thread ID is in the legacy timestamp format.
+    Returns True for legacy format (YYYYMMDD_HHMMSS_microseconds),
+    False for new numbered format (chat_NNNNNN).
+    """
+    # Match the legacy timestamp pattern
+    timestamp_pattern = r'^\d{8}_\d{6}_\d+$'
+    return bool(re.match(timestamp_pattern, thread_id))
 
 def get_session_filepath(thread_id: str) -> str:
     """Gets the full path for a session's JSON file."""
     # Basic sanitization to prevent path traversal
     if ".." in thread_id or "/" in thread_id or "\\" in thread_id:
         raise ValueError("Invalid thread_id format containing path elements.")
+    
+    # For legacy thread IDs, keep using the same file path
+    # For new thread IDs, use the numbered format
     return os.path.join(HISTORY_DIR, f"{thread_id}.json")
 
 def save_chat_messages(
@@ -175,6 +226,10 @@ def list_sessions() -> List[Dict[str, Any]]:
         return []
     try:
         for filename in os.listdir(HISTORY_DIR):
+            # Skip the counter file
+            if filename == ".thread_counter":
+                continue
+                
             if filename.endswith(".json"):
                 thread_id = filename[:-5] # Remove .json extension
                 # Add basic check for potentially invalid filenames from listdir
@@ -198,14 +253,18 @@ def list_sessions() -> List[Dict[str, Any]]:
                     if first_user_message:
                          title = first_user_message[:50] + ('...' if len(first_user_message) > 50 else '') # Truncate
                     else:
-                         title = thread_id # Ultimate fallback to thread_id
+                         # If this is a new numbered thread ID, hide it and use a generic title
+                         if not is_legacy_thread_id(thread_id):
+                             title = "Untitled Chat" 
+                         else:
+                             title = thread_id # Ultimate fallback to thread_id
 
                 sessions_list.append({
                     "thread_id": thread_id,
                     "title": title, # Use the determined title
                     "last_updated": session_data.get("metadata", {}).get("last_updated"),
-                    "created_at": session_data.get("metadata", {}).get("created_at")
-                    # Removed direct file reading here, use get_session
+                    "created_at": session_data.get("metadata", {}).get("created_at"),
+                    "is_legacy_id": is_legacy_thread_id(thread_id) # Add flag for frontend to know format
                 })
                 # --- END MODIFICATION ---
 
