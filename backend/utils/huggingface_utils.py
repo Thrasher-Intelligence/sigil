@@ -240,11 +240,20 @@ def validate_token_and_get_username(token: str) -> Optional[str]:
     except Exception as e:
         raise TokenValidationError(f"An unexpected error occurred during token validation: {e}") from e
 
-def search_models(query: str, token: Optional[str], limit: int = 10) -> List[Dict]:
+def search_models(query: str, token: Optional[str], limit: int = 10, 
+                  filter_downloaded: bool = True,
+                  download_dir: Path = DEFAULT_DOWNLOAD_ROOT) -> List[Dict]:
     """
     Searches Hugging Face Hub for models matching the query.
     Returns a list of model dictionaries.
     Raises ModelSearchError on failure.
+    
+    Parameters:
+        query (str): The search query string
+        token (Optional[str]): HuggingFace token
+        limit (int): Maximum number of results to return
+        filter_downloaded (bool): If True, filters out models that are already downloaded
+        download_dir (Path): Path to the directory where models are downloaded
     """
     try:
         api = HfApi(token=token)
@@ -255,6 +264,16 @@ def search_models(query: str, token: Optional[str], limit: int = 10) -> List[Dic
         if not models_info:
             return [] # Return empty list if no models found
 
+        # Get list of already downloaded models
+        already_downloaded = set()
+        if download_dir.exists():
+            for model_dir in download_dir.iterdir():
+                if model_dir.is_dir():
+                    # Convert local directory name back to model ID format
+                    # (replace "--" with "/" to match the original model ID)
+                    original_model_id = model_dir.name.replace("--", "/")
+                    already_downloaded.add(original_model_id)
+
         # Convert ModelInfo objects to simple dictionaries for API response
         models_list = [
             {
@@ -263,9 +282,11 @@ def search_models(query: str, token: Optional[str], limit: int = 10) -> List[Dic
                 "likes": model.likes,
                 "pipeline_tag": model.pipeline_tag,
                 "last_modified": model.lastModified.isoformat() if model.lastModified else None,
+                "already_downloaded": model.id in already_downloaded,
                 # Add other relevant fields if needed: model.tags
             }
             for model in models_info
+            if not (filter_downloaded and model.id in already_downloaded)
         ]
         return models_list
 
