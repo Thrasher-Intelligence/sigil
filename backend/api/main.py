@@ -1,28 +1,17 @@
 from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, validator
-from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import os
 import sys
-import re # <-- Add import for regex
-from typing import Optional, List, Dict, Any # <-- Add List, Dict, Any
-from contextlib import asynccontextmanager # <-- Import asynccontextmanager
-# Use relative imports for modules within the same package level
+from contextlib import asynccontextmanager
 from .core.model_loader import load_model_internal, load_model_by_name
 from .routes.chat import router as chat_router
 from .routes.settings import router as settings_router
-from .routes.models import router as models_router # <-- Import the new models router
-from .routes.system import router as system_router # <-- Import the new system router
-# Assuming schemas are also in backend/api/schemas
-from .schemas.common import (
-    LoadModelRequest, LoadModelResponse, ModelStatusResponse,
-    ModelSettings, SettingsUpdateResponse, VRAMInfoResponse
-)
-from .schemas.chat import (
-    Message, ChatRequestV2, ChatResponseV2 # <-- Import V2 chat schemas
-)
+from .routes.models import router as models_router
+from .routes.system import router as system_router
+
+from backend.api.schemas.common import VRAMInfoResponse
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -38,6 +27,7 @@ async def lifespan(app: FastAPI):
     app.state.tokenizer = None
     app.state.device = None
     app.state.model_path = None
+    app.state.repetition_penalty = None
     # Load defaults from central settings
     app.state.system_prompt = settings.default_system_prompt
     app.state.temperature = settings.default_temperature
@@ -70,7 +60,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"], # Explicitly list methods
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"],
     allow_headers=["*"],         # Allow all HTTP headers
 )
 
@@ -97,13 +87,16 @@ def list_models():
 # --- API Endpoints --- (Organized and updated)
 
 # Endpoint to load the model
-@app.post("/api/v1/model/load", response_model=LoadModelResponse, status_code=status.HTTP_200_OK)
-def load_model_endpoint(req: LoadModelRequest):
+@app.post("/api/v1/model/load", status_code=status.HTTP_200_OK)
+def load_model_endpoint(req: Request):
     # The check for an existing model is removed here, as load_model_internal now handles unloading.
     try:
-        # Resolve relative paths from the backend API directory if necessary
-        # For simplicity, assume path is usable as is (e.g., absolute or relative to where backend is run)
-        model_path_to_load = req.path
+        # Get the path from the request body
+        request_data = req.json()
+        model_path_to_load = request_data.get("path")
+
+        if not model_path_to_load:
+            raise ValueError("Model path is required")
 
         tokenizer, model, device = load_model_internal(model_path_to_load)
 
@@ -169,18 +162,6 @@ async def load_model_by_name_route(model_name: str, request: Request):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An unexpected error occurred: {e}")
 # --- End New Endpoint ---
 
-# Endpoint to check model status
-# @app.get("/api/v1/model/status", response_model=ModelStatusResponse)
-# def get_model_status():
-#     if app.state.model and app.state.tokenizer:
-#         return {
-#             "loaded": True,
-#             "path": app.state.model_path,
-#             "device": app.state.device
-#         }
-#     else:
-#         return {"loaded": False}
-
 # Simplified health check
 @app.get("/health")
 def health_check():
@@ -241,4 +222,3 @@ if __name__ == "__main__":
     if getattr(sys, 'frozen', False):
         import uvicorn
         uvicorn.run("backend.api.main:app", host="127.0.0.1", port=8000)
-
